@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tweater Picture File Upload
+</title>
+</head>
+<body style='background-color:#c0c0f0;padding:8px;font-family:{$font};font-size:{$font_size}px'>
+<form action="upload_picture.php" method="post" enctype="multipart/form-data">
+<h2>Select picture file to upload (only jpg, gif and png are allowed):</h2>
+<input type="file" name="uploadFile" id="uploadFile" size="70">
+<input type="hidden" name="user_name" value="{$user_name}">
+<input type="submit" value="Upload Picture File" name="submit">
+<input type="button" value="Cancel" onclick="location.replace('home.php');">
+</form>
+</body>
+</html>
