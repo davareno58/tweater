@@ -15,7 +15,7 @@
     header("location: home.php?message=Error:+Your+password+was+not+changed.+The+confirmation+didn't+match.");
     exit();
   }
-  if (strlen($new_password) < 5) {
+  if (strlen($new_password) < 6) {
     header("location: home.php?message=Error:+Your+password+was+not+changed.+It+must+have+at+least+6+characters.");
     exit();
   }

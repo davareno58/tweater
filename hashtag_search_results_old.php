@@ -26,11 +26,14 @@
   
   echo <<<EODH
 <!DOCTYPE html><html><head><meta charset='utf-8' /><title>Hashtag Search Results for "{$hashtag}"</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<style>.user{vertical-align:middle}</style>
   </head><body style='color:black;background-color:#C0C0F0;padding:8px;
   font-family:{$font};font-size:{$font_size}px'>
 EODH;
+
+  require_once '_header.php';
     
   $message = $_GET['message'];
   if (strlen($message) > 0) {
@@ -62,9 +65,9 @@ EODH;
         $vuname = $myrow4['user_name'];
         $tweat = $myrow4['tweat'];
         echo <<<EODL
-<li><img src="follow.png" class='user' onclick="location.replace(
-      'follow.php?followed_one={$vuname}&followed_name={$vname}');" />&nbsp;&nbsp;
-      <a style='a:link{color:#000000};a:vlink{color:#990099};a:alink{color:#999900};a:hlink{color:#000099};' href='home.php?view_user_name={$vuname}' target='_blank'>{$vname}:</a>&nbsp;&nbsp;{$tweat}</li>
+<li><button type="button" class="btn btn-success" onclick="location.replace(
+      'follow.php?followed_one={$vuname}&followed_name={$vname}');">Follow</button>&nbsp;&nbsp;
+      <a href='home.php?view_user_name={$vuname}' target='_blank'>{$vname}:</a>&nbsp;&nbsp;{$tweat}</li>
 EODL;
       } while ($myrow4 = $result4->fetch_assoc());
     }

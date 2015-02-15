@@ -15,7 +15,7 @@ echo <<<EOD
       <li role="presentation" class="btn btn-success"><a href="{$self_name}" onclick="contact();" style="color:lightgray">Contact</a></li>
       <li role="presentation" class="btn btn-warning"><a href="{$self_name}" onclick="unsubscribe();">
       Unsubscribe</a></li>
-      <li role="presentation" class="btn btn-info"><a href="help.php">Help</a></li>      
+      <li role="presentation" class="btn btn-info"><a href="help.php" target="_blank">Help</a></li>      
       <li role="presentation" class="btn btn-primary"><a onclick="settings();" style="color:lightgray">
       Settings</a></li>
       <li role="presentation" class="btn btn-danger"><a href="signout.html" onclick="signOut();" style="color:lightgray">Sign Out</a></li>     

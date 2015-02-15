@@ -5,6 +5,7 @@
   $password = trim($_COOKIE['password']);
   $followed_one = $_GET['followed_one'];
   $followed_name = $_GET['followed_name'];
+  $return_page = "home.php";
 
   $error_later = "There was an error and the user was not added. You may try again later. ";
   
@@ -24,9 +25,9 @@
           $stmt->close();
           $mysqli2->close();
           if ($user_name == $followed_one) {
-            header("Location: home.php?message=" . strtr("You can't follow <i>yourself</i> ! (I tried it once, and kept going in circles...)", " ", "+"));
+            header("Location: " . $return_page . "?message=" . strtr("You can't follow <i>yourself</i> ! (I tried it once, and kept going in circles...)", " ", "+"));
           } else {
-            header("Location: home.php?message=" . strtr($followed_name . " (" . $followed_one . ") is already on your list of followed users. ", " ", "+"));
+            header("Location: " . $return_page . "?message=" . strtr($followed_name . " (" . $followed_one . ") is already on your list of followed users. ", " ", "+"));
           }
           exit();
         } else {
@@ -37,22 +38,22 @@
       } else {
         $stmt->close();
         $mysqli2->close();
-        header("Location: home.php?message=" . strtr($error_later, " ", "+"));
+        header("Location: " . $return_page . "?message=" . strtr($error_later, " ", "+"));
         exit();
       }
     } else {
       $stmt->close();
       $mysqli2->close();
-      header("Location: home.php?message=" . strtr($error_later, " ", "+"));
+      header("Location: " . $return_page . "?message=" . strtr($error_later, " ", "+"));
       exit();
     }
   } else {
     $stmt->close();
     $mysqli2->close();
-    header("Location: home.php?message=" . strtr($error_later, " ", "+"));
+    header("Location: " . $return_page . "?message=" . strtr($error_later, " ", "+"));
     exit();
   }
   $stmt->close();
   $mysqli2->close();
-  header("Location: home.php?message=" . strtr($followed_name . " (" . $followed_one . ") is now added to your list of followed users. ", " ", "+"));
+  header("Location: " . $return_page . "?message=" . strtr($followed_name . " (" . $followed_one . ") is now added to your list of followed users. ", " ", "+"));
   exit();

@@ -29,7 +29,8 @@ EOD;
   require_once '_header.php';
   echo "<ul><!--li>In Conversation Mode, your page will reload every few seconds, so the Tweats of the person(s)
   you're talking with<br />will appear. They should also click on their Conversation Mode button so they will see 
-  your Tweats within a few seconds.</li--><li>The picture file upload function is temporarily disabled for 
+  your Tweats within a few seconds.</li--><li>To show a list of all users, just click the User Search button at the right.</li>
+  <li>The picture file upload function is temporarily disabled for 
   security reasons.</li><li>Click the Home button above to return to the main page, or your browser's Back 
   button<br />to go back to previous page(s).</li><li>To add a hashtag to a Tweat, just include the # sign 
   followed by the hashtag,<br />such as #popmusic (no spaces between multiple words). Only one hashtag is 
