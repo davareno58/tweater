@@ -4,6 +4,7 @@
 
   require_once 'app_config.php';
   
+  $ret = $_GET['return'];
   if (isset($_COOKIE['font_size'])) {
     $font_size = $_COOKIE['font_size'];
   } else {
@@ -24,16 +25,40 @@
   }
   $hashtag = $_GET['hashtag_search'];
   
+  $status = $_GET['admin'];
+  if ($status == 1) {
+    $user_name = trim($_COOKIE['user_name']);
+    $password = trim($_COOKIE['password']);
+    $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
+    if (!$con) {
+      die('Could not connect: ' . mysqli_error($con));
+    }
+    mysqli_select_db($con,DATABASE_TABLE);
+    $stmt = $con->stmt_init();
+    $stmt->prepare("SET NAMES 'utf8'");
+    $stmt->execute();
+    $stmt = $con->stmt_init();
+    $stmt->prepare("select * from " . DATABASE_TABLE . " where (user_name = ?) and (binary password_hash = ?)");
+    $stmt->bind_param('ss', $user_name, crypt($password,"pling515"));
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = mysqli_fetch_array($result);
+    if ($row['admin_status'] == 1) {
+      $admin = true;
+    } else {
+      $admin = false;
+    }
+    mysqli_close($con);
+  }
+  
+  
   echo <<<EODH
 <!DOCTYPE html><html><head><meta charset='utf-8' /><title>Hashtag Search Results for "{$hashtag}"</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<style>.user{vertical-align:middle}</style>
   </head><body style='color:black;background-color:#C0C0F0;padding:8px;
   font-family:{$font};font-size:{$font_size}px'>
 EODH;
-
-  require_once '_header.php';
     
   $message = $_GET['message'];
   if (strlen($message) > 0) {
@@ -43,7 +68,7 @@ EODH;
   
   if (($_GET['hashtag_search'] == NULL) || ($_GET['hashtag_search'] == "")) {
     $message = "No+hashtag+was+given+to+search+for.";
-    header("Location: home.php?message=" . $message);
+    header("Location: home" . $ret . ".php?message=" . $message);
     exit();
   } else {
     $mysqli4 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
@@ -64,11 +89,22 @@ EODH;
         $vname = $myrow4['name'];
         $vuname = $myrow4['user_name'];
         $tweat = $myrow4['tweat'];
+        $tid = $myrow4['id'];
         echo <<<EODL
-<li><button type="button" class="btn btn-success" onclick="location.replace(
-      'follow.php?followed_one={$vuname}&followed_name={$vname}');">Follow</button>&nbsp;&nbsp;
-      <a href='home.php?view_user_name={$vuname}' target='_blank'>{$vname}:</a>&nbsp;&nbsp;{$tweat}</li>
+<li><img src="follow.png" class='user' onclick="location.replace(
+      'follow.php?followed_one={$vuname}&followed_name={$vname}&return={$ret}');" />&nbsp;&nbsp;
+      <a style='a:link{color:#000000};a:vlink{color:#990099};a:alink{color:#999900};a:hlink{color:#000099};' 
+      href='home{$ret}.php?view_user_name={$vuname}' target='_blank'>{$vname}:</a>&nbsp;&nbsp;{$tweat}
 EODL;
+
+// X button for administrator to delete Tweat
+        if ($admin) {
+          $no_quote_tweat = strtr(substr($tweat,0,80), "\"'\t\r\n\f", "      ");
+          echo "&nbsp;&nbsp;<img src='xdel.png' style='position:relative;top:7px' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
+            $no_quote_tweat . "...\")) {window.open(\"home{$ret}.php?delete_tweat=\" + {$tid});}' />";
+        }
+
+        echo "</li>";
       } while ($myrow4 = $result4->fetch_assoc());
     }
     $stmt4->close();

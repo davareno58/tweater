@@ -1,7 +1,6 @@
 <?php
   require_once 'app_config.php';
-echo "u:" . $_COOKIE['user_name'] . $_COOKIE['password'] . "end";
-sleep(1);
+  
   $message = "";
   if (isset($_COOKIE['user_name']) && isset($_COOKIE['password'])) {
     $user_name = trim($_COOKIE['user_name']);

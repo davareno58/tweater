@@ -7,13 +7,22 @@
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 function openit() {
-window.location.replace('home.php');
+//alert(navigator.appVersion);
+  if (navigator.appVersion.indexOf("Chrome") >= 0) {
+    window.location.replace('home_chrome.php');
+  } else if (navigator.appVersion.indexOf("(Windows ") >= 0) {
+    window.location.replace('home.php');
+  } else if (navigator.appVersion.indexOf("5.0 (Windows)") >= 0) {
+    window.location.replace('home_firefox.php');
+  } else {
+    window.location.replace('home.php');
+  }
 }
 //-->
-</script>
+</SCRIPT>
 </HEAD>
-<BODY LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onLoad="openit()">
+<BODY LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onload="openit()">
 <h1>Tweater</h1>
-<h2 style='text-align:center'><a href="home.php">If you're not redirected to Tweater in a few seconds, please click here.</a></h2>
-</BODY>
+<h1 style='text-align:center'><a href="home.php" onclick="openit()">If you're not redirected to Tweater in a few seconds, please click here.</a></h1>
+<img src='tweaty.png' /></BODY>
 </HTML>

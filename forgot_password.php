@@ -12,7 +12,7 @@
   } else {
     $font = "Helvetica";
   }
-
+  $ret = $_GET['return'];
 echo <<<EOD
 <!DOCTYPE html><html>
   <head><title>Password Reset Result</title>
@@ -24,14 +24,14 @@ EOD;
   echo "</head><body style='background-color:#c0c0f0;padding:8px;font-family:{$font};font-size:{$font_size}'>";
   require_once '_header.php';
   echo "<div class='container'>";
-  echo $_REQUEST['message'];
+  echo $_GET['message'];
   echo "</div>";
-  $user_name = trim($_REQUEST['given_user_name']);
-  $password_reset_code = trim($_REQUEST['password_reset_code']);
-  $given_password_reset_code = trim($_REQUEST['given_password_reset_code']);
-  $password = trim($_REQUEST['password']);
-  $password_confirm = trim($_REQUEST['password_confirm']);
-  if (intval(trim($_REQUEST['added'])) != intval(trim($_REQUEST['given_added']))) {
+  $user_name = trim($_POST['given_user_name']);
+  $password_reset_code = trim($_POST['password_reset_code']);
+  $given_password_reset_code = crypt(trim($_POST['given_password_reset_code']),"pling515");
+  $password = trim($_POST['password']);
+  $password_confirm = trim($_POST['password_confirm']);
+  if (intval(trim($_POST['added'])) != intval(trim($_POST['given_added']))) {
     echo "<br /><br /><br /><blockquote><p style='color:red'>The answer to the math question was incorrect. To try again,<br />" . 
       "click the browser's Back button, or return to the <span style='color:black'><a href='index.html'>Sign In</a>" . 
       "<span style='color:red'> page,<br />enter your username and then " . 
@@ -66,6 +66,6 @@ EOD;
     setcookie('user_name', $user_name, 0, "/");
     setcookie('password', $password, 0, "/");
 
-    header("location: home.php");
-  }
-?>
+    header("location: home" . $ret . ".php");
+    exit();
+  }

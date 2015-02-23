@@ -57,8 +57,7 @@
   } else {
     $font_size = FONTSIZE;
   }
-  $bigfont = $font_size * 1.5;
-
+  
   if (isset($_COOKIE['tweat_width'])) {
     $tweat_width = $_COOKIE['tweat_width'];
   } else {
@@ -117,7 +116,7 @@ function openit() {
 <BODY style='background-color:#C0C0F0;font-family:{$font};font-size:{$font_size}px' LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onLoad="openit();">
 <h1 style='text-align:center'>Tweater: You are now unsubscribed to Tweater. Sorry to see you go!<br />(Actually I'm a computer and have no human feelings!)</h1>
 <h2 style='text-align:center'><a href="home.php">Click here to sign in another user or register a new user.</a></h2>
-<img src='tweaty.png' /></BODY>
+</BODY>
 </HTML>
 EODU;
     exit();
@@ -254,6 +253,20 @@ EODU;
     $stmt->close();
     $mysqli3->close();
   }
+// Delete Tweat
+  if (isset($_GET['delete_tweat'])) {
+    $tid = $_GET['delete_tweat'];
+    $mysqli3 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
+    if ($stmt = $mysqli3->prepare("DELETE FROM tweats WHERE id = ?")) {
+      $stmt->bind_param('i', $tid);
+      $stmt->execute();
+      $message = "The Tweat was deleted.";
+    } else {
+      $message = "Error: Sorry, but there was a database error and the Tweat was not deleted.";
+    }
+    $stmt->close();
+    $mysqli3->close();
+  }
   
   $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
   if (!$con) {
@@ -269,37 +282,7 @@ EODU;
   $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
   $stmt->execute();
   $result = $stmt->get_result();
-  $stmt->close();
   $row = mysqli_fetch_array($result);
-  $status = $row['admin_status'];
-  
-// Delete Tweat
-  if (isset($_GET['delete_tweat'])) {
-    $tid = $_GET['delete_tweat'];
-    $mysqli3 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
-    if ($status == 1) {
-// Administrator deletes a Tweat
-      if ($stmt = $mysqli3->prepare("DELETE FROM tweats WHERE id = ?")) {
-        $stmt->bind_param('i', $tid);
-        $stmt->execute();
-        $stmt->close();
-        $message = "The Tweat was deleted.";
-      } else {
-        $message = "Error: Sorry, but there was a database error and the Tweat was not deleted: " . mysqli_error($mysqli3);
-      }
-    } else {
-// Non-administrator deletes a Tweat
-      if ($stmt = $mysqli3->prepare("DELETE FROM tweats WHERE user_name = ? AND id = ?")) {
-        $stmt->bind_param('si', $user_name, $tid);
-        $stmt->execute();
-        $stmt->close();
-        $message = "The Tweat was deleted.";
-      } else {
-        $message = "Error: Sorry, but there was a database error and the Tweat was not deleted: " . mysqli_error($mysqli3);
-      }
-    }
-    $mysqli3->close();
-  }
 
   $forgot_password = $_REQUEST['forgot_password'];
   mysqli_select_db($con,DATABASE_TABLE);
@@ -368,8 +351,8 @@ you would like to use:<br />
 <div class="input-group"><input type="password" class="form-control" placeholder="New Password" name="password" maxlength="32" size="32"></div>
 <div class="input-group"><input type="password" class="form-control" placeholder="Confirm New Password" name="password_confirm" maxlength="32" size=32></div>
 <div class="input-group"><img src="qt.png" /><span id="firstnumber" name="firstnumber"> </span><img src="sa.png" /> 
-<span id="secondnumber" name="secondnumber"> </span>? <input type="text" name="given_added" size="5">
-<input type="hidden" class="form-control" id="added" name="added" value="101" size="5"></div>
+<span id="secondnumber" name="secondnumber"> </span>? <input type="text" class="form-control" name="given_added" size="3">
+<input type="hidden" class="form-control" id="added" name="added" value="101"></div>
 <div class="input-group"><input type="hidden" class="form-control" name="password_reset_code" value={$crypt_code}></div>
 <div class="input-group"><input type="hidden" class="form-control" name="given_user_name" value={$user_name}></div>
 <button type="submit" class="btn btn-success">Change Password</button>
@@ -377,8 +360,6 @@ you would like to use:<br />
 </div>
 </span>
 </form>
-</body>
-</html>
 EOD3;
     }
     mysqli_close($con);
@@ -651,7 +632,7 @@ EODT;
 
     $mysqli2->set_charset("utf8");
     
-    if ($stmt = $mysqli2->prepare("SELECT t.id as tid, t.user_name, t.tweat, u.id, u.name, u.picture_ext FROM tweats AS t INNER JOIN " . 
+    if ($stmt = $mysqli2->prepare("SELECT t.id, t.user_name, t.tweat, u.id, u.name, u.picture_ext FROM tweats AS t INNER JOIN " . 
       "users AS u ON t.user_name = u.user_name WHERE t.user_name = ? ORDER BY t.id DESC LIMIT ?")) {
       $stmt->bind_param('ss', $view_user_name, $shown_limit);
       $stmt->execute();
@@ -663,19 +644,10 @@ EODT;
     while ($myrow = $result->fetch_assoc()) {
       if ($myrow['name']) {
         $myrow_tweat = $myrow['tweat'];
-        $tid = $myrow['tid'];
       } else {
-        $myrow_tweat = "";
-        
+        $myrow_tweat = "";      
       }
-      echo "<p>" . wordwrap($myrow_tweat, $tweat_width, '<br />', true);
-// Red X button for administrator to delete Tweat
-        if ($status == 1) {
-          $no_quote_tweat = strtr(substr($myrow_tweat,0,80), "\"'\t\r\n\f", "      ");
-          echo "&nbsp;&nbsp;<img src='xdel.png' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
-            $no_quote_tweat . "...\")) {window.open(\"{$self_name}?delete_tweat=\" + {$tid});}' />";
-        }
-      echo "</p>";
+      echo "<p>" . wordwrap($myrow_tweat, $tweat_width, '<br />', true) . "</p>";
     }
 
     echo "</div></body></html>";
@@ -701,7 +673,7 @@ EODT;
     $stmtd->bind_param('i', $del_user_id);
     $stmtd->execute();
     mysqli_close($condel);
-    $message = "Listed user with ID #{$del_user_id} has been deleted.";
+    $message = "Listed user with ID# {$del_user_id} deleted.";
   }
   
 // Show signed-in user's page
@@ -1005,33 +977,6 @@ EOD;
     window.open("hashtag_search_results.php?hashtag_search=" + hashtag + "&admin={$status}");
   }
   
-  $(document).ready(function() {
-    $('#tweat').keypress(function(e) {
-      if (e.which == 13) {
-        $('#tweatform').submit();
-        e.preventDefault();
-      }
-    });
-  });
-  
-  $(document).ready(function() {
-    $('#hashtag_search').keypress(function(e) {
-      if (e.which == 13) {
-        hashtagSearch();
-        e.preventDefault();
-      }
-    });
-  });
-  
-  $(document).ready(function() {
-    $('#search_any').keypress(function(e) {
-      if (e.which == 13) {
-        $('#user_search_form').submit();
-        e.preventDefault();
-      }
-    });
-  });
-  
 //-->
 </script>
 EODJ;
@@ -1242,12 +1187,12 @@ EODF2;
   $esc_name = str_replace(" ", "+", $name);
 // Interests and Information and Tweat Entry
   echo <<<EODF
-<form action="{$self_name}" method="POST" role="form" id="intinfo" name="intinfo" class="intinfo">
+<form action="{$self_name}" method="POST" role="form">
 <span>
 <div>
 <fieldset class="fieldset-auto-width" style="float:left"><b>Interests and Information:&nbsp;&nbsp;&nbsp;</b>
-<button type="submit" id="intsubmit" name="intsubmit" class="btn btn-info" style="margin-left:-9px;position:relative;left:2px" >
-Update</button><input type="hidden" name="message" value="Updated Interests and Information! (Limit: {$tweat_max_size} bytes.)"></input>
+<button type="submit" class="btn btn-info" style="margin-left:-9px;position:relative;left:2px" 
+  onclick="alert('Updating Interests and Information! (Limit: {$tweat_max_size} bytes)');">Update</button>
 <div class="span3 form-group">
 <textarea class="textarea inbox" rows="4" cols="36" id="interests" name="interests" maxlength="{$tweat_max_size}" 
   placeholder="You may type your interests and information here and press Update."
@@ -1260,12 +1205,12 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 </div>
 <div class='col-md-9' style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
   darkblue;padding:10px;height:259px'>
-<form action="{$self_name}" method="POST" role="form" id="tweatform">
+<form action="{$self_name}" method="POST" role="form">
 <span>
 <div ng-app="">
 <fieldset class="fieldset-auto-width" style="float:left">
 <div class="span9 form-group" style="height:170px">
-<textarea class="textarea inbox" rows="4" cols="103" id="tweat" name="tweat" ng-model="tweat" 
+<textarea class="textarea inbox" rows="4" cols="104" id="tweat" name="tweat" ng-model="tweat" 
   onkeyup="showCharsLeftAndLimit(this);" maxlength="{$tweat_max_size}" placeholder=
   "--Type your Tweat here (limit: {$tweat_max_size} characters) and then click the Post Tweat button.--">
   </textarea><br />
@@ -1278,32 +1223,38 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 <button type="button" class="btn btn-primary" onclick="textSmaller();">Text Size-</button>
 <button type="button" class="btn btn-info" onclick="fontEntry();">Font</button>
 <button type="button" class="btn btn-primary" onclick="toggleBW();">B/W</button>
-<button type="button" class="btn btn-warning" onclick="shownLimit();" style="padding-left:3px;padding-right:3px">Limit: {$shown_limit}</button>
+<button type="button" class="btn btn-warning" onclick="shownLimit();">Limit: {$shown_limit}</button>
 <button type="button" class="btn btn-info" style="position:relative;left:-1px" onclick="tweatWidth();">Width</button>
-<input type="hidden" class="form-control" name="name" value={$esc_name}><br /></form>
-<form><span style="position:relative;top:3px">Hashtag Search: #</span><textarea class="textarea inbox" rows="1" cols="67" id="hashtag_search" style="font-size:{$fontsize}"
-  name="hashtag_search" maxlength="30" placeholder="To search Tweats by hashtag, type the hashtag here and press--&gt;"></textarea>
+<input type="hidden" class="form-control" name="name" value={$esc_name}><br />
+<span style="vertical-align:-5px">Hashtag Search: #</span><textarea class="textarea inbox" rows="1" cols="67" id="hashtag_search" style="font-size:{$fontsize}"
+  name="hashtag_search" maxlength="30" placeholder="To search Tweats by hashtag, type the hashtag here and press-->"></textarea>
   <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px">Hashtag Search</button>
 </span><br /></div></fieldset></div></span></form>
-<form action="user_search_results.php?admin={$status}" method="POST" role="form" target="_blank" id="user_search_form"><br />
-<nobr><span style="position:relative;top:-22px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
-  style="position:relative;top:-25px;height:26px" placeholder="To search users by interests, info or names, type them here and press--&gt;" 
+<form action="user_search_results.php?admin={$status}" method="POST" role="form" target="_blank"><br />
+<nobr><span style="position:relative;top:-21px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
+  style="position:relative;top:-25px;height:26px" placeholder="To search users by interests or information, type them here and press-->" 
   style="font-size:{$fontsize}"></textarea>&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-24px">User Search</button></nobr><br />
 </form>
-<form action="boolean_user_search_results.php?admin={$status}" method="POST" role="form" target="_blank"><br />
+<form action="boolean_user_search_results.php" method="POST" role="form" target="_blank"><br />
 <nobr><span style="position:relative;top:-46px;left:-40">Boolean Search: <input type="text" 
   style="position:relative;top:3px" placeholder="First Search Term" id="search_one" 
   name="search_one" maxlength="30" size="26">
-<select class="inbox" id="search_type" name="search_type" style="position:relative;left:-5px">
+<select class="inbox" id="search_type" name="search_type" style="position:relative;left:-4px">
           <option value="AND" default>AND</option>
           <option value="OR">OR</option>
           <option value="NOT">NOT</option>
-</select><input type="text" style="position:relative;top:3px;left:-6px" placeholder="Second Search Term" id="search_two" name="search_two" value="" maxlength="30" size="26">
+</select><input type="text" style="position:relative;top:3px;left:-5px" placeholder="Second Search Term" id="search_two" name="search_two" value="" maxlength="30" size="26">
 <button type="submit" class="btn btn-warning" style="position:relative;top:-2px;left:-6px">Boolean Search</button></span></nobr></form>
 </div></div></div><div class='row'>
 EODF;
 
-  echo "<div id='pic_top' style='position:relative;left:7px;top:-12px'><img id='top' src='transparent.gif' onload='startPic();' /></div></div></div>";
+  echo "<div id='pic_top' style='position:relative;left:7px'><img id='top' src='";
+  if ($picture_url == "nophoto.jpg") {
+    echo "transparent.gif' ";
+  } else {
+    echo "pictures/{$picture_url}' ";
+  }
+  echo "onload='startPic();' /></div></div></div>";
 
 // Display Tweats
     while ($myrow = $result->fetch_assoc()) {
@@ -1323,7 +1274,7 @@ EODF;
         if ($myrow_name == $name) {
           $no_quote_tweat = strtr(substr($myrow_tweat,0,80), "\"'\t\r\n\f", "      ");
 // X button to delete Tweat
-          echo "&nbsp;&nbsp;<img src='xdel.png' style='position:relative;top:-1px' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
+          echo "&nbsp;&nbsp;<img src='xdel.png' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
             $no_quote_tweat . "...\")) {location.replace(\"home.php?delete_tweat=\" + {$tid});}' />";
         }
         echo "</p></div></div>";
@@ -1333,10 +1284,11 @@ EODF;
       "doesn't assume responsibility for its usage by others.</i><br /><br />" . 
       "<div class='row' style='color:black'><div class='col-md-3 text-right'>" . 
       "<div id='pic_bottom' style='position:absolute;left:7px'>";
-    echo "<img id='bottom' src='transparent.gif' style='position:relative;top:-30px' />";
+    if ($picture_url == "nophoto.jpg") {
+      echo "<img id='bottom' src='transparent.gif' />";
+    }
     echo "</div></div><div class='col-md-9'></div></div><br /><br /></div></body></html>";
   $stmt->close();
   $stmt3->close();
   $mysqli2->close();
-  $mysqli3->close();
-  exit();
+  $mysqli3->close();

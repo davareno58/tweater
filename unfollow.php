@@ -18,29 +18,29 @@
       $stmt->bind_param('ss', $user_name, $followed_one);
       $stmt->execute();
       $result = $stmt->get_result();
-      if (($myrow2 = $result->fetch_assoc()) && ($user_name != $followed_one)) {
+      if ((($myrow2 = $result->fetch_assoc()) != NULL) && ($user_name != $followed_one)) {
         $stmt = $mysqli2->prepare("DELETE FROM followed_ones WHERE user_name = ? AND followed_one = ? AND user_name != followed_one");
         $stmt->bind_param('ss', $user_name, $followed_one);
         $stmt->execute();
+        $stmt->close();
+        $mysqli2->close();
+        echo "<script>alert('{$followed_name} ({$followed_one}) is now unfollowed.');window.close();</script>";
+        exit();
       } else {
         $stmt->close();
         $mysqli2->close();
-        header("Location: home.php?message=" . strtr($followed_name . " (" . $followed_one . ") isn't on your list of followed users. ", " ", "+"));
+        echo "<script>alert('{$followed_name} ({$followed_one}) isn\'t on your list of followed users.');window.close();</script>";
         exit();
       }
     } else {
       $stmt->close();
       $mysqli2->close();    
-      header("Location: home.php?message=" . strtr("There was an error and the user was not removed. You may try again later. ", " ", "+"));
+      echo "<script>alert('There was an error and the user was not unfollowed. You may try again later.');window.close();</script>";
       exit();
     }
   } else {
-    $stmt->close();
-    $mysqli2->close();
-    header("Location: home.php?message=" . strtr("There was an error and the user was not removed. You may try again later. ", " ", "+"));
+    echo "<script>alert('There was an error and the user was not unfollowed. You may try again later.');window.close();</script>";
     exit();
   }
-  $stmt->close();
-  $mysqli2->close();
-  header("Location: home.php?message=" . strtr($followed_name . " (" . $followed_one . ") is now removed from your list of followed users. ", " ", "+"));
+  echo "<script>alert('There was an error and the user was not unfollowed. You may try again later.');window.close();</script>";
   exit();

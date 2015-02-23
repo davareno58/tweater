@@ -32,7 +32,9 @@ EOD;
   your Tweats within a few seconds.</li--><li>To show a list of all users, just click the User Search button at the right.</li>
   <li>The picture file upload function is temporarily disabled for 
   security reasons.</li><li>Click the Home button above to return to the main page, or your browser's Back 
-  button<br />to go back to previous page(s).</li><li>To add a hashtag to a Tweat, just include the # sign 
-  followed by the hashtag,<br />such as #popmusic (no spaces between multiple words). Only one hashtag is 
-  allowed per Tweat,<br />but you could post the same Tweat twice with different hashtags, theoretically...</li>
+  button<br />to go back to previous page(s).</li><li>Click on Home at the top left to update your page.</li><li>Cookies and JavaScript must be enabled for some functions.</li><li>In a Boolean Search, 
+  at least the first term must be filled in, and wildcards may be used:<br />? for any one letter or numeral, 
+  and * for zero or more letters or numerals.</li><li>To add a hashtag to a Tweat, just include the # sign 
+  followed by the hashtag,<br />such as #popmusic (with no spaces between multiple words). Only one hashtag<br /> 
+  can be used in each Tweat, but you could post the same Tweat twice<br />with different hashtags, theoretically...</li>
   </ul></body></html>";

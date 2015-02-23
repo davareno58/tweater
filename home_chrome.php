@@ -10,8 +10,8 @@
   $site_root = SITE_ROOT;
   $self_name = $_SERVER['PHP_SELF'];
 
-  if (isset($_REQUEST['message'])) {
-    $message = strtr($_REQUEST['message'], "+", " ");
+  if (isset($_GET['message'])) {
+    $message = strtr($_GET['message'], "+", " ");
   } else {  
     $message = "";
   }
@@ -58,7 +58,6 @@
     $font_size = FONTSIZE;
   }
   $bigfont = $font_size * 1.5;
-
   if (isset($_COOKIE['tweat_width'])) {
     $tweat_width = $_COOKIE['tweat_width'];
   } else {
@@ -116,23 +115,26 @@ function openit() {
 </HEAD>
 <BODY style='background-color:#C0C0F0;font-family:{$font};font-size:{$font_size}px' LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onLoad="openit();">
 <h1 style='text-align:center'>Tweater: You are now unsubscribed to Tweater. Sorry to see you go!<br />(Actually I'm a computer and have no human feelings!)</h1>
-<h2 style='text-align:center'><a href="home.php">Click here to sign in another user or register a new user.</a></h2>
+<h2 style='text-align:center'><a href="{$self_name}">Click here to sign in another user or register a new user.</a></h2>
 <img src='tweaty.png' /></BODY>
 </HTML>
 EODU;
     exit();
   }
+
 // Automatic signin
-  if (isset($_COOKIE['user_name']) && isset($_COOKIE['password'])) {
+  if (isset($_COOKIE['user_name']) && isset($_COOKIE['password']) && ($_COOKIE['user_name'] != "") && 
+    ($_COOKIE['password'] != "")) {
     $user_name = trim($_COOKIE['user_name']);
     $password = trim($_COOKIE['password']);
-    $stay_logged_in = $_REQUEST['stay_logged_in'];
+    $stay_logged_in = $_POST['stay_logged_in'];
   } else {
 // Manual signin
-    $user_name = trim($_REQUEST['user_name']);
-    $password = trim($_REQUEST['password']);
-    $stay_logged_in = $_REQUEST['stay_logged_in'];
+    $user_name = trim($_POST['user_name']);
+    $password = trim($_POST['password']);
+    $stay_logged_in = $_POST['stay_logged_in'];
   }
+  
 // Change email address
   if (isset($_GET['new_email_address'])) {
     $new_email_address = trim($_GET['new_email_address']);
@@ -174,6 +176,7 @@ EODU;
     $stmt->close();
     $mysqli3->close();
   }
+  
 // Change Tweat Email Notifications
   if (isset($_GET['notify'])) {
     $mysqli3 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
@@ -199,10 +202,11 @@ EODU;
     $stmt->close();
     $mysqli3->close();
   }
+
 //Post New Tweat
-  if (isset($_REQUEST['tweat']) && (strlen($_REQUEST['tweat']) > 0)) {
-    $tweat = trim($_REQUEST['tweat']);
-    $name = str_replace("+", " ", $_REQUEST['name']);
+  if (isset($_POST['tweat']) && (strlen($_POST['tweat']) > 0)) {
+    $tweat = trim($_POST['tweat']);
+    $name = str_replace("+", " ", $_POST['name']);
     if (mb_check_encoding($tweat, 'UTF-8' ) === true ) {
       $mysqli3 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
       if ($stmt = $mysqli3->prepare("SET NAMES 'utf8'")) {
@@ -249,6 +253,8 @@ EODU;
             }
           }
         }
+      } else {
+        echo mysqli_error($mysqli3);
       }
     }
     $stmt->close();
@@ -272,7 +278,7 @@ EODU;
   $stmt->close();
   $row = mysqli_fetch_array($result);
   $status = $row['admin_status'];
-  
+    
 // Delete Tweat
   if (isset($_GET['delete_tweat'])) {
     $tid = $_GET['delete_tweat'];
@@ -301,7 +307,7 @@ EODU;
     $mysqli3->close();
   }
 
-  $forgot_password = $_REQUEST['forgot_password'];
+  $forgot_password = $_POST['forgot_password'];
   mysqli_select_db($con,DATABASE_TABLE);
   $stmt = $con->stmt_init();
   mysqli_set_charset('$con', 'utf8mb4');
@@ -346,7 +352,7 @@ echo <<<EOD
 EOD;
   require_once '_shim.php';
   echo "</head><body style='background-color:#A0A0C0;padding:8px;font-family:{$font};font-size:{$font_size}px' onload='turingsetup();'>";
-  require_once '_header.php';
+  require_once '_header_chrome.php';
   if (strlen($message) > 0) {
     echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div>";
     $message = "";
@@ -359,7 +365,7 @@ A password reset code has been sent by the Apache server to your email address<b
 check your spam folder. Please enter it here, along with the new password that<br />
 you would like to use:<br />
 <br />
-<form action="forgot_password.php" method="POST">
+<form action="forgot_password.php?return=_chrome" method="POST">
 <span>
 <div>
 <fieldset class="fieldset-auto-width" style="float:left">
@@ -408,7 +414,7 @@ EOD3;
   };
     
   function URLsetup() {
-    document.getElementById("action").action = "home.php?user_name=" + 
+    document.getElementById("action").action = "{$self_name}?user_name=" + 
       document.getElementById("user_name").value;
   };
   
@@ -425,7 +431,7 @@ EOD;
     require_once '_shim.php';
     echo "</head><body style='background-color:#C0C0F0;padding:8px;font-family:{$font};
       font-size:{$font_size}px' onload='turingsetup();'>";
-    require_once '_header.php';
+    require_once '_header_chrome.php';
     if (strlen($message) > 0) {
       echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div>";
       $message = "";
@@ -440,16 +446,16 @@ EOD;
 
     echo <<<EOD2
 <div style="margin-left: auto; margin-right: auto;"><p style="text-align:center">
-<a href="home.php" style="font-size:72px;color:red;background-color:violet"><b>
+<a href="{$self_name}" style="font-size:72px;color:red;background-color:violet"><b>
 &nbsp;Tweater&nbsp;</b></a></p></div>
-<div style="margin-left: auto; margin-right: auto;position: relative;right: -153px;">
+<div style="margin-left: auto; margin-right: auto;position: relative;right: -77px;">
 <form action="{$self_name}" method="POST" id="action">
 <span>
 <div>
 <fieldset class="fieldset-auto-width" style="float:left;background-color:#A0C0A0">
-<legend>Sign In:</legend>
+<legend style="background-color:#A0C0A0;width:506px">Sign In:</legend>
 <div class="input-group"><input type="text" class="form-control" placeholder="Username or Email" name="user_name" id="user_name" maxlength="50" size="60"></div>
-<div class="input-group"><input type="password" class="form-control" placeholder="Password" name="password" maxlength="32" size="32"></div>
+<div class="input-group"><input type="password" class="form-control" placeholder="Password" name="password" id="password" maxlength="32" size="32"></div>
 <div class="checkbox"><label><input type="checkbox" name="forgot_password" unchecked>I forgot my password.</label></div>
 <div class="checkbox"><label><input type="checkbox" name="stay_logged_in" unchecked>Remain signed in.</label></div>
 <button type="submit" class="btn btn-success">Sign In</button>
@@ -461,11 +467,11 @@ EOD;
 <br /><br /><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 OR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
-<form action="register.php" method="POST">
+<form action="register.php?return=_chrome" method="POST">
 <span>
 <div>
 <fieldset class="fieldset-auto-width" style="float:left;background-color:#A0A0C0">
-<legend>Register New User:</legend>
+<legend style="background-color:#A0A0C0;width:506px">Register New User:</legend>
 <div class="input-group"><input type="text" class="form-control" placeholder="Desired Username" name="user_name" value="{$user_name}" maxlength="50" size="50"></div>
 <div class="input-group"><input type="password" class="form-control" placeholder="Password: Minimum 6 Characters" name="password" maxlength="32" size="32"></div>
 <div class="input-group"><input type="password" class="form-control" placeholder="Confirm Password" name="password_confirm" maxlength="32" size="32"></div>
@@ -487,6 +493,7 @@ EOD2;
     mysqli_close($con);
     exit();
   }
+
 // Get picture filename or default
   $row = mysqli_fetch_array($result);
   $id = $row['id'];
@@ -497,7 +504,8 @@ EOD2;
     $picture_url = $id . "." . $picture_ext;
   }
 // Set signed-in cookie
-  if (!isset($_COOKIE['user_name']) || !isset($_COOKIE['password'])) {
+  if (!isset($_COOKIE['user_name']) || !isset($_COOKIE['password']) || ($_COOKIE['user_name'] == "") 
+    || ($_COOKIE['password'] == "")) {
     setcookie('user_name', $user_name, 0, "/");
     setcookie('password', $password, 0, "/");
   }
@@ -617,14 +625,14 @@ EOD;
     if (emailAddress == "") {
       emailAddress = null;
     }
-    location.replace("home.php?new_email_address=" + emailAddress);
+    location.replace("{$self_name}?new_email_address=" + emailAddress);
   }
 
 //-->
 </script>
 EODJ;
     echo "</head><body style='background-color:#C0C0F0;padding:8px;font-family:{$font};font-size:{$font_size}px'>";
-    require_once '_header.php';
+    require_once '_header_chrome.php';
     
     if (strlen($message) > 0) {
       echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div>";
@@ -634,13 +642,13 @@ EODJ;
     mysqli_close($con);
 
     echo <<<EODT
-<h1><a href="home.php" style="font-size:{$bigfont}px;color:red;background-color:violet"><b>
+<h1><a href="{$self_name}" style="font-size:{$bigfont}px;color:red;background-color:violet"><b>
 &nbsp;&nbsp;&nbsp;Tweater&nbsp;&nbsp;&nbsp;</b></a>
 <div style="text-shadow: 5px 5px 5px #007F00;">{$view_name}'s Tweater Page ({$view_user_name})&nbsp;&nbsp;
 <button type="button" class="btn btn-success" onclick="location.replace(
-'follow.php?followed_one={$view_user_name}&followed_name={$view_name}');">Follow</button>
+'follow.php?followed_one={$view_user_name}&followed_name={$view_name}&return=_chrome');">Follow</button>
 <button type="button" class="btn btn-danger" onclick="location.replace(
-'unfollow.php?followed_one={$view_user_name}&followed_name={$view_name}');">Unfollow</button>
+'unfollow.php?followed_one={$view_user_name}&followed_name={$view_name}&return=_chrome');">Unfollow</button>
 </div></h1><br />
 <b>Interests and Information:&nbsp;&nbsp;</b>{$view_interests}<br /><br />
 <img id='picture' src='pictures/{$picture_url}' /><br /><br />
@@ -677,6 +685,7 @@ EODT;
         }
       echo "</p>";
     }
+
 
     echo "</div></body></html>";
     echo "</body></html>";
@@ -748,7 +757,7 @@ EOD;
       converse = "On";
       document.cookie = "converse=On; expires=" + date.toGMTString() + "; path=/";    
     }
-    window.location.replace('home.php');
+    window.location.replace('{$self_name}');
   }
 
   function startPic() {
@@ -884,9 +893,9 @@ EOD;
   }
  
   function textErase() {
-    document.getElementById("tweat").innerHTML = "";
-    document.getElementById("hashtag_search").innerHTML = "";
-    document.getElementById("search_any").innerHTML = "";
+    $("#tweat").val("");
+    $("#hashtag_search").val("");
+    $("#search_any").val("");
     $("#search_one").val("");
     $("#search_two").val("");
   }
@@ -976,7 +985,7 @@ EOD;
   function settings() {
     var chosen = prompt("Would you like to change your password or your email address? (password or email)", "");
     if (chosen.toLowerCase() == "password") {
-      window.open("change_password.php");
+      window.open("change_password.php?return=_chrome");
     } else if (chosen.toLowerCase().substring(0,5) == "email") {
       var emailAddress = prompt("Enter your new email address or just press OK to have no email address:", "");
       if (emailAddress == "") {
@@ -990,7 +999,7 @@ EOD;
     var notify = prompt("Would you like email Tweat Notifications of Tweats posted by people " + 
       "you're following (Add apache@crandall.altervista.org to your contact list)? (Yes or No)", "");
     if (notify.trim().toLowerCase().substr(0,1) == "y") {
-      location.replace("home.php?notify=1");
+      location.replace("{$self_name}?notify=1");
     } else {
       location.replace("{$self_name}?notify=0");  
     }
@@ -1002,7 +1011,7 @@ EOD;
     if (hashtag.substr(0,1) == "#") {
       hashtag = hashtag.substr(1);
     }
-    window.open("hashtag_search_results.php?hashtag_search=" + hashtag + "&admin={$status}");
+    window.open("hashtag_search_results.php?hashtag_search=" + hashtag + "&admin={$status}&return=_chrome");
   }
   
   $(document).ready(function() {
@@ -1037,7 +1046,7 @@ EOD;
 EODJ;
   echo "</head><body background='pictures/backviolet.png' 
     style='color:black;background-color:#c0c0f0;padding:8px;font-family:{$font};font-size:{$font_size}px'>";
-  require_once '_header.php';
+  require_once '_header_chrome.php';
   
   if (strlen($message) > 0) {
     echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div><br />";
@@ -1148,7 +1157,7 @@ EODJ;
   }
   
   mysqli_close($con);
-  
+
   if ($font_size == FONTSIZE) {
     $input_width = 113;
   } else {
@@ -1160,9 +1169,9 @@ EODJ;
 <div class="container" style="position:relative;top:-16px">
   <div class='row'>
     <div class='col-md-3' style="background-color:#6644CC;text-align:center;height:259px;width:334px;
-    margin-left: -53px;margin-right: 4px;padding: 10px;border: 4px outset violet">
+    margin-left: -43px;margin-right: 4px;padding: 10px;border: 4px outset violet">
     <form role="form">
-      <div><a href="home.php" style="font-size:{$bigfont}px;color:red;background-color:#990099"><b>
+      <div><a href="{$self_name}" style="font-size:{$bigfont}px;color:red;background-color:#990099"><b>
 &nbsp;Tweater&nbsp;</b></a>
         <select class="inbox" id="selsize">
           <option value="Caption" default>Adjust Picture:</option>
@@ -1242,16 +1251,16 @@ EODF2;
   $esc_name = str_replace(" ", "+", $name);
 // Interests and Information and Tweat Entry
   echo <<<EODF
-<form action="{$self_name}" method="POST" role="form" id="intinfo" name="intinfo" class="intinfo">
+<form action="{$self_name}" method="POST" role="form" id="intinfo">
 <span>
 <div>
 <fieldset class="fieldset-auto-width" style="float:left"><b>Interests and Information:&nbsp;&nbsp;&nbsp;</b>
-<button type="submit" id="intsubmit" name="intsubmit" class="btn btn-info" style="margin-left:-9px;position:relative;left:2px" >
+<button type="submit" id="intsubmit" name="intsubmit" class="btn btn-info" style="margin-left:-9px;position:relative;left:3px">
 Update</button><input type="hidden" name="message" value="Updated Interests and Information! (Limit: {$tweat_max_size} bytes.)"></input>
 <div class="span3 form-group">
 <textarea class="textarea inbox" rows="4" cols="36" id="interests" name="interests" maxlength="{$tweat_max_size}" 
   placeholder="You may type your interests and information here and press Update."
-  style="font-size:{$fontsize};height:80px">{$interests}</textarea>
+  style="font-size:{$fontsize};height:80px;width:310px;position:relative;top:2px">{$interests}</textarea>
 </div>
 </fieldset>
 </div>
@@ -1259,50 +1268,49 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 </form>
 </div>
 <div class='col-md-9' style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
-  darkblue;padding:10px;height:259px'>
-<form action="{$self_name}" method="POST" role="form" id="tweatform">
-<span>
-<div ng-app="">
+  darkblue;padding:10px;height:259px;width:869px'>
+<form action="{$self_name}" method="POST" role="form" id="tweatform"><span><div ng-app="">
 <fieldset class="fieldset-auto-width" style="float:left">
 <div class="span9 form-group" style="height:170px">
-<textarea class="textarea inbox" rows="4" cols="103" id="tweat" name="tweat" ng-model="tweat" 
+<textarea class="textarea inbox" style="width:840px" rows="3" cols="104" id="tweat" name="tweat" ng-model="tweat" 
   onkeyup="showCharsLeftAndLimit(this);" maxlength="{$tweat_max_size}" placeholder=
   "--Type your Tweat here (limit: {$tweat_max_size} characters) and then click the Post Tweat button.--">
   </textarea><br />
-<button type="submit" class="btn btn-success">Post Tweat</button>
-<span style="font-family:Courier New, monospace">
+<button type="submit" class="btn btn-success" style="position:relative;top:-8px">Post Tweat</button>
+<span style="font-family:Courier New, monospace;position:relative;top:-8px">
 <span ng-bind="('0000' + ({$tweat_max_size} - tweat.length)).slice(-3)"></span> characters left
 </span>
-<span><button type="button" class="btn btn-warning" onclick="textErase();">Erase</button>
-<button type="button" class="btn btn-success" onclick="textLarger();">Text Size+</button>
-<button type="button" class="btn btn-primary" onclick="textSmaller();">Text Size-</button>
-<button type="button" class="btn btn-info" onclick="fontEntry();">Font</button>
-<button type="button" class="btn btn-primary" onclick="toggleBW();">B/W</button>
-<button type="button" class="btn btn-warning" onclick="shownLimit();" style="padding-left:3px;padding-right:3px">Limit: {$shown_limit}</button>
-<button type="button" class="btn btn-info" style="position:relative;left:-1px" onclick="tweatWidth();">Width</button>
+<span><button type="button" class="btn btn-warning" onclick="textErase();" style="position:relative;top:-8px">Erase</button>
+<button type="button" class="btn btn-success" onclick="textLarger();" style="position:relative;top:-8px">Text Size+</button>
+<button type="button" class="btn btn-primary" onclick="textSmaller();" style="position:relative;top:-8px">Text Size-</button>
+<button type="button" class="btn btn-info" onclick="fontEntry();" style="position:relative;top:-8px">Font</button>
+<button type="button" class="btn btn-primary" onclick="toggleBW();" style="position:relative;top:-8px">B/W</button>
+<button type="button" class="btn btn-warning" onclick="shownLimit();" style="position:relative;top:-8px;padding-left:3px;padding-right:3px">Limit: {$shown_limit}</button>
+<button type="button" class="btn btn-info" style="position:relative;top:-8px;width:49px;padding-left:3px;padding-right:3px" onclick="tweatWidth();">Width</button>
 <input type="hidden" class="form-control" name="name" value={$esc_name}><br /></form>
-<form><span style="position:relative;top:3px">Hashtag Search: #</span><textarea class="textarea inbox" rows="1" cols="67" id="hashtag_search" style="font-size:{$fontsize}"
+<form><span style="position:relative;top:-11px">Hashtag Search: #</span><textarea class="textarea inbox" rows="1" cols="67" id="hashtag_search" 
+  style="font-size:{$fontsize};position:relative;top:-1px;width:554px"
   name="hashtag_search" maxlength="30" placeholder="To search Tweats by hashtag, type the hashtag here and press--&gt;"></textarea>
-  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px">Hashtag Search</button>
+  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px;position:relative;top:-10px">Hashtag Search</button>
 </span><br /></div></fieldset></div></span></form>
-<form action="user_search_results.php?admin={$status}" method="POST" role="form" target="_blank" id="user_search_form"><br />
-<nobr><span style="position:relative;top:-22px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
-  style="position:relative;top:-25px;height:26px" placeholder="To search users by interests, info or names, type them here and press--&gt;" 
-  style="font-size:{$fontsize}"></textarea>&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-24px">User Search</button></nobr><br />
+<form action="user_search_results.php?admin={$status}&return=_chrome" method="POST" role="form" id="user_search_form" target="_blank"><br />
+<nobr><span style="position:relative;top:-32px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
+  style="font-size:{$fontsize};position:relative;top:-22px;width:613px" placeholder="To search by interests, info or names, type them here and press--&gt;"></textarea>
+&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-32px">User Search</button></nobr><br />
 </form>
-<form action="boolean_user_search_results.php?admin={$status}" method="POST" role="form" target="_blank"><br />
-<nobr><span style="position:relative;top:-46px;left:-40">Boolean Search: <input type="text" 
-  style="position:relative;top:3px" placeholder="First Search Term" id="search_one" 
+<form action="boolean_user_search_results.php?admin={$status}&return=_chrome" method="POST" role="form" target="_blank"><br />
+<nobr><span style="position:relative;top:-49px;left:-40">Boolean Search: <input type="text" 
+  style="position:relative;width:250px" placeholder="First Search Term" id="search_one" 
   name="search_one" maxlength="30" size="26">
 <select class="inbox" id="search_type" name="search_type" style="position:relative;left:-5px">
           <option value="AND" default>AND</option>
           <option value="OR">OR</option>
           <option value="NOT">NOT</option>
-</select><input type="text" style="position:relative;top:3px;left:-6px" placeholder="Second Search Term" id="search_two" name="search_two" value="" maxlength="30" size="26">
-<button type="submit" class="btn btn-warning" style="position:relative;top:-2px;left:-6px">Boolean Search</button></span></nobr></form>
-</div></div></div><div class='row'>
+</select><input type="text" style="position:relative;left:-5px;width:250px" placeholder="Second Search Term" 
+  id="search_two" name="search_two" value="" maxlength="30" size="26">
+<button type="submit" class="btn btn-warning" style="position:relative;top:-2px;left:-6px">Boolean Search</button>
+</span></nobr></form></div></div></div><div class='row'>
 EODF;
-
   echo "<div id='pic_top' style='position:relative;left:7px;top:-12px'><img id='top' src='transparent.gif' onload='startPic();' /></div></div></div>";
 
 // Display Tweats
@@ -1323,20 +1331,20 @@ EODF;
         if ($myrow_name == $name) {
           $no_quote_tweat = strtr(substr($myrow_tweat,0,80), "\"'\t\r\n\f", "      ");
 // X button to delete Tweat
-          echo "&nbsp;&nbsp;<img src='xdel.png' style='position:relative;top:-1px' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
-            $no_quote_tweat . "...\")) {location.replace(\"home.php?delete_tweat=\" + {$tid});}' />";
+          echo "&nbsp;&nbsp;<img src='xdel.png' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
+            $no_quote_tweat . "...\")) {location.replace(\"{$self_name}?delete_tweat=\" + {$tid});}' />";
         }
         echo "</p></div></div>";
     }
 // Disclaimer    
-    echo "</div><div style='text-align:center'><br /><i>Note:&nbsp;&nbsp;The creator of this website " . 
+  echo "</div><div style='text-align:center'><br /><i>Note:&nbsp;&nbsp;The creator of this website " . 
       "doesn't assume responsibility for its usage by others.</i><br /><br />" . 
       "<div class='row' style='color:black'><div class='col-md-3 text-right'>" . 
-      "<div id='pic_bottom' style='position:absolute;left:7px'>";
-    echo "<img id='bottom' src='transparent.gif' style='position:relative;top:-30px' />";
-    echo "</div></div><div class='col-md-9'></div></div><br /><br /></div></body></html>";
+      "<div id='pic_bottom' style='position:absolute;left:7px;top:-30px'>";
+  echo "<img id='bottom' src='transparent.gif' />";
+  echo "</div></div><div class='col-md-9'></div></div><br /><br /></div></body></html>";
   $stmt->close();
   $stmt3->close();
   $mysqli2->close();
   $mysqli3->close();
-  exit();
+  exit();

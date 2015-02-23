@@ -5,8 +5,6 @@
   $password = trim($_COOKIE['password']);
   $followed_one = $_GET['followed_one'];
   $followed_name = $_GET['followed_name'];
-  $return_page = "home.php";
-
   $error_later = "There was an error and the user was not added. You may try again later. ";
   
   if ((strlen($user_name) > 0) && (strlen($password) > 0 ) && (strlen($followed_one) > 0)) {
@@ -25,9 +23,9 @@
           $stmt->close();
           $mysqli2->close();
           if ($user_name == $followed_one) {
-            header("Location: " . $return_page . "?message=" . strtr("You can't follow <i>yourself</i> ! (I tried it once, and kept going in circles...)", " ", "+"));
+            echo "<script>alert('Hey, you can\'t follow YOURSELF ! (I tried it once, and kept going in circles...)');window.close();</script>";
           } else {
-            header("Location: " . $return_page . "?message=" . strtr($followed_name . " (" . $followed_one . ") is already on your list of followed users. ", " ", "+"));
+            echo "<script>alert('{$followed_name} ({$followed_one}) is already on your list of followed users.');window.close();</script>";
           }
           exit();
         } else {
@@ -38,22 +36,22 @@
       } else {
         $stmt->close();
         $mysqli2->close();
-        header("Location: " . $return_page . "?message=" . strtr($error_later, " ", "+"));
+        echo "<script>alert('{$error_later}');window.close();</script>";
         exit();
       }
     } else {
       $stmt->close();
       $mysqli2->close();
-      header("Location: " . $return_page . "?message=" . strtr($error_later, " ", "+"));
+      echo "<script>alert('{$error_later}');window.close();</script>";
       exit();
     }
   } else {
     $stmt->close();
     $mysqli2->close();
-    header("Location: " . $return_page . "?message=" . strtr($error_later, " ", "+"));
+    echo "<script>alert('{$error_later}');window.close();</script>";
     exit();
   }
   $stmt->close();
   $mysqli2->close();
-  header("Location: " . $return_page . "?message=" . strtr($followed_name . " (" . $followed_one . ") is now added to your list of followed users. ", " ", "+"));
+  echo "<script>alert('{$followed_name} ({$followed_one}) is now added to your list of followed users.');window.close();</script>";
   exit();
