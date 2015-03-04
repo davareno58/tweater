@@ -1,13 +1,26 @@
 <?php
-// Get Tweats from followed users and signed-in user
+// Get Tweats from followed users and signed-in user to display in iframe
   require_once 'app_config.php';
   $user_name = $_COOKIE['user_name'];
   $name = $_GET['name'];
   $name = strtr($name, "+", " ");
-  if (isset($_COOKIE['shown_limit'])) {
-    $shown_limit = $_COOKIE['shown_limit'];
-  } else {
-    $shown_limit = 50;
+  $ret = $_GET['return'];
+  $shown_limit = 10;
+  $timeout_message = "";
+  if (isset($_COOKIE['chat_timeout'])) {
+    $chat_timeout = $_COOKIE['chat_timeout'];
+    if ($chat_timeout != 'end') {
+      if (time() > $chat_timeout) {
+// Automatically turn off chat mode
+        setcookie('chat', false, time() + 7200, "/");
+        setcookie('chat_timeout', 'end', time() + 7200, "/");
+        $timeout_message = "<!DOCTYPE html><html><head><script>window.open(\"home{$ret}.php?message=Chat+Mode+has+timed+out+and+has+been+turned+off.+The+timeout+is+five+minutes.\", \"_parent\");</script></head><body></body></html>";
+        //header("Location: home{$ret}.php?message=Chat+Mode+has+timed+out+and+has+been+turned+off.");
+        //exit();
+      } else if (time() >= $chat_timeout - 60) {
+        $timeout_message = "<p style='color:red'>Timeout Warning: If you don't post a Tweat within one minute, Chat Mode will be turned off.</p>";    
+      }
+    }
   }
   if (isset($_COOKIE['font_size'])) {
     $font_size = $_COOKIE['font_size'];
@@ -33,14 +46,13 @@
     $stmt->bind_param('ss', $user_name, $shown_limit);
     $stmt->execute();
     $result = $stmt->get_result();
-// Display Tweats
 
-// Change content 5 to 10
+// Display Tweats in iframe with 10 second refresh for chat mode
     echo <<<EOD
-<!DOCTYPE html><html><head><meta charset='utf-8' /><meta http-equiv="refresh" content="5">
+<!DOCTYPE html><html><head><meta charset='utf-8' /><meta http-equiv="refresh" content="10">
 <title>Tweats:</title></head>
 <body background='pictures/backviolet.png' style='color:black;background-color:#c0c0f0;padding:8px;
-font-family:{$font};font-size:{$font_size}px'><h2>Tweats (Limit {$shown_limit}):</h2>
+font-family:{$font};font-size:{$font_size}px'>{$timeout_message}
 <table>
 EOD;
     while ($myrow = $result->fetch_assoc()) {
@@ -48,9 +60,22 @@ EOD;
         $myrow_name = $myrow['name'];
         $myrow_tweat = $myrow['tweat'];
         $tid = $myrow['id'];
+        $myrow_hashtag = $myrow['hashtag'];
       } else {
         $myrow_name = "";
-        $myrow_tweat = "";      
+        $myrow_tweat = "";
+        $myrow_hashtag ="";
+      }
+      if (substr($myrow_hashtag, 0, 3) == "DEL") {
+      $myrow_tweat .= " chat fd:" . time() . " " . substr($myrow_tweat, 3);
+      // Delete old chat tweat
+        if (time() > substr($myrow_hashtag, 3)) {
+          $stmt->close();
+          $stmt = $mysqli2->prepare("DELETE FROM tweats WHERE id = ?");
+          $stmt->bind_param('i', $tid);
+          $stmt->execute();
+          continue;
+        }
       }
       echo "<tr><td style='vertical-align:top;text-align:right'><b>" . 
         wordwrap($myrow_name, 40, '<br />', true) . 
@@ -59,12 +84,13 @@ EOD;
       if ($myrow_name == $name) {
           $no_quote_tweat = strtr(substr($myrow_tweat,0,80), "\"'\t\r\n\f", "      ");
 // X button to delete Tweat
-          echo "&nbsp;&nbsp;&nbsp;<span style='font-size:{$bigfont}px;color:black;background-color:red' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
-            $no_quote_tweat . "...\")) {location.replace(\"home.php?delete_tweat=\" + {$tid});}'>&nbsp;X&nbsp;</span>";
+          echo "&nbsp;&nbsp;&nbsp;<span style='color:black;background-color:red' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
+            $no_quote_tweat . "...\")) {window.open(\"home{$ret}.php?delete_tweat=\" + {$tid}, \"_parent\");}'>&nbsp;X&nbsp;</span>";
       }
       echo "</td></tr>";
     }
-    echo "</table></body></html>";
+    $t = time();
+    echo "</table>{$timeout_message}</body></html>";
   }
   $stmt->close();
   $mysqli2->close();

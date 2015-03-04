@@ -24,7 +24,9 @@
     $font = "Helvetica";
   }
   $hashtag = $_GET['hashtag_search'];
-  
+  $hashtag_win = $hashtag;
+  $hashtag = str_replace("*", "%", $hashtag);
+  $hashtag = str_replace("?", "_", $hashtag);
   $status = $_GET['admin'];
   if ($status == 1) {
     $user_name = trim($_COOKIE['user_name']);
@@ -53,7 +55,7 @@
   
   
   echo <<<EODH
-<!DOCTYPE html><html><head><meta charset='utf-8' /><title>Hashtag Search Results for "{$hashtag}"</title>
+<!DOCTYPE html><html><head><meta charset='utf-8' /><title>Hashtag Search Results for "{$hashtag_win}"</title>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>
@@ -76,22 +78,29 @@ EODH;
     $message = "";
   }
   
-  if (($_GET['hashtag_search'] == NULL) || ($_GET['hashtag_search'] == "")) {
+  if (($hashtag == NULL) || ($hashtag == "")) {
     $message = "No+hashtag+was+given+to+search+for.";
     header("Location: home" . $ret . ".php?message=" . $message);
     exit();
   } else {
+
     $mysqli4 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
     $mysqli4->set_charset("utf8");
+    if ((strpos($hashtag, "%") !== false) || (strpos($hashtag, "_") !== false)) {
+      $compare = "LIKE";
+    } else {
+      $compare = "=";
+    }
     $stmt4 = $mysqli4->prepare("SELECT t.id, t.user_name, t.tweat, t.hashtag, u.name FROM tweats AS t " . 
-      "INNER JOIN users AS u ON t.user_name = u.user_name WHERE t.hashtag = ? ORDER BY t.id DESC LIMIT ?");
+      "INNER JOIN users AS u ON t.user_name = u.user_name WHERE (t.hashtag " . $compare . " ?) AND " . 
+        "(SUBSTRING(t.hashtag FROM 1 FOR 3) != 'DEL') ORDER BY t.id DESC LIMIT ?");
     $stmt4->bind_param('ss', $hashtag, $shown_limit);
     $stmt4->execute();
     $result4 = $stmt4->get_result();
-
-    echo "<h2>Hashtag Search Results for \"{$hashtag}\":</h2><ul>";
+    
+    echo "<h2>Hashtag Search Results for \"{$hashtag_win}\"<br />(Note: Wildcards ? and * may be used):</h2><ul>";
     if (!$myrow4 = $result4->fetch_assoc()) {
-      echo "<p>No Tweats found with the hashtag \"{$hashtag}\". <br />
+      echo "<p>No Tweats found with the hashtag \"{$hashtag_win}\". <br />
         Are you sure you spelled it right? (Don't worry about capitalizing.) <br />
         You might try some other form of the word, such as a singular or plural.</p>";
     } else {

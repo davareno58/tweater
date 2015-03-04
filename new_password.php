@@ -35,6 +35,11 @@
     $stmt->execute();
     $result = $stmt->get_result();
     $row = mysqli_fetch_array($result);
+    if ($row['user_name'] == NULL) {
+      header("location: home" . $ret . ".php?message=Your+password+has+not+been+changed.+You+may+try+again." . 
+        "+Remember+that+passwords+are+case-sensitive,+and+to+be+sure+your+caps+lock+isn't+on.");
+      exit();
+    }
     $email = $row['email'];
     if ((is_null($email)) && (strpos($row['user_name'], "@") > 0) && (strpos($row['user_name'], ".") > strpos($row['user_name'], "@") + 1)) {
       $email = $row['user_name'];

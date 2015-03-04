@@ -33,12 +33,14 @@
 <body background='pictures/backviolet.png' 
     style='color:black;background-color:#c0c0f0;padding:8px;font-family:{$font},Courier New;font-size:{$bigfont}px'>
 <div class="center"><p>Password Change:</p><span>
-<form action="new_password.php?return={$ret}" method="POST">
+<form action="new_password.php?return={$ret}" method="POST" autocomplete="off">
 <div>
 <fieldset class="fieldset-auto-width" style="float:left">
-<div class="input-group"><input type="password" class="form-control" placeholder="Old Password" name="old_password" size="32"></div>
-<div class="input-group"><input type="password" class="form-control" placeholder="New Password" name="new_password" size="32"></div>
-<div class="input-group"><input type="password" class="form-control" placeholder="Confirm New Password" name="password_confirm" size=32></div>
+<input type="text" style="display:none">
+<input type="password" style="display:none">
+<div class="input-group"><input type="password" class="form-control" placeholder="Old Password" name="old_password" autocomplete="off" size="32"></div>
+<div class="input-group"><input type="password" class="form-control" placeholder="New Password" name="new_password" autocomplete="off" size="32"></div>
+<div class="input-group"><input type="password" class="form-control" placeholder="Confirm New Password" name="password_confirm" autocomplete="off" size=32></div>
 <button type="submit" class="btn btn-success">Change Password</button>
 </fieldset>
 </div>

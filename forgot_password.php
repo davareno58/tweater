@@ -13,6 +13,25 @@
     $font = "Helvetica";
   }
   $ret = $_GET['return'];
+  $user_name = trim($_POST['given_user_name']);
+  $given_password_reset_code = crypt(trim($_POST['given_password_reset_code']),"pling515");
+  $password = trim($_POST['password']);
+  $password_confirm = trim($_POST['password_confirm']);
+  $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
+    if (!$con) {
+      die('Could not connect: ' . mysqli_error($con));
+    }
+    mysqli_select_db($con,DATABASE_TABLE);
+    $stmt = $con->stmt_init();
+    $stmt->prepare("SELECT password_reset_hash FROM " . DATABASE_TABLE . 
+      " WHERE (user_name = ?) OR (email = ?)");
+    $stmt->bind_param('ss', $user_name, $user_name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $rowi = $result->fetch_assoc();
+    $password_reset_code = $rowi['password_reset_hash'];
+    $stmt->close();
+    mysqli_close($con);
 echo <<<EOD
 <!DOCTYPE html><html>
   <head><title>Password Reset Result</title>
@@ -26,11 +45,6 @@ EOD;
   echo "<div class='container'>";
   echo $_GET['message'];
   echo "</div>";
-  $user_name = trim($_POST['given_user_name']);
-  $password_reset_code = trim($_POST['password_reset_code']);
-  $given_password_reset_code = crypt(trim($_POST['given_password_reset_code']),"pling515");
-  $password = trim($_POST['password']);
-  $password_confirm = trim($_POST['password_confirm']);
   if (intval(trim($_POST['added'])) != intval(trim($_POST['given_added']))) {
     echo "<br /><br /><br /><blockquote><p style='color:red'>The answer to the math question was incorrect. To try again,<br />" . 
       "click the browser's Back button, or return to the <span style='color:black'><a href='index.html'>Sign In</a>" . 

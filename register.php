@@ -12,7 +12,7 @@
   $password_confirmation_error = "<p style='color:red'>The password confirmation does not match the password. Please re-enter both.</p>";
   $password_length_error = "<p style='color:red'>The password is too short. It must have at least 6 characters.</p>";
   $already_exists_error = "<p style='color:red'>The username \"{$user_name}\" is already being used by someone. Please choose another username.</p>";
-  $password = trim($_POST['password']);
+  $password = trim($_POST['new_user_password']);
   $password_confirm = trim($_POST['password_confirm']);
   $password_hash = crypt($password,"pling515");
   $name = trim($_POST['name']);
@@ -20,12 +20,12 @@
   
   if (intval(trim($_POST['added'])) != intval(trim($_POST['given_added']))) {
     $password_confirmation_error = "<p style='color:red'>The answer to the math question was incorrect. You may try again with a new question below.</p>";
-    $password_confirm = $password . " turing error";
+    //$password_confirm = $password . " turing error";
   }
   if ((strlen($user_name) < 1) || (strlen($name) < 1)) {
     $password_confirmation_error = "<p style='color:red'>A username and name are both required.</p>";
     $already_exists_error = "";
-    $password_confirm = $password . " no username or name";
+    //$password_confirm = $password . " no username or name";
   }
   if (strlen($password) < 6) {
     $already_exists_error = "";
@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 EOD;
     require_once '_shim.php';
     echo "</head><body style='background-color:#c0c0f0;padding:8px;font-size:{$font_size}px'>";
@@ -89,6 +90,7 @@ EOD;
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 EOD;
   require_once '_shim.php';
     echo <<<EODS
@@ -109,7 +111,7 @@ EODS;
 
   require_once '_header' . $ret . '.php';
   echo "<div class='container'>";
-  echo $_GET['message'];
+  echo $message;
   echo "</div>";
     $self_name = $_SERVER['PHP_SELF'];
     echo "<h4 style='color:red'>Error:&nbsp;&nbsp;{$error_message}</h4>";
@@ -118,19 +120,21 @@ EODS;
   <a href="home{$ret}.php" style="font-size:72px;color:red;background-color:violet"><b>
 &nbsp;Tweater&nbsp;</b></a></p></div>
 <div  class="center">
-  <form action="register.php?return={$ret}" method="POST">
+  <form action="register.php?return={$ret}" method="POST" autocomplete="off">
     <span>
     <div>
       <fieldset class="fieldset-auto-width" style="float:left;background-color:#A0A0C0">
         <legend>Register New User:</legend>
-          <div class="input-group"><input type="text" class="form-control" placeholder="Desired Username" name="user_name" value="{$user_name}" maxlength="50" size="50"></div>
-          <div class="input-group"><input type="password" class="form-control" placeholder="Password: Minimum 6 Characters" name="password" maxlength="32" size="32"></div>
-          <div class="input-group"><input type="password" class="form-control" placeholder="Confirm Password" name="password_confirm" maxlength="32" size="32"></div>
-          <div class="input-group"><input type="text" class="form-control" placeholder="Name" name="name" value="{$name}" maxlength="60" size="60"></div>
+          <input type="text" style="display:none">
+          <input type="password" style="display:none">
+          <div class="input-group"><input type="text" class="form-control" placeholder="Desired Username" name="user_name" value="{$user_name}" autocomplete="off" maxlength="50" size="50"></div>
+          <div class="input-group"><input type="password" class="form-control" placeholder="Password: Minimum 6 Characters" name="new_user_password" autocomplete="off" maxlength="32" size="32"></div>
+          <div class="input-group"><input type="password" class="form-control" placeholder="Confirm Password" name="password_confirm" autocomplete="off" maxlength="32" size="32"></div>
+          <div class="input-group"><input type="text" class="form-control" placeholder="Name" name="name" value="{$name}" autocomplete="off" maxlength="60" size="60"></div>
           <div class="input-group"><input type="text" class="form-control" 
-placeholder="Optional: Your Email for Tweat Notifications" name="email" value="{$email}" maxlength="50" size="50"></div>
+placeholder="Optional: Your Email for Tweat Notifications" name="email" value="{$email}" autocomplete="off" maxlength="50" size="50"></div>
           <div class="input-group"><img src="qt.png" /><span id="firstnumber" name="firstnumber"> </span><img src="sa.png" /> 
-            <span id="secondnumber" name="secondnumber"> </span>? <input type="text" name="given_added" size="3"><br />
+            <span id="secondnumber" name="secondnumber"> </span>? <input type="text" name="given_added" autocomplete="off" size="3"><br />
           <input type="hidden" class="form-control" id="added" name="added" value="101"></div>
           <button type="submit" class="btn btn-primary">Register</button>
       </fieldset><br />
@@ -158,6 +162,7 @@ EOD2;
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 EOD;
     require_once '_shim.php';
     echo "</head><body style='background-color:#c0c0f0;padding:8px;font-size:{$font_size}px'>";
@@ -177,7 +182,7 @@ EOD;
     $stmt->execute();
   }
   if ($stmt = $mysqli2->prepare("INSERT INTO " . DATABASE_TABLE . " (user_name, password_hash, name, " . 
-    "interests, interests_words, tweat_notify, email, picture_ext) values(?,?,?,NULL,?,?,?,NULL)")) {
+    "interests, interests_words, tweat_notify, email, picture_ext, password_reset_hash) values(?,?,?,NULL,?,?,?,NULL,NULL)")) {
     $stmt->bind_param('ssssis', $user_name, $password_hash, $name, $interests_words, $tweat_notify, $email);
     $stmt->execute();
 //echo "1: " . $mysqli2->error;
@@ -207,6 +212,7 @@ EOD;
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 EOD;
       require_once '_shim.php';
       echo "</head><body style='background-color:#c0c0f0;padding:8px;font-size:{$font_size}px'>";
@@ -230,6 +236,7 @@ EOD;
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 EOD;
   require_once '_shim.php';
   echo "</head><body style='background-color:#c0c0f0;padding:8px;font-size:{$font_size}px'>";
