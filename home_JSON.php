@@ -1,11 +1,6 @@
 <?php
   require_once 'app_config.php';
   
-  //$mysqli2 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
-  //$mysqli2->set_charset("utf8");
-  //$mysqli2->close();
-  //exit();
-  
   $tweat_max_size = TWEATMAXSIZE;
   $site_root = SITE_ROOT;
   $self_name = $_SERVER['PHP_SELF'];
@@ -117,7 +112,7 @@ function openit() {
 <BODY style='background-color:#C0C0F0;font-family:{$font};font-size:{$font_size}px' LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onLoad="openit();">
 <h1 style='text-align:center'>Tweater: You are now unsubscribed to Tweater. Sorry to see you go!<br />(Actually I'm a computer and have no human feelings!)</h1>
 <h2 style='text-align:center'><a href="{$self_name}">Click here to sign in another user or register a new user.</a></h2>
-<img src='tweaty.png' /></BODY>
+<img src='tweatysad.png' /></BODY>
 </HTML>
 EODU;
     exit();
@@ -270,17 +265,17 @@ EODU;
   $stmt->prepare("SET NAMES 'utf8'");
   $stmt->execute();
   $stmt = $con->stmt_init();
-  $stmt->prepare("select * from " . DATABASE_TABLE . " where ((user_name = ?) or (email = ?)) and (binary password_hash = ?)");
-  $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
-  $stmt->execute();
-  $result = $stmt->get_result();
-  $stmt->close();
-  $row = mysqli_fetch_array($result);
-  $status = $row['admin_status'];
-  
 // Delete Tweat
   if (isset($_GET['delete_tweat'])) {
     $tid = $_GET['delete_tweat'];
+    $stmt->prepare("select * from " . DATABASE_TABLE . " where ((user_name = ?) or (email = ?)) and (binary password_hash = ?)");
+    $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    $row = mysqli_fetch_array($result);
+    $status = $row['admin_status'];
+  
     $mysqli3 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
     if ($status == 1) {
 // Administrator deletes a Tweat
@@ -904,8 +899,10 @@ EOD;
   });
 
   function signOut() {
-    document.cookie = "user_name=; expires=-7200; path=/";
-    document.cookie = "password=; expires=-7200; path=/";
+    var date = new Date();
+    date.setTime(date.getTime() - 7200);
+    document.cookie = "user_name={$user_name}; expires=" + date.toGMTString() + "; path=/";
+    document.cookie = "password={$password}; expires=" + date.toGMTString() + "; path=/";
     window.location.replace('signout.html');
   }
   
@@ -1188,6 +1185,12 @@ EODJ;
   }
   $bigfont = $font_size * 1.5;
 // Picture position adjustment
+  if ($picture_ext == NULL) {
+    $disable_photo_adjust = "disabled";
+  } else {
+    $disable_photo_adjust = "";
+  }
+  
   echo <<<EODT
 <div class="container" style="position:relative;top:-16px">
   <div class='row'>
@@ -1196,7 +1199,7 @@ EODJ;
     <form role="form">
       <div><a href="{$self_name}" style="font-size:{$bigfont}px;color:red;background-color:#990099"><b>
 &nbsp;Tweater&nbsp;</b></a>
-        <select class="inbox" id="selsize">
+        <select class="inbox" id="selsize" {$disable_photo_adjust}>
           <option value="Caption" default>Adjust Picture:</option>
           <option value="Show">Show</option>
           <option value="Hide">Hide</option>

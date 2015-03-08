@@ -1,12 +1,6 @@
 <?php
-  require_once 'app_config.php';
   
-  //$mysqli2 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
-  //$mysqli2->set_charset("utf8");
-  //$mysqli2->close();
-  //exit();
-  
-  $tweat_max_size = TWEATMAXSIZE;
+$tweat_max_size = TWEATMAXSIZE;
   $site_root = SITE_ROOT;
   $self_name = $_SERVER['PHP_SELF'];
 
@@ -17,85 +11,85 @@
   }
   
   if (isset($_COOKIE['pic_scale'])) {
-    $pic_scale = $_COOKIE['pic_scale'];
+    $pic_scale = $_COOKIE['pic_scale']; // Uploaded image scale multiplier
     if ($pic_scale > 16) {
-      $pic_scale = 16;
+      $pic_scale = 16; // Scale upper limit
     }
     if ($pic_scale <= 0.01) {
-      $pic_scale = 1;
+      $pic_scale = 1/64; // Scale lower limit
     }
   } else {
-    $pic_scale = 1;
+    $pic_scale = 1; // Default scale is full-size
   }
 
-  if (isset($_COOKIE['pic_position'])) {
+  if (isset($_COOKIE['pic_position'])) { // Uploaded image position
     $pic_position = $_COOKIE['pic_position'];
   } else {
-    $pic_position = "Top";
+    $pic_position = "Top"; // Default is above Tweats
   }
   
-  if (isset($_COOKIE['pic_visible'])) {
+  if (isset($_COOKIE['pic_visible'])) { // Uploaded image visibility
     $pic_visible = $_COOKIE['pic_visible'];
   } else {
-    $pic_visible = "Show";
+    $pic_visible = "Show"; // Default is visible
   }
     
-  if (isset($_COOKIE['text_color'])) {
+  if (isset($_COOKIE['text_color'])) { // Text color can be changed to white for contrast with image in background
     $text_color = $_COOKIE['text_color'];
   } else {
     $text_color = "black";
   }
   
-  if (isset($_COOKIE['font_size'])) {
+  if (isset($_COOKIE['font_size'])) { // Text size can be adjusted, especially for the vision-impaired
     $font_size = $_COOKIE['font_size'];
   } else {
     $font_size = FONTSIZE;
   }
-  $bigfont = $font_size * 1.5;
+  $bigfont = $font_size * 1.5; // Large text size
 
-  if (isset($_COOKIE['tweat_width'])) {
+  if (isset($_COOKIE['tweat_width'])) { // Display width of Tweats is adjustable
     $tweat_width = $_COOKIE['tweat_width'];
   } else {
     $tweat_width = floor(1600 / $font_size);
   }
-  
-// Limit set for number of Tweats and Search Results
-  if (isset($_COOKIE['shown_limit'])) {
+   
+  if (isset($_COOKIE['shown_limit'])) { // Maximum number of Tweats and Search Results is adjustable
     $shown_limit = $_COOKIE['shown_limit'];
   } else {
     $shown_limit = 50;
   }
   
-  if (isset($_COOKIE['font_family'])) {
+  if (isset($_COOKIE['font_family'])) { // Font is adjustable
     $font = $_COOKIE['font_family'] . ", Helvetica";
   } else {
     $font = "Helvetica";
   }
 
   $chat = 'false';
-  if (isset($_COOKIE['chat'])) {
+  if (isset($_COOKIE['chat'])) { // Chat mode refreshes Tweat display every 10 seconds for real-time conversation
     $chat = $_COOKIE['chat'];
   }
 
-// Unsubscribe request
+// Process unsubscribe request
   if (isset($_COOKIE['unsub']) && isset($_COOKIE['user_name']) && isset($_COOKIE['password'])) {
     $user_name = trim($_COOKIE['user_name']);
     $password = trim($_COOKIE['password']);
     
-    $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
+    $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME); // Connect to database
     if (!$con) {
       die('Could not connect: ' . mysqli_error($con));
     }
-    mysqli_select_db($con,DATABASE_TABLE);
+    mysqli_select_db($con,DATABASE_TABLE); // Use users table
     $stmt = $con->stmt_init();
     $stmt->prepare("DELETE FROM " . DATABASE_TABLE . 
       " WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
     $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
-    $stmt->execute();
+    $stmt->execute(); // Delete user's data (cascades to delete data from other tables)
     mysqli_close($con);
-    setcookie('user_name', "", time() - 7200, "/");
+    setcookie('user_name', "", time() - 7200, "/"); // Set cookies to be deleted
     setcookie('password', "", time() - 7200, "/");
     setcookie('unsub', "", time() - 7200, "/");
+// Display good-bye page
     echo <<<EODU
 <!DOCTYPE html>
 <HTML>
@@ -117,18 +111,19 @@ function openit() {
 <BODY style='background-color:#C0C0F0;font-family:{$font};font-size:{$font_size}px' LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onLoad="openit();">
 <h1 style='text-align:center'>Tweater: You are now unsubscribed to Tweater. Sorry to see you go!<br />(Actually I'm a computer and have no human feelings!)</h1>
 <h2 style='text-align:center'><a href="{$self_name}">Click here to sign in another user or register a new user.</a></h2>
-<img src='tweaty.png' /></BODY>
+<img src='tweatysad.png' /></BODY>
 </HTML>
 EODU;
     exit();
   }
-// Automatic signin
+
   if (isset($_COOKIE['user_name']) && isset($_COOKIE['password']) && (strlen($_COOKIE['password']) > 0)) {
+// Get automatic signin data with username and password stored in cookies
     $user_name = trim($_COOKIE['user_name']);
     $password = trim($_COOKIE['password']);
     $stay_logged_in = $_POST['stay_logged_in'];
   } else {
-// Manual signin
+// Get manual signin data
     $user_name = trim($_POST['user_name']);
     $password = trim($_POST['password']);
     $stay_logged_in = $_POST['stay_logged_in'];
@@ -208,7 +203,7 @@ EODU;
       if ($stmt = $mysqli3->prepare("SET NAMES 'utf8'")) {
         $stmt->execute();
       }
-      $hashtag_pos = strpos($tweat, "#");
+      $hashtag_pos = strpos($tweat, "#"); // Look for hashtag (Tweat subject marker)
       if ($hashtag_pos === false) {
         $hashtag = NULL;
       } else {
@@ -216,17 +211,17 @@ EODU;
         $start = $hashtag_pos;
         while (($hashtag_pos < strlen($tweat)) && (strpos(" ,.?!:;*/()-+{}[]|\"<>\\\`", 
           substr($tweat, $hashtag_pos, 1)) === false)) {
-          $hashtag_pos = $hashtag_pos + 1;
+          $hashtag_pos = $hashtag_pos + 1; // Find end of hashtag
         }
         $hashtag = trim(strtolower(substr($tweat, $start, $hashtag_pos - $start)));
       }
       if ($chat == "true") {
-        $hashtag = "DEL" . (time() + 86400);
+        $hashtag = "DEL" . (time() + 86400); // In Chat Mode, store delete time instead of hashtag
       }
       if ($stmt = $mysqli3->prepare("INSERT INTO tweats (id, user_name, tweat, hashtag) values(NULL,?,?,?)")) {
         $mysqli3->set_charset('utf8mb4');
         $stmt->bind_param('sss', $user_name, $tweat, $hashtag);
-        $stmt->execute();
+        $stmt->execute(); // Store Tweat and hashtag in database
         if (mysqli_connect_errno()) {
           $message = "ERROR: Tweat not posted! Sorry, but something went wrong.<br />" . 
             "You may try to post the Tweat again. ";
@@ -235,12 +230,12 @@ EODU;
             "(SELECT user_name FROM followed_ones WHERE followed_one = ? AND user_name != followed_one)");
           $mysqli3->set_charset('utf8mb4');
           $stmt->bind_param('s', $user_name);
-          $stmt->execute();
+          $stmt->execute(); // Check if email Tweat notification desired by user
           $result = $stmt->get_result();
           while ($row = mysqli_fetch_array($result)) {
             $email = $row['email'];
 // Send Email Tweat Notification(s)
-            if (($chat != "true") && ($row['tweat_notify'] == 1) && (strpos($email, "@") > 0)) {
+            if (($chat != "true") && ($row['tweat_notify'] == 1) && (strpos($email, "@") > 0)) { // Send email
               $email_header = "MIME-Version: 1.0\r\nContent-type:text/html;charset=UTF-8\r\n";
               mail($email, 'Tweat Notification: ' . $name . ' (' . $user_name . ') has just posted this Tweat',
                 'Hello ' . $row['name'] . ',<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $name . ' (' . 
@@ -249,8 +244,8 @@ EODU;
                 'sign in to your Tweat account at http://crandall.altervista.org/tweater<br />' . 
                 'and click on the Tweat Notifications button at the left. A pop-up prompt ' . 
                 'will appear. Type the word No and click on OK.<br /><br />--Tweater<br /><br />', $email_header);
-            } else {
-              setcookie('chat_timeout', time() + 300, time() + 7200, "/");
+            } else if ($chat == "true") {
+              setcookie('chat_timeout', time() + 300, time() + 7200, "/"); // Reset Chat Mode timeout after Tweat
             }
           }
         }
@@ -259,7 +254,7 @@ EODU;
     $stmt->close();
     $mysqli3->close();
   }
-  
+// Check administrator status with username and password hash of case-sensitive password
   $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
   if (!$con) {
     die('Could not connect: ' . mysqli_error($con));
@@ -270,17 +265,17 @@ EODU;
   $stmt->prepare("SET NAMES 'utf8'");
   $stmt->execute();
   $stmt = $con->stmt_init();
-  $stmt->prepare("select * from " . DATABASE_TABLE . " where ((user_name = ?) or (email = ?)) and (binary password_hash = ?)");
-  $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
-  $stmt->execute();
-  $result = $stmt->get_result();
-  $stmt->close();
-  $row = mysqli_fetch_array($result);
-  $status = $row['admin_status'];
-  
 // Delete Tweat
   if (isset($_GET['delete_tweat'])) {
     $tid = $_GET['delete_tweat'];
+    $stmt->prepare("select * from " . DATABASE_TABLE . " where ((user_name = ?) or (email = ?)) and (binary password_hash = ?)");
+    $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    $row = mysqli_fetch_array($result);
+    $status = $row['admin_status'];
+  
     $mysqli3 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
     if ($status == 1) {
 // Administrator deletes a Tweat
@@ -310,7 +305,7 @@ EODU;
   mysqli_select_db($con,DATABASE_TABLE);
   $stmt = $con->stmt_init();
   mysqli_set_charset('$con', 'utf8mb4');
-// Forgot password, so email password reset code if email address exists
+// Forgot password, so email password reset code if email address exists or username appears to be email address
   if ($forgot_password == "on") {
     $stmt->prepare("select * from " . DATABASE_TABLE . " where (user_name = ?) or (email = ?)");
     $stmt->bind_param('ss', $user_name, $user_name);
@@ -324,6 +319,7 @@ EODU;
     if (is_null($email)) {
       echo "<p style='color:red'>Sorry, but I don't have an email address to send the password reset code to.<br />Suggestion: Register as a new user and enter an email address at the bottom of the home page,<br />in case you forget your password again.</p>";
     } else {
+// Generate pseudo-random 10-character password reset code and store it in database and email it to user
     $password_reset_code = chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) .
       chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . 
       chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122));
@@ -333,7 +329,7 @@ EODU;
     $stmt->prepare("update " . DATABASE_TABLE . " SET password_reset_hash = ? where (user_name = ?) or (email = ?)");
     $stmt->bind_param('sss', crypt($password_reset_code,"pling515"), $user_name, $user_name);
     $stmt->execute();
-
+// Display password reset page with Turing test
 echo <<<EOD
 <!DOCTYPE html><html>
   <head><title>Password Reset</title>
@@ -352,10 +348,10 @@ echo <<<EOD
 -->
 </SCRIPT>
 EOD;
-  require_once '_shim.php';
+  require_once '_shim.php'; // Shim for MSIE
   echo "</head><body style='background-color:#A0A0C0;padding:8px;font-family:{$font};font-size:{$font_size}px' onload='turingsetup();'>";
-  require_once '_header.php';
-  if (strlen($message) > 0) {
+  require_once $header; // Menu buttons at top of page
+  if (strlen($message) > 0) { // Display message if any
     echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div>";
     $message = "";
   }
@@ -366,7 +362,7 @@ A password reset code has been sent by the Apache server to your email address<b
 check your spam folder. Please enter it here, along with the new password that<br />
 you would like to use:<br />
 <br />
-<form action="forgot_password.php" method="POST">
+<form action="forgot_password.php?return={$ret}" method="POST">
 <span>
 <div>
 <fieldset class="fieldset-auto-width" style="float:left">
@@ -392,13 +388,13 @@ EOD3;
     mysqli_close($con);
     exit();
   }
-
+// Sign in
   $stmt->prepare("SELECT * FROM " . DATABASE_TABLE . " WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
   $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
   $stmt->execute();
   $result = $stmt->get_result();
   $num_rows = $result->num_rows;
-  if ((!$result) || ($num_rows == 0)) {
+  if ((!$result) || ($num_rows == 0)) { // Sign In failure, so display Sign In/Registration with error message
     echo <<<EOD
 <!DOCTYPE html><html>
   <head><title>Tweater</title>
@@ -434,7 +430,7 @@ EOD;
     require_once '_shim.php';
     echo "</head><body style='background-color:#C0C0F0;padding:8px;font-family:{$font};
       font-size:{$font_size}px' onload='turingsetup();'>";
-    require_once '_header.php';
+    require_once $header;
     if (strlen($message) > 0) {
       echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div>";
       $message = "";
@@ -451,11 +447,11 @@ EOD;
 <div style="margin-left: auto; margin-right: auto;"><p style="text-align:center">
 <a href="{$self_name}" style="font-size:72px;color:red;background-color:violet"><b>
 &nbsp;Tweater&nbsp;</b></a></p></div>
-<div style="margin-left: auto; margin-right: auto;position: relative;right: -153px;">
+<div style="margin-left: auto; margin-right: auto;position: relative;{$title_position}">
 <form action="{$self_name}" method="POST" id="action">
 <span>
 <div>
-<fieldset class="fieldset-auto-width" style="float:left;background-color:#A0C0A0">
+<fieldset class="fieldset-auto-width" style="float:left;background-color:#A0C0A0;{$sign_in_width}">
 <legend>Sign In:</legend>
 <div class="input-group"><input type="text" class="form-control" placeholder="Username or Email" name="user_name" id="user_name" maxlength="50" size="60"></div>
 <div class="input-group"><input type="password" class="form-control" placeholder="Password" name="password" maxlength="32" size="32"></div>
@@ -470,11 +466,11 @@ EOD;
 <br /><br /><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 OR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
-<form action="register.php" method="POST" autocomplete="off">
+<form action="register.php?return={$ret}" method="POST" autocomplete="off">
 <span>
 <div>
 <fieldset class="fieldset-auto-width" style="float:left;background-color:#A0A0C0">
-<legend>Register New User:</legend>
+<legend style="background-color:#A0A0C0;{$sign_in_width}">Register New User:</legend>
 <input type="text" style="display:none">
 <input type="password" style="display:none">
 <div class="input-group"><input type="text" class="form-control" autocomplete="off" placeholder="Desired Username" name="user_name" value="{$user_name}" maxlength="50" size="50"></div>
@@ -507,12 +503,12 @@ EOD2;
   } else {
     $picture_url = $id . "." . $picture_ext;
   }
-// Set signed-in cookie
+// Set signed-in cookie if not yet set
   if (!isset($_COOKIE['user_name']) || !isset($_COOKIE['password'])) {
     setcookie('user_name', $user_name, 0, "/");
     setcookie('password', $password, 0, "/");
   }
-// Show another user's profile
+// Show another user's Public Page (profile)
   if (isset($_GET['view_user_name'])) {
 
     $view_user_name = $_GET['view_user_name'];
@@ -635,7 +631,7 @@ EOD;
 </script>
 EODJ;
     echo "</head><body style='background-color:#C0C0F0;padding:8px;font-family:{$font};font-size:{$font_size}px'>";
-    require_once '_header.php';
+    require_once $header;
     
     if (strlen($message) > 0) {
       echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div>";
@@ -649,9 +645,9 @@ EODJ;
 &nbsp;&nbsp;&nbsp;Tweater&nbsp;&nbsp;&nbsp;</b></a>
 <div style="text-shadow: 5px 5px 5px #007F00;">{$view_name}'s Tweater Page ({$view_user_name})&nbsp;&nbsp;
 <button type="button" class="btn btn-success" onclick="location.replace(
-'follow.php?followed_one={$view_user_name}&followed_name={$view_name}');">Follow</button>
+'follow.php?followed_one={$view_user_name}&followed_name={$view_name}&return={$ret}');">Follow</button>
 <button type="button" class="btn btn-danger" onclick="location.replace(
-'unfollow.php?followed_one={$view_user_name}&followed_name={$view_name}');">Unfollow</button>
+'unfollow.php?followed_one={$view_user_name}&followed_name={$view_name}&return={$ret}');">Unfollow</button>
 </div></h1><br />
 <b>Interests and Information:&nbsp;&nbsp;</b>{$view_interests}<br /><br />
 <img id='picture' src='pictures/{$picture_url}' /><br /><br />
@@ -719,7 +715,7 @@ EODT;
   echo "<!DOCTYPE html><html><head><meta charset='utf-8' />";
 
   echo "<title>" . $name . "'s Tweater Page (Username: " . $row['user_name'] . ")</title>";
-    
+// Get icon, Bootstrap, Angular and jQuery
   echo <<<EOD
     <link rel='shortcut icon' href='favicon.png' type='image/png'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -732,7 +728,7 @@ EOD;
   require_once '_shim.php';
   echo "<script language='JavaScript'>\n<!--\n";
   
-  if ($stay_logged_in == "on") {
+  if ($stay_logged_in == "on") { // Stay signed in
     echo "  staySignedIn();\n\n";
   }
   
@@ -741,16 +737,15 @@ EOD;
   $unsubscribe_password = crypt($password,"pling515");
     
   echo <<<EODJ
-  var saveWidth = $("#picture").width();
-  var picHtml = "<img id='picture' src='pictures/{$picture_url}' />";
-  var picHtmlBottom = "<img id='picture' src='pictures/{$picture_url}' style='position:relative;top:-20px;padding-bottom:20px' />";
+  var saveWidth = $("#picture").width(); // Save image size
+  var picHtml = "<img id='picture' src='pictures/{$picture_url}' />"; // Image tag for above Tweats
+  var picHtmlBottom = "<img id='picture' src='pictures/{$picture_url}' style='position:relative;top:-20px;padding-bottom:20px' />"; // Image tag for below Tweats
   var color = "{$text_color}";
   var pic_scale = {$pic_scale};
   var pic_position = "{$pic_position}";
   var pic_visible = "{$pic_visible}";
-  //alert("pos=" + pic_position + " vis=" + pic_visible + " scale=" + pic_scale + " color=" + color);
 
-  function startPic() {
+  function startPic() { // Initialize image size and position
     if (color == "white") {
       color = "black";
       toggleBW();
@@ -783,7 +778,7 @@ EOD;
     }
   }
   
-  $(document).ready(function(){
+  $(document).ready(function(){ // Change image size or position
     $("#selsize").change(function(){
       if ($("#picture").width() == 0) {
         $("#picture").width(saveWidth);
@@ -848,11 +843,13 @@ EOD;
   });
 
   function signOut() {
-    document.cookie = "user_name=; expires=-7200; path=/";
-    document.cookie = "password=; expires=-7200; path=/";
+    var date = new Date();
+    date.setTime(date.getTime() - 7200);
+    document.cookie = "user_name={$user_name}; expires=" + date.toGMTString() + "; path=/";
+    document.cookie = "password={$password}; expires=" + date.toGMTString() + "; path=/";
     window.location.replace('signout.html');
   }
-  
+
   function unsubscribe() {
     if (confirm("Are you sure you want to unsubscribe to Tweater and delete your account?")) {
       staySignedIn();
@@ -884,7 +881,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     alert("David Crandall's email is crandadk@aol.com");
   }
  
-  function textErase() {
+  function textErase() { // Erase input fields
     $("#tweat").val("");
     $("#hashtag_search").val("");
     $("#search_any").val("");
@@ -914,7 +911,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     location.replace("{$self_name}");
   }
 
-  function fontEntry() {
+  function fontEntry() { // Choose font
     var newfont = prompt("Current font: {$font}. Enter desired font: ", "Helvetica");
     if ((newfont != "") && (newfont != "{$font}")) {
       var date = new Date();
@@ -924,7 +921,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     }
   }
 // Text color for contrast
-  function toggleBW() {
+  function toggleBW() { // Toggle font color black/white
     var date = new Date();
     date.setTime(date.getTime() + (86400 * 365 * 67));
     if (color == "black") {
@@ -944,7 +941,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     }
   }
 
-  function shownLimit() {
+  function shownLimit() { // Change maximum number of Tweats and Search Results
     var newlimit = prompt("Current limit of Tweats and Search Results: {$shown_limit}. Enter desired limit: ", "50");
     if ((newlimit != "") && (newlimit != "{$shown_limit}")) {
       if ((newlimit == "") || (newlimit + 1 == 1) || (newlimit.indexOf("-") >= 0)) {
@@ -957,7 +954,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     }
   }
   
-  function tweatWidth() {
+  function tweatWidth() { // Change maximum width of Tweats display
     var newwidth = prompt("Current width of Tweats display: {$tweat_width} characters. Enter desired width: ", "80");
     if ((newwidth != "") && (newwidth != "{$tweat_width}")) {
       if ((newwidth == "") || (newwidth + 1 == 1) || (newwidth.indexOf("-") >= 0)) {
@@ -970,14 +967,14 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     }
   }
   
-  function viewUser(user) {
+  function viewUser(user) { // Show another user's Public Page (profile)
     window.open("{$self_name}?view_user_name=" + user);
   }
 
-  function settings() {
+  function settings() { // Change password or email address
     var chosen = prompt("Would you like to change your password or your email address? (password or email)", "");
     if (chosen.toLowerCase() == "password") {
-      window.open("change_password.php");
+      window.open("change_password.php?return={$ret}");
     } else if (chosen.toLowerCase().substring(0,5) == "email") {
       var emailAddress = prompt("Enter your new email address or just press OK to have no email address:", "");
       if (emailAddress == "") {
@@ -987,7 +984,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     }
   }
 
-  function notifications() {
+  function notifications() { // Set email Tweat Notifications preference
     var notify = prompt("Would you like email Tweat Notifications of Tweats posted by people " + 
       "you're following (Add apache@crandall.altervista.org to your contact list)? (Yes or No)", "");
     if (notify.trim().toLowerCase().substr(0,1) == "y") {
@@ -997,7 +994,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     }
   }
   
-  function hashtagSearch() {
+  function hashtagSearch() { // Search Tweats by hashtag (subject), e.g. #music
     var hashtag = $("#hashtag_search").val();
     hashtag = hashtag.trim().toLowerCase();
     if (hashtag.substr(0,1) == "#") {
@@ -1006,10 +1003,10 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     hashtag = hashtag.replace(/\*/g, "%2A");
     hashtag = hashtag.replace(/\?/g, "%3F");
     hashtag = hashtag.replace(/ /g, "");
-    window.open("hashtag_search_results.php?hashtag_search=" + hashtag + "&admin={$status}");
+    window.open("hashtag_search_results.php?hashtag_search=" + hashtag + "&admin={$status}&return={$ret}");
   }
   
-  function chatToggle(mode) {
+  function chatToggle(mode) { // Toggle Chat Mode for 10-second Tweats refresh
     var date = new Date();
     // 5 minute timeout if user doesn't send a Tweat
     var chatTimeout = Math.floor(date.getTime()/1000) + 300;
@@ -1028,7 +1025,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     location.replace("{$self_name}?chat=" + mode);
   }
   
-  $(document).ready(function() {
+  $(document).ready(function() { // Set up Enter key for sending Tweat
     $('#tweat').keypress(function(e) {
       if (e.which == 13) {
         $('#tweatform').submit();
@@ -1037,7 +1034,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     });
   });
   
-  $(document).ready(function() {
+  $(document).ready(function() { // Set up Enter key for sending hashtag search
     $('#hashtag_search').keypress(function(e) {
       if (e.which == 13) {
         hashtagSearch();
@@ -1047,7 +1044,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
   });
   
   $(document).ready(function() {
-    $('#search_any').keypress(function(e) {
+    $('#search_any').keypress(function(e) { // Set up Enter key for sending user search by names/info/interests
       if (e.which == 13) {
         $('#user_search_form').submit();
         e.preventDefault();
@@ -1058,17 +1055,19 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
 //-->
 </script>
 EODJ;
+// Display user's Home Page
   echo "</head><body background='pictures/backviolet.png' 
     style='color:black;background-color:#c0c0f0;padding:8px;font-family:{$font};font-size:{$font_size}px'>";
-  require_once '_header.php';
+  require_once $header; // Menu buttons at top
   
-  if (strlen($message) > 0) {
+  if (strlen($message) > 0) { // Display message if any
     echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div><br />";
     $message = "";
   }
 
   $interests = "";
   $row_interests = $row['interests'];
+
 // Update information and interests
   if (isset($_REQUEST['interests'])) {
     $interests = $_REQUEST['interests'];
@@ -1103,7 +1102,8 @@ EODJ;
         $user_name = $rowi['user_name'];
       }
     }
-      
+
+// Build list of old interests for deleting and list of new interests for adding
     $old_interests = str_replace("-", " ", substr(strtolower($row_interests), 0, 250));
     $old_interests = trim(strtr($old_interests, '!"#%&()*+,-./:;<=>?[\]^_`{|}~' . 
     '¡¦©«¬­®¯´¶¸»¿', '                                                  ' . 
@@ -1125,14 +1125,17 @@ EODJ;
     $new_interests = str_replace("   ", " ", $new_interests);
     $new_interests = str_replace("  ", " ", $new_interests);
     
+// Add username and name to lists of interests
     $old_interests = strtolower($user_name) . " " . strtolower($name) . " " . $old_interests;
     $new_interests = strtolower($user_name) . " " . strtolower($name) . " " . $new_interests;
+
+// Create arrays of unique words from interests
     $old_interests_array = array_unique(explode(" ", $old_interests));
     $new_interests_array = array_unique(explode(" ", $new_interests));
     $old_interests = "  " . $old_interests . " ";
     $new_interests = "  " . $new_interests . " ";
 
-    if (mb_check_encoding($old_interests, 'UTF-8' ) === true ) {
+    if (mb_check_encoding($old_interests, 'UTF-8' ) === true ) { // Use UTF-8 character encoding
         $stmt->prepare("SET NAMES 'utf8'");
         $stmt->execute();
     }
@@ -1141,7 +1144,7 @@ EODJ;
         $stmt->execute();
     }
     
-    foreach ($new_interests_array as $new_item) {
+    foreach ($new_interests_array as $new_item) { // Add new updated interests to database
       if ((strlen($new_item) > 0) && (strpos($old_interests, " " . $new_item . " ") == false)) {
         $stmt->prepare("INSERT INTO interests (id, user_name, interest) values(NULL, ?,?)");
         mysqli_set_charset('$con', 'utf8mb4');
@@ -1149,7 +1152,7 @@ EODJ;
         $stmt->execute();
       }
     }
-    foreach ($old_interests_array as $old_item) {
+    foreach ($old_interests_array as $old_item) { // Delete old obsolete interests from database
       if ((strlen($old_item) > 0) && (strpos($new_interests, " " . $old_item . " ") == false)) {
         $stmt->prepare("DELETE FROM interests WHERE user_name = ? AND interest = ?");
         mysqli_set_charset('$con', 'utf8mb4');
@@ -1157,14 +1160,15 @@ EODJ;
         $stmt->execute();
       }
     }
-    
+
+// Store interests list in database
     $stmt->prepare("UPDATE " . DATABASE_TABLE . " SET interests_words = ? " . 
       "WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
     $stmt->bind_param('ssss', $new_interests, $user_name, $user_name, crypt($password,"pling515"));
     $stmt->execute();
     }
   } else {
-    $interests = $row_interests;
+    $interests = $row_interests; // No update of interests
   }
   if ($interests == "    ") {
     $interests = "";
@@ -1172,22 +1176,29 @@ EODJ;
   
   mysqli_close($con);
   
-  if ($font_size == FONTSIZE) {
+  if ($font_size == FONTSIZE) { // Adjust input width by font size
     $input_width = 113;
   } else {
     $input_width = floor(2000 / $font_size);
   }
   $bigfont = $font_size * 1.5;
-// Picture position adjustment
+// Enable/disable image adjustment
+  if ($picture_ext == NULL) {
+    $disable_photo_adjust = "disabled";
+  } else {
+    $disable_photo_adjust = "";
+  }
+
+// Display image adjustment drop-down
   echo <<<EODT
 <div class="container" style="position:relative;top:-16px">
   <div class='row'>
     <div class='col-md-3' style="background-color:#6644CC;text-align:center;height:259px;width:334px;
-    margin-left: -53px;margin-right: 4px;padding: 10px;border: 4px outset violet">
+    {$margin_left}margin-right: 4px;padding: 10px;border: 4px outset violet">
     <form role="form">
       <div><a href="{$self_name}" style="font-size:{$bigfont}px;color:red;background-color:#990099"><b>
 &nbsp;Tweater&nbsp;</b></a>
-        <select class="inbox" id="selsize">
+        <select class="inbox" id="selsize" {$disable_photo_adjust}>
           <option value="Caption" default>Adjust Picture:</option>
           <option value="Show">Show</option>
           <option value="Hide">Hide</option>
@@ -1212,7 +1223,7 @@ EODT;
   $stmt4->execute();
   $result4 = $stmt4->get_result();
   if ($myrow4 = $result4->fetch_assoc()) {
-    $followers_count = $myrow4['followers_count'] - 1;
+    $followers_count = $myrow4['followers_count'] - 1; // Don't count self
   } else {
     $followers_count = 0;
   }
@@ -1239,6 +1250,8 @@ EODT;
   }
   $stmt3->close();
   $mysqli3->close();
+
+// Display email Tweat notification button
   echo <<<EODF2
         </select>
         <div style="text-align:center"><button type="button" class="btn btn-warning" onclick="notifications();">Notifications</button>
@@ -1246,7 +1259,7 @@ EODT;
 EODF2;
 
   $esc_name = str_replace(" ", "+", $name);
-  if ($chat == 'true') {
+  if ($chat == 'true') { // Adjust Chat Mode start/stop button and its action
     $chat_button = 'danger';
     $chat_button_action = 'Stop';
     $chat_toggle = 'false';
@@ -1255,142 +1268,3 @@ EODF2;
     $chat_button_action = 'Start';
     $chat_toggle = 'true';
   }
-// Interests and Information and Tweat Entry
-  echo <<<EODF
-<form action="{$self_name}" method="POST" role="form" id="intinfo" name="intinfo" class="intinfo">
-<span>
-<div>
-<fieldset class="fieldset-auto-width" style="float:left"><b>Interests and Information:&nbsp;&nbsp;&nbsp;</b>
-<button type="submit" id="intsubmit" name="intsubmit" class="btn btn-info" style="margin-left:-9px;position:relative;left:2px" >
-Update</button><input type="hidden" name="message" value="Updated Interests and Information! (Limit: {$tweat_max_size} bytes.)"></input>
-<div class="span3 form-group">
-<textarea class="textarea inbox" rows="4" cols="36" id="interests" name="interests" maxlength="{$tweat_max_size}" 
-  placeholder="You may type your interests and information here and press Update."
-  style="font-size:{$fontsize};height:80px">{$interests}</textarea>
-</div>
-</fieldset>
-</div>
-</span>
-</form>
-</div>
-<div class='col-md-9' style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
-  darkblue;padding:10px;height:259px'>
-<form action="{$self_name}" method="POST" role="form" id="tweatform">
-<span>
-<div ng-app="">
-<fieldset class="fieldset-auto-width" style="float:left">
-<div class="span9 form-group" style="height:170px">
-<textarea class="textarea inbox" rows="4" cols="103" id="tweat" name="tweat" autofocus ng-model="tweat" 
-  onkeyup="showCharsLeftAndLimit(this);" maxlength="{$tweat_max_size}" placeholder=
-  "--Type your Tweat here (limit: {$tweat_max_size} characters) and then click the Post Tweat button or press Enter.--">
-  </textarea><br />
-<button type="submit" class="btn btn-success">Post Tweat</button>
-<span style="font-family:Courier New, monospace">
-<span ng-bind="('0000' + ({$tweat_max_size} - tweat.length)).slice(-3)"></span> characters left
-</span>
-<span><button type="button" class="btn btn-warning" onclick="textErase();">Erase</button>
-<button type="button" class="btn btn-success" style="width:100px" onclick="textLarger();">Text Size+</button>
-<button type="button" class="btn btn-primary" style="padding-left:2px;padding-right:2px;width:80px" onclick="textSmaller();">Text Size-</button>
-<button type="button" class="btn btn-info" onclick="fontEntry();">Font</button>
-<button type="button" class="btn btn-primary" style="padding-left:2px;padding-right:2px;width:47px" onclick="toggleBW();">B/W</button>
-<button type="button" class="btn btn-info" style="position:relative;left:-1px" onclick="tweatWidth();">Width</button>&nbsp;
-<button type="submit" class="btn btn-{$chat_button}" onclick="chatToggle({$chat_toggle})" 
- style="position:relative;left:-6px">{$chat_button_action} Chat</button>
-<input type="hidden" class="form-control" name="name" value={$esc_name}><br /></form>
-<form><span style="position:relative;top:3px">Hashtag Search: #</span><input type="text" id="hashtag_search" style="font-size:{$fontsize};width:450px;position:relative;top:5px"
-  name="hashtag_search" maxlength="30" placeholder="To search Tweats, type the hashtag here and press--&gt;"></input>
-  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px">Hashtag Search</button>&nbsp;
-<button type="button" class="btn btn-warning" onclick="shownLimit();" style="padding-left:3px;padding-right:3px">Limit: {$shown_limit}</button>
-</span></span><br /></div></fieldset></div></form>
-<form action="user_search_results.php?admin={$status}" method="POST" role="form" target="_blank" id="user_search_form"><br />
-<nobr><span style="position:relative;top:-22px">User Search: </span><input type="text" id="search_any" name="search_any" size="72" maxlength="250" 
-  style="position:relative;top:-19px;height:26px" placeholder="To search by interests, info or names, type them here and press--&gt;" 
-  style="font-size:{$fontsize}"></input>&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-24px">User Search</button></nobr><br />
-</form>
-<form action="boolean_user_search_results.php?admin={$status}" method="POST" role="form" target="_blank"><br />
-<nobr><span style="position:relative;top:-46px">Boolean Search: <input type="text" 
-  style="position:relative;top:3px" placeholder="First Search Term" id="search_one" 
-  name="search_one" maxlength="30" size="26">
-<select class="inbox" id="search_type" name="search_type" style="position:relative;left:-5px;top:1px">
-          <option value="AND" default>AND</option>
-          <option value="OR">OR</option>
-          <option value="NOT">NOT</option>
-</select><input type="text" style="position:relative;top:3px;left:-6px" placeholder="Second Search Term" id="search_two" name="search_two" value="" maxlength="30" size="26">
-<button type="submit" class="btn btn-warning" style="position:relative;top:-2px;left:-6px">Boolean Search</button></span></nobr></form>
-</div></div></div><div class='row'>
-EODF;
-
-// Display Tweats
-  if ($chat == 'true') {
-// Display Tweats as Chat in iframe
-    $name = strtr($name, " ", "+");
-    echo "<iframe id='tweats_iframe' src='get_tweats.php?name={$name}' style='width:1250px;height:590px;position:absolute;" . 
-      "left:0px'><p>Your browser doesn't support iframes!</p></iframe>";
-    echo "<p style='position:relative;left:20px;top:590px'><i>Note:&nbsp;&nbsp;The creator of this website " . 
-        "doesn't assume responsibility for its usage by others.</i></p>";
-    echo "<br /><img id='picture' src='pictures/{$picture_url}' style='position:relative;top:570px' />";
-    echo "<p style='position:relative;top:590px'>&nbsp;</p>";
-  } else {
-// Display Tweats as non-Chat without iframe
-    echo "<div id='pic_top' style='position:relative;left:7px;top:-12px'><img id='top' src='transparent.gif' onload='startPic();' /></div></div></div>";
-// Get Tweats from followed users and signed-in user for non-Chat Mode
-    $mysqli2 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
-    
-    $mysqli2->set_charset("utf8");
-    if ($stmt = $mysqli2->prepare("SELECT t.id, t.user_name, t.tweat, t.hashtag, u.name FROM tweats AS t INNER JOIN " . 
-      "users AS u ON t.user_name = u.user_name WHERE t.user_name IN " . 
-      "(SELECT followed_one FROM followed_ones AS f WHERE f.user_name = ?) ORDER BY t.id DESC LIMIT ?")) {
-      $stmt->bind_param('ss', $user_name, $shown_limit);
-      $stmt->execute();
-      $result = $stmt->get_result();
-    } else {
-      echo "Error: " . $mysqli2->error . " & " . $mysqli3->error;
-    }    
-    while ($myrow = $result->fetch_assoc()) {
-      if ($myrow['name']) {
-        $myrow_name = $myrow['name'];
-        $myrow_tweat = $myrow['tweat'];
-        $tid = $myrow['id'];
-        $myrow_hashtag = $myrow['hashtag'];
-      } else {
-        $myrow_name = "";
-        $myrow_tweat = "";
-        $myrow_hashtag = "";
-      }
-      if (substr($myrow_hashtag, 0, 3) == "DEL") {
-
-      // Delete old chat tweat
-        if (time() > substr($myrow_hashtag, 3)) {
-          $stmt->close();
-          $stmt = $mysqli2->prepare("DELETE FROM tweats WHERE id = ?");
-          $stmt->bind_param('i', $tid);
-          $stmt->execute();
-          continue;
-        }
-      }
-      echo "<div class='row' style='color:black'><div class='col-md-3 text-right' " . 
-      "style='word-wrap: break-word; margin-right: 1em; position:relative; left:46px'><b>" . 
-        wordwrap($myrow_name, 40, '<br />', true) . 
-        "</b>:</div><div class='col-md-9' style='margin-left: -2em; position:relative; left:46px'><p>" . 
-        wordwrap($myrow_tweat, $tweat_width, '<br />', true);
-        if ($myrow_name == $name) {
-          $no_quote_tweat = strtr(substr($myrow_tweat,0,80), "\"'\t\r\n\f", "      ");
-// X button to delete Tweat
-          echo "&nbsp;&nbsp;<img src='xdel.png' style='position:relative;top:-1px' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
-            $no_quote_tweat . "...\")) {location.replace(\"{$self_name}?delete_tweat=\" + {$tid});}' />";
-        }
-        echo "</p></div></div>";
-    }
-    $stmt->close();
-    $mysqli2->close();
-    echo "</div>";
-// Disclaimer    
-  echo "<div style='text-align:center'><br /><i>Note:&nbsp;&nbsp;The creator of this website " . 
-    "doesn't assume responsibility for its usage by others.</i><br /><br />" . 
-    "<div class='row' style='color:black'><div class='col-md-3 text-right'>" . 
-    "<div id='pic_bottom' style='position:absolute;left:7px'>";
-  echo "<img id='bottom' src='transparent.gif' />";
-  echo "</div></div><div class='col-md-9'></div></div>";
-  }
-  echo "&nbsp;<br />&nbsp;<br />&nbsp;</div></body></html>";
-  exit();

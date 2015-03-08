@@ -11,11 +11,11 @@ function openit() {
   if (navigator.appVersion.indexOf("Chrome") >= 0) {
     window.location.replace('home_chrome.php');
   } else if (navigator.appVersion.indexOf("(Windows ") >= 0) {
-    window.location.replace('home.php');
+    window.location.replace('home_msie.php');
   } else if (navigator.appVersion.indexOf("5.0 (Windows)") >= 0) {
     window.location.replace('home_firefox.php');
   } else {
-    window.location.replace('home.php');
+    window.location.replace('home_msie.php');
   }
 }
 //-->
