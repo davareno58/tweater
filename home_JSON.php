@@ -1112,11 +1112,11 @@ EODJ;
       
     $old_interests = str_replace("-", " ", substr(strtolower($row_interests), 0, 250));
     $old_interests = trim(strtr($old_interests, '!"#%&()*+,-./:;<=>?[\]^_`{|}~' . 
-    '¡¦©«¬­®¯´¶¸»¿', '                                                  ' . 
+    'Â¡Â¦Â©Â«Â¬Â­Â®Â¯Â´Â¶Â¸Â»Â¿', '                                                  ' . 
     '                                       '));
     $new_interests = str_replace("-", " ", substr(strtolower($interests), 0, 250));
     $new_interests = trim(strtr($new_interests, '!"#%&()*+,-./:;<=>?[\]^_`{|}~' . 
-    '¡¦©«¬­®¯´¶¸»¿', '                                                  ' . 
+    'Â¡Â¦Â©Â«Â¬Â­Â®Â¯Â´Â¶Â¸Â»Â¿', '                                                  ' . 
     '                                       '));
     $old_interests = str_replace("   ", " ", $old_interests);
     $old_interests = str_replace("  ", " ", $old_interests);
