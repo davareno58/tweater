@@ -25,11 +25,11 @@
   };
 -->
 </SCRIPT>
-<body style='background-color:#C0C0F0;font-size:{$font_size}px'>
+<body style='background-color:#99D9EA;font-size:{$font_size}px'>
 <div><a href="{$self_name}" style="font-size:{$bigfont}px;color:red;background-color:#990099"><b>
 &nbsp;Tweater Help&nbsp;</b></a></div>
 EOD;
-  echo "<img src='tweatyleft.png' style='float:right' /><ul><li>To show a list of all users, just click the User Search button at the right.</li>
+  echo "<img src='tweatyquestion.png' style='float:right' /><ul><li>To show a list of all users, just click the User Search button at the right.</li>
   <li>The picture file upload function is temporarily disabled for 
   security reasons.</li><li>Click your browser's Back button to go back to previous page(s).</li>
   <li>Click on Home at the top left to update your page, or to remove red messages at the top.</li>
@@ -54,4 +54,6 @@ EOD;
   <li>To add a hashtag to a Tweat, just include the # sign followed by the hashtag,<br />
   such as #popmusic (with no spaces between multiple words). Only one hashtag<br /> 
   can be used in each Tweat, but you could post the same Tweat twice<br />with different hashtags, theoretically...</li>
-  </ul></body></html>";
+  </ul></body></html>";
+  exit();
+  

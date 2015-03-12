@@ -43,4 +43,5 @@
     exit();
   }
   echo "<script>alert('There was an error and the user was not unfollowed. You may try again later.');window.close();</script>";
-  exit();
+  exit();
+  

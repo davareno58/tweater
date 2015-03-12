@@ -62,29 +62,28 @@ EOD;
   }
   
   if ($stmt = $mysqli->prepare("SELECT user_name FROM " . DATABASE_TABLE . " WHERE user_name = ?")) {
-  $stmt->bind_param("s", $user_name);
-  $stmt->execute();
-  $stmt->bind_result($uname);
-  $stmt->fetch();
-  if ($uname == $user_name) {
-    $already_exists = 1;
-  } else {
-    $already_exists = 0;
-  }
-  if (($already_exists == 1) || ($password_confirm != $password) || (strlen($password) < 6)) {
-    $error_message = "";
-    if ($already_exists == 1) {
-      $error_message .= $already_exists_error;
+    $stmt->bind_param("s", $user_name);
+    $stmt->execute();
+    $stmt->bind_result($uname);
+    $stmt->fetch();
+    if ($uname == $user_name) {
+      $already_exists = 1;
+    } else {
+      $already_exists = 0;
     }
-    if ($password_confirm != $password) {
-      $error_message .= $password_confirmation_error;
-    }
-    if (strlen($password) < 6) {
-      $error_message .= $password_length_error;
-    }
+    if (($already_exists == 1) || ($password_confirm != $password) || (strlen($password) < 6)) {
+      $error_message = "";
+      if ($already_exists == 1) {
+        $error_message .= $already_exists_error;
+      }
+      if ($password_confirm != $password) {
+        $error_message .= $password_confirmation_error;
+      }
+      if (strlen($password) < 6) {
+        $error_message .= $password_length_error;
+      }
     
-
-  echo <<<EOD
+      echo <<<EOD
 <!DOCTYPE html><html>
   <head><title>Tweater: Error!</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -92,8 +91,8 @@ EOD;
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 EOD;
-  require_once '_shim.php';
-    echo <<<EODS
+      require_once '_shim.php';
+      echo <<<EODS
 <SCRIPT LANGUAGE="JavaScript">
 <!--
   function turingsetup() {
@@ -109,13 +108,13 @@ EOD;
       font-size:{$font_size}px' onload='turingsetup();'>
 EODS;
 
-  require_once '_header' . $ret . '.php';
-  echo "<div class='container'>";
-  echo $message;
-  echo "</div>";
-    $self_name = $_SERVER['PHP_SELF'];
-    echo "<h4 style='color:red'>Error:&nbsp;&nbsp;{$error_message}</h4>";
-    echo <<<EOD2
+      require_once '_header' . $ret . '.php';
+      echo "<div class='container'>";
+      echo $message;
+      echo "</div>";
+      $self_name = $_SERVER['PHP_SELF'];
+      echo "<h4 style='color:red'>Error:&nbsp;&nbsp;{$error_message}</h4>";
+      echo <<<EOD2
 <div class="center"><p style="text-align:center">
   <a href="home{$ret}.php" style="font-size:72px;color:red;background-color:violet"><b>
 &nbsp;Tweater&nbsp;</b></a></p></div>
@@ -145,11 +144,11 @@ placeholder="Optional: Your Email for Tweat Notifications" name="email" value="{
 </body>
 </html>
 EOD2;
-    $stmt->close();
-    $mysqli->close();
-    exit();
-  }
-} 
+      $stmt->close();
+      $mysqli->close();
+      exit();
+    }
+  } 
   $stmt->close();
   $mysqli->close();
   
@@ -185,7 +184,6 @@ EOD;
     "interests, interests_words, tweat_notify, email, picture_ext, password_reset_hash) values(?,?,?,NULL,?,?,?,NULL,NULL)")) {
     $stmt->bind_param('ssssis', $user_name, $password_hash, $name, $interests_words, $tweat_notify, $email);
     $stmt->execute();
-//echo "1: " . $mysqli2->error;
     $stmt = $mysqli2->prepare("INSERT INTO followed_ones (id, user_name, followed_one) VALUES (NULL, ?, ?)");
     $stmt->bind_param('ss', $user_name, $user_name);
     $stmt->execute();
@@ -204,7 +202,6 @@ EOD;
     $stmt->execute();
     $stmt->bind_result($uname);
     $stmt->fetch();
-//echo "2: " . $mysqli2->error;
     if ($uname == $user_name) {
       echo <<<EOD
 <!DOCTYPE html><html>
@@ -250,3 +247,5 @@ EOD;
   
   $stmt->close();
   $mysqli2->close();
+  exit();
+  

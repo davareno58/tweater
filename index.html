@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <HTML>
-<HEAD>
-<TITLE>TWEATER</TITLE>
-<META NAME="description" CONTENT="Tweater Social Site"> 
-<META NAME="keywords" CONTENT="tweater, social site, tweats">
-<SCRIPT LANGUAGE="JavaScript">
-<!--
+  <HEAD>
+    <TITLE>TWEATER</TITLE>
+    <META NAME="description" CONTENT="Tweater Social Site"> 
+    <META NAME="keywords" CONTENT="tweater, social site, tweats">
+    <SCRIPT LANGUAGE="JavaScript">
+    <!--
 function openit() {
-//alert(navigator.appVersion);
   if (navigator.appVersion.indexOf("Chrome") >= 0) {
     window.location.replace('home_chrome.php');
   } else if (navigator.appVersion.indexOf("(Windows ") >= 0) {
@@ -15,14 +14,18 @@ function openit() {
   } else if (navigator.appVersion.indexOf("5.0 (Windows)") >= 0) {
     window.location.replace('home_firefox.php');
   } else {
-    window.location.replace('home_msie.php');
+    window.location.replace('home_chrome.php');
   }
 }
-//-->
-</SCRIPT>
-</HEAD>
-<BODY LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onload="openit()">
-<h1>Tweater</h1>
-<h1 style='text-align:center'><a href="home.php" onclick="openit()">If you're not redirected to Tweater in a few seconds, please click here.</a></h1>
-<img src='tweaty.png' /></BODY>
+    //-->
+    </SCRIPT>
+  </HEAD>
+  <BODY LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="#99D9EA" onload="openit()">
+    <h1>Tweater</h1>
+    <h1 style='text-align:center'>
+      <a href="home_chrome.php" onclick="openit()">If you're not redirected to Tweater in a few seconds, 
+        please click here.</a>
+    </h1>
+    <img src='tweaty.png' />
+  </BODY>
 </HTML>

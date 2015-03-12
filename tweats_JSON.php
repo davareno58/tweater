@@ -23,7 +23,9 @@ $stmt->execute();
 $result = $stmt->get_result();
 $outp = "[";
 while($rs = $result->fetch_assoc()) {
-  if ($outp != "[") {$outp .= ",";}
+  if ($outp != "[") {
+    $outp .= ",";
+  }
   $rs_name = $rs["name"];
   $rs_tweat = $rs["tweat"];
   $rs_id = $rs["id"];
@@ -46,4 +48,4 @@ while($rs = $result->fetch_assoc()) {
 $outp .="]";
 $stmt->close();
 $mysqli2->close();
-echo($outp);
+echo($outp);

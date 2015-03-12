@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html>
-<head>
-<title>Tweater Picture File Upload
-</title>
-    <style>
+<HTML>
+  <HEAD>
+    <TITLE>Tweater Picture File Upload</TITLE>
+    <STYLE>
       .center {
         margin-left: auto;
         margin-right: auto;
         width: 50%;
         background-color: #00DD00;
       }
-    </style>
-</head>
-<body style='background-color:#c0c0f0;padding:8px;font-family:Courier New, Helvetica};'>
-<div style="width:100%"><div class="center"><h1 class="center">Picture Upload:</h1></div></div>
-<div class="center">
-<h2>Disabled.</h2>
-<form action="upload_picture.php" method="post" enctype="multipart/form-data">
-<h2>Select picture file to upload (only jpg, gif and png image files are allowed):</h2>
-<input type="file" name="uploadFile" id="uploadFile" size="70">
-<input type="hidden" name="user_name" value="{$user_name}">
-<input type="submit" value="Upload Picture File" name="submit">
-<input type="button" value="Cancel" onclick="location.replace('home.php');">
-</form>
-</div>
-</body>
-</html>
+    </STYLE>
+  </HEAD>
+  <BODY style='background-color:#c0c0f0;padding:8px;font-family:Courier New, Helvetica};'>
+    <DIV style="width:100%">
+      <DIV class="center">
+        <H1 class="center">Picture Upload:</H1>
+      </DIV>
+    </DIV>
+    <DIV class="center">
+      <!--<H2>Disabled.</H2>-->
+      <FORM action="upload_picture.php" method="post" enctype="multipart/form-data">
+        <H2>Select picture file to upload (only jpg, gif and png image files are allowed):</H2>
+        <INPUT type="file" name="uploadFile" id="uploadFile" size="70">
+        <INPUT type="hidden" name="user_name" value="{$user_name}">
+        <INPUT type="submit" value="Upload Picture File" name="submit">
+        <INPUT type="button" value="Cancel" onclick="window.close();">
+      </FORM>
+    </DIV>
+  </BODY>
+</HTML>

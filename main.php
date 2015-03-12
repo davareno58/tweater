@@ -1,6 +1,5 @@
 <?php
-  
-$tweat_max_size = TWEATMAXSIZE;
+  $tweat_max_size = TWEATMAXSIZE;
   $site_root = SITE_ROOT;
   $self_name = $_SERVER['PHP_SELF'];
 
@@ -10,6 +9,7 @@ $tweat_max_size = TWEATMAXSIZE;
     $message = "";
   }
   
+// Get various cookies data
   if (isset($_COOKIE['pic_scale'])) {
     $pic_scale = $_COOKIE['pic_scale']; // Uploaded image scale multiplier
     if ($pic_scale > 16) {
@@ -108,7 +108,7 @@ function openit() {
 //-->
 </SCRIPT>
 </HEAD>
-<BODY style='background-color:#C0C0F0;font-family:{$font};font-size:{$font_size}px' LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onLoad="openit();">
+<BODY style='background-color:#99D9EA;font-family:{$font};font-size:{$font_size}px' LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onLoad="openit();">
 <h1 style='text-align:center'>Tweater: You are now unsubscribed to Tweater. Sorry to see you go!<br />(Actually I'm a computer and have no human feelings!)</h1>
 <h2 style='text-align:center'><a href="{$self_name}">Click here to sign in another user or register a new user.</a></h2>
 <img src='tweatysad.png' /></BODY>
@@ -237,13 +237,15 @@ EODU;
 // Send Email Tweat Notification(s)
             if (($chat != "true") && ($row['tweat_notify'] == 1) && (strpos($email, "@") > 0)) { // Send email
               $email_header = "MIME-Version: 1.0\r\nContent-type:text/html;charset=UTF-8\r\n";
-              mail($email, 'Tweat Notification: ' . $name . ' (' . $user_name . ') has just posted this Tweat',
+              mail($email, 'Tweat Notification: ' . $name . ' (' . $user_name . ') just posted this Tweat',
                 'Hello ' . $row['name'] . ',<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $name . ' (' . 
-                $user_name . ') has just posted this Tweat:<br /><br />' . wordwrap($tweat, 70, '<br />', true) . 
+                $user_name . ') just posted this Tweat:<br /><br />' . wordwrap($tweat, 70, '<br />', true) . 
                 '<br /><br />If you don\'t want to receive Tweat Notifications, please ' . 
                 'sign in to your Tweat account at http://crandall.altervista.org/tweater<br />' . 
                 'and click on the Tweat Notifications button at the left. A pop-up prompt ' . 
-                'will appear. Type the word No and click on OK.<br /><br />--Tweater<br /><br />', $email_header);
+                'will appear. Type the word No and click on OK.<br /><br />' . 
+                '<a href="http://crandall.altervista.org/tweater" style="font-size:40px;color:red;background-color:#990099">' . 
+                '<b>&nbsp;Tweater&nbsp;</b></a><br /><br />', $email_header);
             } else if ($chat == "true") {
               setcookie('chat_timeout', time() + 300, time() + 7200, "/"); // Reset Chat Mode timeout after Tweat
             }
@@ -317,20 +319,25 @@ EODU;
       $email = $row['user_name'];
     }
     if (is_null($email)) {
-      echo "<p style='color:red'>Sorry, but I don't have an email address to send the password reset code to.<br />Suggestion: Register as a new user and enter an email address at the bottom of the home page,<br />in case you forget your password again.</p>";
+      echo "<p style='color:red'>Sorry, but I don't have an email address to send the password reset " .
+        "code to.<br />Suggestion: Register as a new user and enter an email address at the bottom of " . 
+        "the home page,<br />in case you forget your password again.</p>";
     } else {
 // Generate pseudo-random 10-character password reset code and store it in database and email it to user
-    $password_reset_code = chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) .
-      chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . 
-      chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122));
+      $password_reset_code = chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) .
+        chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . 
+        chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122));
+      $email_header = "MIME-Version: 1.0\r\nContent-type:text/html;charset=UTF-8\r\n";
       mail($email, 'Password reset code for ' . $row['name']. '\'s Tweater account',
-        $row['name'] . ', Here is the requested password reset code for your Tweater account: ' . 
-        $password_reset_code);
-    $stmt->prepare("update " . DATABASE_TABLE . " SET password_reset_hash = ? where (user_name = ?) or (email = ?)");
-    $stmt->bind_param('sss', crypt($password_reset_code,"pling515"), $user_name, $user_name);
-    $stmt->execute();
+        '<html><body>' . $row['name'] . ',<br /><br />Here is the requested password reset code for your Tweater account: ' . 
+        $password_reset_code . '<br /><br />' . 
+        '<a href="http://crandall.altervista.org/tweater" style="font-size:40px;color:red;background-color:#990099">' . 
+        '<b>&nbsp;Tweater&nbsp;</b></a><br /><br /></html></body>', $email_header);
+      $stmt->prepare("update " . DATABASE_TABLE . " SET password_reset_hash = ? where (user_name = ?) or (email = ?)");
+      $stmt->bind_param('sss', crypt($password_reset_code,"pling515"), $user_name, $user_name);
+      $stmt->execute();
 // Display password reset page with Turing test
-echo <<<EOD
+      echo <<<EOD
 <!DOCTYPE html><html>
   <head><title>Password Reset</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -348,15 +355,17 @@ echo <<<EOD
 -->
 </SCRIPT>
 EOD;
-  require_once '_shim.php'; // Shim for MSIE
-  echo "</head><body style='background-color:#A0A0C0;padding:8px;font-family:{$font};font-size:{$font_size}px' onload='turingsetup();'>";
-  require_once $header; // Menu buttons at top of page
-  if (strlen($message) > 0) { // Display message if any
-    echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div>";
-    $message = "";
-  }
+      require_once '_shim.php'; // Shim for MSIE
+      echo "</head><body style='background-color:#99D9EA;padding:8px;font-family:{$font};" . 
+        "font-size:{$font_size}px' onload='turingsetup();'>";
+      require_once $header; // Menu buttons at top of page
+      if (strlen($message) > 0) { // Display message if any
+        echo "<div class='container'><p style='font-size:{$bigfont}px;color:red'>{$message}</p></div>";
+        $message = "";
+      }
 // Enter password reset code and choose new password
-  echo <<<EOD3
+      echo <<<EOD3
+<img src='tweatyquestion.png' style='float:right' />
 A password reset code has been sent by the Apache server to your email address<br />
 (or to the email address in your username). If you don't see it there, be sure to<br />
 check your spam folder. Please enter it here, along with the new password that<br />
@@ -369,13 +378,19 @@ you would like to use:<br />
 <legend>Password Reset:</legend>
 <input type="text" style="display:none">
 <input type="password" style="display:none">
-<div class="input-group"><input type="text" class="form-control" placeholder="Password Reset Code" name="given_password_reset_code" autocomplete="off" maxlength="20" size=20></div>
-<div class="input-group"><input type="password" class="form-control" placeholder="New Password" name="password" autocomplete="off" maxlength="32" size="32"></div>
-<div class="input-group"><input type="password" class="form-control" placeholder="Confirm New Password" autocomplete="off" name="password_confirm" maxlength="32" size=32></div>
-<div class="input-group"><img src="qt.png" /><span id="firstnumber" name="firstnumber"> </span><img src="sa.png" /> 
-<span id="secondnumber" name="secondnumber"> </span>? <input type="text" name="given_added" autocomplete="off" size="5">
+<div class="input-group"><input type="text" class="form-control" placeholder="Password Reset Code" 
+  name="given_password_reset_code" autocomplete="off" maxlength="20" size=20></div>
+<div class="input-group"><input type="password" class="form-control" placeholder="New Password" 
+  name="password" autocomplete="off" maxlength="32" size="32"></div>
+<div class="input-group"><input type="password" class="form-control" placeholder="Confirm New Password" 
+  autocomplete="off" name="password_confirm" maxlength="32" size=32></div>
+<div class="input-group"><img src="qtblue.png" /><span id="firstnumber" name="firstnumber"> </span>
+<img src="sablue.png" /> 
+<span id="secondnumber" name="secondnumber"> </span>? <input type="text" name="given_added" 
+  autocomplete="off" size="5">
 <input type="hidden" class="form-control" id="added" name="added" value="101" size="5"></div>
-<div class="input-group"><input type="hidden" class="form-control" name="given_user_name" value={$user_name}></div>
+<div class="input-group"><input type="hidden" class="form-control" name="given_user_name" 
+  value={$user_name}></div>
 <button type="submit" class="btn btn-success">Change Password</button>
 </fieldset>
 </div>
@@ -389,7 +404,8 @@ EOD3;
     exit();
   }
 // Sign in
-  $stmt->prepare("SELECT * FROM " . DATABASE_TABLE . " WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
+  $stmt->prepare("SELECT * FROM " . DATABASE_TABLE . 
+    " WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
   $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
   $stmt->execute();
   $result = $stmt->get_result();
@@ -418,7 +434,8 @@ EOD3;
   };
   
   function about() {
-    alert("Tweater is an app created by David Crandall, to show his programming skills using PHP, MySQL, Bootstrap, Angular.js, JavaScript, HTML and CSS.");
+    alert("Tweater is an app created by David Crandall, to show his programming skills using PHP, MySQL, " +
+      "Bootstrap, Angular.js, JavaScript, HTML and CSS.");
   };
  
   function contact() {
@@ -428,7 +445,7 @@ EOD3;
 </SCRIPT>
 EOD;
     require_once '_shim.php';
-    echo "</head><body style='background-color:#C0C0F0;padding:8px;font-family:{$font};
+    echo "</head><body style='background-color:#99D9EA;padding:8px;font-family:{$font};
       font-size:{$font_size}px' onload='turingsetup();'>";
     require_once $header;
     if (strlen($message) > 0) {
@@ -444,19 +461,24 @@ EOD;
     }
 
     echo <<<EOD2
-<div style="margin-left: auto; margin-right: auto;"><p style="text-align:center">
+<div style="margin-left: auto; margin-right: auto;"><p style="text-align:center"><img src='tweaty.png' style='width:15%;height:15%' />
 <a href="{$self_name}" style="font-size:72px;color:red;background-color:violet"><b>
-&nbsp;Tweater&nbsp;</b></a></p></div>
+&nbsp;Tweater&nbsp;</b></a><img src='tweatyleft.png' style='width:15%;height:15%' />
+</p></div>
 <div style="margin-left: auto; margin-right: auto;position: relative;{$title_position}">
 <form action="{$self_name}" method="POST" id="action">
 <span>
 <div>
 <fieldset class="fieldset-auto-width" style="float:left;background-color:#A0C0A0;{$sign_in_width}">
 <legend>Sign In:</legend>
-<div class="input-group"><input type="text" class="form-control" placeholder="Username or Email" name="user_name" id="user_name" maxlength="50" size="60"></div>
-<div class="input-group"><input type="password" class="form-control" placeholder="Password" name="password" maxlength="32" size="32"></div>
-<div class="checkbox"><label><input type="checkbox" name="forgot_password" unchecked>I forgot my password.</label></div>
-<div class="checkbox"><label><input type="checkbox" name="stay_logged_in" unchecked>Remain signed in.</label></div>
+<div class="input-group"><input type="text" class="form-control" placeholder="Username or Email" 
+  name="user_name" id="user_name" maxlength="50" size="60"></div>
+<div class="input-group"><input type="password" class="form-control" placeholder="Password" 
+  name="password" maxlength="32" size="32"></div>
+<div class="checkbox"><label><input type="checkbox" name="forgot_password" 
+  unchecked>I forgot my password.</label></div>
+<div class="checkbox"><label><input type="checkbox" name="stay_logged_in" 
+  unchecked>Remain signed in.</label></div>
 <button type="submit" class="btn btn-success">Sign In</button>
 </fieldset>
 </div>
@@ -473,14 +495,21 @@ OR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <legend style="background-color:#A0A0C0;{$sign_in_width}">Register New User:</legend>
 <input type="text" style="display:none">
 <input type="password" style="display:none">
-<div class="input-group"><input type="text" class="form-control" autocomplete="off" placeholder="Desired Username" name="user_name" value="{$user_name}" maxlength="50" size="50"></div>
-<div class="input-group"><input type="password" class="form-control" autocomplete="off" placeholder="Password: Minimum 6 Characters" name="new_user_password" maxlength="32" size="32"></div>
-<div class="input-group"><input type="password" class="form-control" autocomplete="off" placeholder="Confirm Password" name="password_confirm" maxlength="32" size="32"></div>
-<div class="input-group"><input type="text" class="form-control" autocomplete="off" placeholder="Name" name="name" value="{$name}" maxlength="60" size="60"></div>
 <div class="input-group"><input type="text" class="form-control" autocomplete="off" 
-placeholder="Optional: Your Email for Tweat Notifications" name="email" value="{$email}" autocomplete="off" maxlength="50" size="50"></div>
-<div class="input-group"><img src="qt.png" /><span id="firstnumber" name="firstnumber"> </span><img src="sa.png" /> 
-<span id="secondnumber" name="secondnumber"> </span>? <input type="text" name="given_added" autocomplete="off" size="3"><br />
+  placeholder="Desired Username" name="user_name" value="{$user_name}" maxlength="50" size="50"></div>
+<div class="input-group"><input type="password" class="form-control" autocomplete="off" 
+  placeholder="Password: Minimum 6 Characters" name="new_user_password" maxlength="32" size="32"></div>
+<div class="input-group"><input type="password" class="form-control" autocomplete="off" 
+  placeholder="Confirm Password" name="password_confirm" maxlength="32" size="32"></div>
+<div class="input-group"><input type="text" class="form-control" autocomplete="off" 
+  placeholder="Name" name="name" value="{$name}" maxlength="60" size="60"></div>
+<div class="input-group"><input type="text" class="form-control" autocomplete="off" 
+placeholder="Optional: Your Email for Tweat Notifications" name="email" value="{$email}" 
+  autocomplete="off" maxlength="50" size="50"></div>
+<div class="input-group"><img src="qt.png" /><span id="firstnumber" name="firstnumber"> </span>
+  <img src="sa.png" /> 
+<span id="secondnumber" name="secondnumber"> </span>? <input type="text" name="given_added" 
+  autocomplete="off" size="3"><br />
 <input type="hidden" class="form-control" id="added" name="added" autocomplete="off" value="101"></div>
 <button type="submit" class="btn btn-primary">Register</button>
 </fieldset><br />
@@ -510,7 +539,6 @@ EOD2;
   }
 // Show another user's Public Page (profile)
   if (isset($_GET['view_user_name'])) {
-
     $view_user_name = $_GET['view_user_name'];
 
     mysqli_select_db($con,DATABASE_TABLE);
@@ -576,7 +604,8 @@ EOD;
   }
 
   function about() {
-    alert("Tweater is an app created by David Crandall, to show his programming skills using PHP, MySQL, Bootstrap, Angular.js, JavaScript, HTML and CSS.");
+    alert("Tweater is an app created by David Crandall, to show his programming skills using PHP, MySQL, " +
+      "Bootstrap, Angular.js, JavaScript, HTML and CSS.");
   }
  
   function contact() {
@@ -630,7 +659,7 @@ EOD;
 //-->
 </script>
 EODJ;
-    echo "</head><body style='background-color:#C0C0F0;padding:8px;font-family:{$font};font-size:{$font_size}px'>";
+    echo "</head><body style='background-color:#99D9EA;padding:8px;font-family:{$font};font-size:{$font_size}px'>";
     require_once $header;
     
     if (strlen($message) > 0) {
@@ -657,9 +686,9 @@ EODT;
     $mysqli2 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
 
     $mysqli2->set_charset("utf8");
-    
-    if ($stmt = $mysqli2->prepare("SELECT t.id as tid, t.user_name, t.tweat, u.id, u.name, u.picture_ext FROM tweats AS t INNER JOIN " . 
-      "users AS u ON t.user_name = u.user_name WHERE t.user_name = ? ORDER BY t.id DESC LIMIT ?")) {
+    if ($stmt = $mysqli2->prepare("SELECT t.id as tid, t.user_name, t.tweat, u.id, u.name, u.picture_ext " . 
+      "FROM tweats AS t INNER JOIN users AS u ON t.user_name = u.user_name WHERE t.user_name = ? " . 
+      "ORDER BY t.id DESC LIMIT ?")) {
       $stmt->bind_param('ss', $view_user_name, $shown_limit);
       $stmt->execute();
       $result = $stmt->get_result();
@@ -677,11 +706,12 @@ EODT;
       }
       echo "<p>" . wordwrap($myrow_tweat, $tweat_width, '<br />', true);
 // Red X button for administrator to delete Tweat
-        if ($status == 1) {
-          $no_quote_tweat = strtr(substr($myrow_tweat,0,80), "\"'\t\r\n\f", "      ");
-          echo "&nbsp;&nbsp;<img src='xdel.png' style='position:relative;top:-2px' onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
-            $no_quote_tweat . "...\")) {window.open(\"{$self_name}?delete_tweat=\" + {$tid});}' />";
-        }
+      if ($status == 1) {
+        $no_quote_tweat = strtr(substr($myrow_tweat,0,80), "\"'\t\r\n\f", "      ");
+        echo "&nbsp;&nbsp;<img src='xdel.png' style='position:relative;top:-2px' " . 
+          "onclick='if (confirm(\"Are you sure you want to delete this Tweat?:  " . 
+          $no_quote_tweat . "...\")) {window.open(\"{$self_name}?delete_tweat=\" + {$tid});}' />";
+      }
       echo "</p>";
     }
 
@@ -739,7 +769,8 @@ EOD;
   echo <<<EODJ
   var saveWidth = $("#picture").width(); // Save image size
   var picHtml = "<img id='picture' src='pictures/{$picture_url}' />"; // Image tag for above Tweats
-  var picHtmlBottom = "<img id='picture' src='pictures/{$picture_url}' style='position:relative;top:-20px;padding-bottom:20px' />"; // Image tag for below Tweats
+  var picHtmlBottom = "<img id='picture' src='pictures/{$picture_url}' " +
+    "style='position:relative;top:-20px;padding-bottom:20px' />"; // Image tag for below Tweats
   var color = "{$text_color}";
   var pic_scale = {$pic_scale};
   var pic_position = "{$pic_position}";
@@ -1057,7 +1088,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
 EODJ;
 // Display user's Home Page
   echo "</head><body background='pictures/backviolet.png' 
-    style='color:black;background-color:#c0c0f0;padding:8px;font-family:{$font};font-size:{$font_size}px'>";
+    style='color:black;background-color:#99D9EA;padding:8px;font-family:{$font};font-size:{$font_size}px'>";
   require_once $header; // Menu buttons at top
   
   if (strlen($message) > 0) { // Display message if any
@@ -1218,7 +1249,8 @@ EODT;
 
 // Get followers count 
   $mysqli4 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
-  $stmt4 = $mysqli4->prepare("SELECT COUNT(DISTINCT user_name) AS followers_count FROM followed_ones WHERE followed_one = ?");
+  $stmt4 = $mysqli4->prepare("SELECT COUNT(DISTINCT user_name) AS followers_count FROM followed_ones " .
+    "WHERE followed_one = ?");
   $stmt4->bind_param('s', $user_name);
   $stmt4->execute();
   $result4 = $stmt4->get_result();
@@ -1254,8 +1286,8 @@ EODT;
 // Display email Tweat notification button
   echo <<<EODF2
         </select>
-        <div style="text-align:center"><button type="button" class="btn btn-warning" onclick="notifications();">Notifications</button>
-      &nbsp;{$followers_count} Followers</div></div>
+        <div style="text-align:center"><button type="button" class="btn btn-warning" 
+          onclick="notifications();">Notifications</button>&nbsp;{$followers_count} Followers</div></div>
 EODF2;
 
   $esc_name = str_replace(" ", "+", $name);

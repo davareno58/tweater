@@ -18,21 +18,21 @@
   $password = trim($_POST['password']);
   $password_confirm = trim($_POST['password_confirm']);
   $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
-    if (!$con) {
-      die('Could not connect: ' . mysqli_error($con));
-    }
-    mysqli_select_db($con,DATABASE_TABLE);
-    $stmt = $con->stmt_init();
-    $stmt->prepare("SELECT password_reset_hash FROM " . DATABASE_TABLE . 
-      " WHERE (user_name = ?) OR (email = ?)");
-    $stmt->bind_param('ss', $user_name, $user_name);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $rowi = $result->fetch_assoc();
-    $password_reset_code = $rowi['password_reset_hash'];
-    $stmt->close();
-    mysqli_close($con);
-echo <<<EOD
+  if (!$con) {
+    die('Could not connect: ' . mysqli_error($con));
+  }
+  mysqli_select_db($con,DATABASE_TABLE);
+  $stmt = $con->stmt_init();
+  $stmt->prepare("SELECT password_reset_hash FROM " . DATABASE_TABLE . 
+    " WHERE (user_name = ?) OR (email = ?)");
+  $stmt->bind_param('ss', $user_name, $user_name);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $rowi = $result->fetch_assoc();
+  $password_reset_code = $rowi['password_reset_hash'];
+  $stmt->close();
+  mysqli_close($con);
+  echo <<<EOD
 <!DOCTYPE html><html>
   <head><title>Password Reset Result</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -51,7 +51,7 @@ EOD;
       "<span style='color:red'> page,<br />enter your username and then " . 
       "click on 'I forgot my password.'<br />and click the Sign In button to get " . 
       "another password reset code<br />sent to your email address.</p></blockquote></body></html>";
-      exit();
+    exit();
   }
   if ($given_password_reset_code != $password_reset_code) {
     echo "<br /><br /><br /><blockquote><p style='color:red'>The password reset code given is not correct. To try again,<br />" . 
@@ -82,4 +82,6 @@ EOD;
 
     header("location: home" . $ret . ".php");
     exit();
-  }
+  }
+  exit();
+  

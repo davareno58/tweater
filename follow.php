@@ -6,6 +6,7 @@
   $followed_one = $_GET['followed_one'];
   $followed_name = $_GET['followed_name'];
   $error_later = "There was an error and the user was not added. You may try again later. ";
+  $ret = $_GET['return'];
   
   if ((strlen($user_name) > 0) && (strlen($password) > 0 ) && (strlen($followed_one) > 0)) {
     $mysqli2 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
@@ -53,5 +54,6 @@
   }
   $stmt->close();
   $mysqli2->close();
-  echo "<script>alert('{$followed_name} ({$followed_one}) is now added to your list of followed users.');window.close();</script>";
-  exit();
+  echo "<script>disableFollowedOnes = 0;alert('{$followed_name} ({$followed_one}) is now added to your list of followed users.');window.close();</script>";
+  exit();
+  

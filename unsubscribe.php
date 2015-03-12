@@ -5,6 +5,11 @@
   if (isset($_COOKIE['user_name']) && isset($_COOKIE['password'])) {
     $user_name = trim($_COOKIE['user_name']);
     $password = trim($_COOKIE['password']);
+    
+    $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
+    if (!$con) {
+      die('Could not connect: ' . mysqli_error($con));
+    }
     mysqli_select_db($con,DATABASE_TABLE);
     $stmt = $con->stmt_init();
     $stmt->prepare("DELETE * FROM " . DATABASE_TABLE . 
@@ -25,9 +30,10 @@
 <BODY LINK="#C00000" VLINK="#800080" alink="#FFFF00" bgcolor="00D0C0" onLoad="openit()">
 <h1 style='text-align:center'>Tweater: You are now unsubscribed to Tweater.<br />Sorry to see you go! (Actually I'm a computer and have no human feelings.)</h1>
 <h2 style='text-align:center'><a href="home.php">Click here to sign in another user or register a new user.</a></h2>
-</BODY>
+<img src='tweaty.png' /></BODY>
 </HTML>
 EOD;
     exit();
   }
-?>
+  exit();
+  

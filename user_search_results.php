@@ -1,7 +1,5 @@
 <?php
-
 // Search for other users by any information and interests
-
   require_once 'app_config.php';
   
   $ret = $_GET['return'];  
@@ -164,4 +162,5 @@ EODD;
     echo "No search term was given.<br /><br />";
   }
   echo "</ul><br /><br /></body></html>";  
-  exit();
+  exit();
+  

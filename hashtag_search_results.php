@@ -53,7 +53,6 @@
     mysqli_close($con);
   }
   
-  
   echo <<<EODH
 <!DOCTYPE html><html><head><meta charset='utf-8' /><title>Hashtag Search Results for "{$hashtag_win}"</title>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
@@ -83,8 +82,8 @@ EODH;
     header("Location: home" . $ret . ".php?message=" . $message);
     exit();
   } else {
-
     $mysqli4 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
+    
     $mysqli4->set_charset("utf8");
     if ((strpos($hashtag, "%") !== false) || (strpos($hashtag, "_") !== false)) {
       $compare = "LIKE";
@@ -131,4 +130,5 @@ EODL;
     
     echo "</ul></body></html>";
   }
-  exit();
+  exit();
+  

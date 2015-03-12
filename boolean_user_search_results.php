@@ -199,4 +199,5 @@ EODD;
     echo "No search term was given.<br /><br />";
   }
   echo "</ul><br /><br /></body></html>";  
-  exit();
+  exit();
+  
