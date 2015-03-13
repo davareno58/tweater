@@ -85,7 +85,7 @@
     $stmt = $con->stmt_init();
     $stmt->prepare("DELETE FROM " . DATABASE_TABLE . 
       " WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
-    $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
+    $stmt->bind_param('sss', $user_name, $user_name, crypt($password,CRYPT_SALT));
     $stmt->execute();
     mysqli_close($con);
     setcookie('user_name', "", time() - 7200, "/");
@@ -144,7 +144,7 @@ EODU;
       }
       if ($stmt = $mysqli3->prepare("UPDATE users SET email = ? WHERE user_name = ? AND binary password_hash = ?")) {
         $mysqli3->set_charset('utf8mb4');
-        $stmt->bind_param('sss', $new_email_address, $user_name, crypt($password,"pling515"));
+        $stmt->bind_param('sss', $new_email_address, $user_name, crypt($password,CRYPT_SALT));
         $stmt->execute();
         if (mysqli_connect_errno()) {
           $message = "ERROR: Email address not updated! Sorry, but something went wrong.<br />" . 
@@ -158,7 +158,7 @@ EODU;
           }
           $stmt = $mysqli3->prepare("UPDATE users SET tweat_notify = ? WHERE user_name = ? AND " . 
             "binary password_hash = ?");
-          $stmt->bind_param('iss', $tweat_notify, $user_name, crypt($password,"pling515"));
+          $stmt->bind_param('iss', $tweat_notify, $user_name, crypt($password,CRYPT_SALT));
           $stmt->execute();
         }
       } else {
@@ -181,7 +181,7 @@ EODU;
     }
     if ($stmt = $mysqli3->prepare("UPDATE users SET tweat_notify = ? WHERE user_name = ? AND 
       binary password_hash = ?")) {
-      $stmt->bind_param('iss', $tweat_notify, $user_name, crypt($password,"pling515"));
+      $stmt->bind_param('iss', $tweat_notify, $user_name, crypt($password,CRYPT_SALT));
       $stmt->execute();
       if (mysqli_connect_errno()) {
         $message = "ERROR: Tweat Notification was not updated! Sorry, but something went wrong.<br />" . 
@@ -269,7 +269,7 @@ EODU;
   if (isset($_GET['delete_tweat'])) {
     $tid = $_GET['delete_tweat'];
     $stmt->prepare("select * from " . DATABASE_TABLE . " where ((user_name = ?) or (email = ?)) and (binary password_hash = ?)");
-    $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
+    $stmt->bind_param('sss', $user_name, $user_name, crypt($password,CRYPT_SALT));
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -326,7 +326,7 @@ EODU;
         $row['name'] . ', Here is the requested password reset code for your Tweater account: ' . 
         $password_reset_code);
     $stmt->prepare("update " . DATABASE_TABLE . " SET password_reset_hash = ? where (user_name = ?) or (email = ?)");
-    $stmt->bind_param('sss', crypt($password_reset_code,"pling515"), $user_name, $user_name);
+    $stmt->bind_param('sss', crypt($password_reset_code,CRYPT_SALT), $user_name, $user_name);
     $stmt->execute();
 
 echo <<<EOD
@@ -389,7 +389,7 @@ EOD3;
   }
 
   $stmt->prepare("SELECT * FROM " . DATABASE_TABLE . " WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
-  $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
+  $stmt->bind_param('sss', $user_name, $user_name, crypt($password,CRYPT_SALT));
   $stmt->execute();
   $result = $stmt->get_result();
   $num_rows = $result->num_rows;
@@ -545,7 +545,7 @@ EOD;
   
     echo "var fontsize = {$font_size};";
 
-    $unsubscribe_password = crypt($password,"pling515");
+    $unsubscribe_password = crypt($password,CRYPT_SALT);
     echo <<<EODJ
   function signOut() {
     document.cookie = "user_name=; expires=-7200; path=/";
@@ -733,7 +733,7 @@ EOD;
   
   echo "var fontsize = {$font_size};";
 
-  $unsubscribe_password = crypt($password,"pling515");
+  $unsubscribe_password = crypt($password,CRYPT_SALT);
     
   echo <<<EODJ
   var saveWidth = $("#picture").width();
@@ -1166,7 +1166,7 @@ EODJ;
     
     $stmt->prepare("UPDATE " . DATABASE_TABLE . " SET interests_words = ? " . 
       "WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
-    $stmt->bind_param('ssss', $new_interests, $user_name, $user_name, crypt($password,"pling515"));
+    $stmt->bind_param('ssss', $new_interests, $user_name, $user_name, crypt($password,CRYPT_SALT));
     $stmt->execute();
     }
   } else {

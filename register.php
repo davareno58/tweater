@@ -14,7 +14,7 @@
   $already_exists_error = "<p style='color:red'>The username \"{$user_name}\" is already being used by someone. Please choose another username.</p>";
   $password = trim($_POST['new_user_password']);
   $password_confirm = trim($_POST['password_confirm']);
-  $password_hash = crypt($password,"pling515");
+  $password_hash = crypt($password,CRYPT_SALT);
   $name = trim($_POST['name']);
   $email = trim($_POST['email']);
   
@@ -217,6 +217,7 @@ EOD;
       echo "<div class='container'>";
       echo $_GET['message'];
       echo "</div></body></html>";
+      
       $message = strtr("Success! {$name}'s account was created! Welcome! For help, click Help above.", " ", "+");
       $stmt->close();
       $mysqli2->close();
@@ -248,4 +249,4 @@ EOD;
   $stmt->close();
   $mysqli2->close();
   exit();
-  
+  

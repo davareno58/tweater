@@ -28,10 +28,10 @@
   mysqli_select_db($con,DATABASE_TABLE);
   $stmt = $con->stmt_init();
   $stmt->prepare("update " . DATABASE_TABLE . " set password_hash = ? where user_name = ? AND password_hash = ?");
-  $stmt->bind_param('sss', crypt($new_password,"pling515"), $user_name, crypt($old_password,"pling515"));
+  $stmt->bind_param('sss', crypt($new_password,CRYPT_SALT), $user_name, crypt($old_password,CRYPT_SALT));
   $stmt->execute();
   $stmt->prepare("select * from " . DATABASE_TABLE . " where user_name = ? AND password_hash = ?");
-  $stmt->bind_param('ss', $user_name, crypt($new_password,"pling515"));
+  $stmt->bind_param('ss', $user_name, crypt($new_password,CRYPT_SALT));
   $stmt->execute();
   $result = $stmt->get_result();
   $row = mysqli_fetch_array($result);

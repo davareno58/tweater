@@ -14,7 +14,7 @@
   }
   $ret = $_GET['return'];
   $user_name = trim($_POST['given_user_name']);
-  $given_password_reset_code = crypt(trim($_POST['given_password_reset_code']),"pling515");
+  $given_password_reset_code = crypt(trim($_POST['given_password_reset_code']),CRYPT_SALT);
   $password = trim($_POST['password']);
   $password_confirm = trim($_POST['password_confirm']);
   $con = mysqli_connect(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
@@ -74,7 +74,7 @@ EOD;
     mysqli_select_db($con,DATABASE_TABLE);
     $stmt = $con->stmt_init();
     $stmt->prepare("update " . DATABASE_TABLE . " set password_hash = ? where user_name = ?");
-    $stmt->bind_param('ss', crypt($password,"pling515"), $user_name);
+    $stmt->bind_param('ss', crypt($password,CRYPT_SALT), $user_name);
     $stmt->execute();
     mysqli_close($con);
     setcookie('user_name', $user_name, 0, "/");

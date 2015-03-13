@@ -41,7 +41,7 @@
     $stmt->execute();
     $stmt = $con->stmt_init();
     $stmt->prepare("select * from " . DATABASE_TABLE . " where (user_name = ?) and (binary password_hash = ?)");
-    $stmt->bind_param('ss', $user_name, crypt($password,"pling515"));
+    $stmt->bind_param('ss', $user_name, crypt($password,CRYPT_SALT));
     $stmt->execute();
     $result = $stmt->get_result();
     $row = mysqli_fetch_array($result);
@@ -135,7 +135,7 @@ EODL;
               if ($admin) {
                 echo <<<EODD
 &nbsp;&nbsp;<img src='xdel.png' class='user' onclick='if (confirm("Are you sure you want to delete this user?:  " + 
-                  "{$vname} (Username: {$vuname}; User ID: {$uid})")) {window.open("home{$ret}.php?delete_listed_user={$uid}")}' />
+                  "{$vname} (Username: {$vuname}; User ID: {$uid})")) {window.open("home{$ret}.php?delete_listed_user={$uid}&delete_listed_uname={$vuname}")}' />
 EODD;
               }
               echo "</li>";

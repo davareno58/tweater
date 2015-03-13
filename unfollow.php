@@ -10,7 +10,7 @@
     $mysqli2 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
     $stmt = $mysqli2->prepare("SELECT * FROM " . DATABASE_TABLE . " WHERE (user_name = ?) and 
       (binary password_hash = ?)");
-    $stmt->bind_param('ss', $user_name, crypt($password,"pling515"));
+    $stmt->bind_param('ss', $user_name, crypt($password,CRYPT_SALT));
     $stmt->execute();
     $result = $stmt->get_result();
     if ($row = mysqli_fetch_array($result)) {

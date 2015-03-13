@@ -14,7 +14,7 @@
     $stmt = $con->stmt_init();
     $stmt->prepare("DELETE * FROM " . DATABASE_TABLE . 
       " WHERE ((user_name = ?) OR (email = ?)) AND (binary password_hash = ?)");
-    $stmt->bind_param('sss', $user_name, $user_name, crypt($password,"pling515"));
+    $stmt->bind_param('sss', $user_name, $user_name, crypt($password,CRYPT_SALT));
     $stmt->execute();
     mysqli_close($con);
     setcookie('user_name', "", time() - 7200, "/");
