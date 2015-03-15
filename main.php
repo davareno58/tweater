@@ -669,6 +669,11 @@ EODJ;
   
     mysqli_close($con);
 
+    if (strlen($view_name) < 1) {
+      $view_name = "Unknown Username";
+      $view_user_name = "Not much to see here!";
+    }
+
     echo <<<EODT
 <h1><a href="{$self_name}" style="font-size:{$bigfont}px;color:red;background-color:violet"><b>
 &nbsp;&nbsp;&nbsp;Tweater&nbsp;&nbsp;&nbsp;</b></a>
@@ -1137,11 +1142,11 @@ EODJ;
 // Build list of old interests for deleting and list of new interests for adding
     $old_interests = str_replace("-", " ", substr(strtolower($row_interests), 0, 250));
     $old_interests = trim(strtr($old_interests, '!"#%&()*+,-./:;<=>?[\]^_`{|}~' . 
-    '¡¦©«¬­®¯´¶¸»¿', '                                                  ' . 
+    'Â¡Â¦Â©Â«Â¬Â­Â®Â¯Â´Â¶Â¸Â»Â¿', '                                                  ' . 
     '                                       '));
     $new_interests = str_replace("-", " ", substr(strtolower($interests), 0, 250));
     $new_interests = trim(strtr($new_interests, '!"#%&()*+,-./:;<=>?[\]^_`{|}~' . 
-    '¡¦©«¬­®¯´¶¸»¿', '                                                  ' . 
+    'Â¡Â¦Â©Â«Â¬Â­Â®Â¯Â´Â¶Â¸Â»Â¿', '                                                  ' . 
     '                                       '));
     $old_interests = str_replace("   ", " ", $old_interests);
     $old_interests = str_replace("  ", " ", $old_interests);
