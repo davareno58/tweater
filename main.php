@@ -669,6 +669,11 @@ EODJ;
   
     mysqli_close($con);
 
+    if (strlen($view_name) < 1) {
+      $view_name = "Unknown Username";
+      $view_user_name = "Not much to see here!";
+    }
+
     echo <<<EODT
 <h1><a href="{$self_name}" style="font-size:{$bigfont}px;color:red;background-color:violet"><b>
 &nbsp;&nbsp;&nbsp;Tweater&nbsp;&nbsp;&nbsp;</b></a>

@@ -89,6 +89,9 @@
       
         if (!move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $new_filename)) {
           $message = $message . $error_sorry;
+        } else {
+          $message = "Picture uploaded! To see the new picture, update your page by clicking on Home at " . 
+            "the top left (or your browser's Refresh button).";
         }
       } else {
         $message = $message . "Sorry, the connection to the database failed. Your picture file was not uploaded. ";
@@ -97,10 +100,6 @@
   } else {
     $message = $message . $error_sorry;
   }
-  header("refresh:1;url=home.php?message=" . strtr($message, " ", "+"));
-  echo '<!DOCTYPE HTML><HTML><head><title>Tweater Picture Uploaded!</title><body style="background-color:#C0C0F0">';
-  echo '<h2>Picture Uploaded! You\'ll return to your home page now. </h2>';
-  $url = "home.php?message=" . strtr($message, " ", "+");
-  echo "<h3>If it doesn't appear, <a href='" . $url . "'>click here</a>.</h3></body></HTML>";
+  echo "<!DOCTYPE HTML><HTML><head><script>alert(\"{$message}\"); window.close();</script></head><body></body></html>";
   exit();
   
