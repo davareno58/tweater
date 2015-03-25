@@ -8,7 +8,7 @@
     $font_size = FONTSIZE;
   }
 
-  $user_name = trim($_POST['user_name']);
+  $user_name = trim(strtolower($_POST['user_name']));
   $password_confirmation_error = "<p style='color:red'>The password confirmation does not match the password. Please re-enter both.</p>";
   $password_length_error = "<p style='color:red'>The password is too short. It must have at least 6 characters.</p>";
   $already_exists_error = "<p style='color:red'>The username \"{$user_name}\" is already being used by someone. Please choose another username.</p>";
