@@ -153,8 +153,10 @@ EODU;
           $message = "Email address updated to:  " . $new_email_address . $null;
           if (strlen($new_email_address) > 2) {
             $tweat_notify = 1;
+            $message = "Tweat Notifications are now enabled, and your email address has been changed to: " . $new_email_address . $null;
           } else {
             $tweat_notify = 0;
+            $message = "Tweat Notifications are now DISABLED, and your email address has been changed to: " . $new_email_address . $null;
           }
           $stmt = $mysqli3->prepare("UPDATE users SET tweat_notify = ? WHERE user_name = ? AND " . 
             "binary password_hash = ?");
@@ -174,7 +176,7 @@ EODU;
     $mysqli3 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
     if ($_GET['notify'] == '0') {
       $tweat_notify = 0;
-      $message = "Tweat Notifications are now disabled.";
+      $message = "Tweat Notifications are now DISABLED.";
     } else {
       $tweat_notify = 1;
       $message = "Tweat Notifications are now enabled.";
