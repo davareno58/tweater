@@ -209,11 +209,11 @@ EODU;
       if ($hashtag_pos === false) {
         $hashtag = NULL;
       } else {
-        $hashtag_pos = $hashtag_pos + 1;
+        $hashtag_pos++;
         $start = $hashtag_pos;
         while (($hashtag_pos < strlen($tweat)) && (strpos(" ,.?!:;*/()-+{}[]|\"<>\\\`", 
           substr($tweat, $hashtag_pos, 1)) === false)) {
-          $hashtag_pos = $hashtag_pos + 1; // Find end of hashtag
+          $hashtag_pos++; // Find end of hashtag
         }
         $hashtag = trim(strtolower(substr($tweat, $start, $hashtag_pos - $start)));
       }
