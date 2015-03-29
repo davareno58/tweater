@@ -240,7 +240,9 @@ EODU;
             if (($chat != "true") && ($row['tweat_notify'] == 1) && (strpos($email, "@") > 0)) { // Send email
               $email_header = "MIME-Version: 1.0\r\nContent-type:text/html;charset=UTF-8\r\n";
               mail($email, 'Tweat Notification: ' . $name . ' (' . $user_name . ') just posted this Tweat',
-                '<body style="background-color:#99D9EA">Hello ' . $row['name'] . ',<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $name . ' (' . 
+                '<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /></head>' . 
+                '<body style="background-color:#99D9EA;padding:20px">Hello ' . $row['name'] . 
+                ',<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $name . ' (' . 
                 $user_name . ') just posted this Tweat:<br /><br />' . wordwrap($tweat, 70, '<br />', true) . 
                 '<br /><br />If you don\'t want to receive Tweat Notifications, please ' . 
                 'sign in to your Tweat account at http://crandall.altervista.org/tweater<br />' . 
