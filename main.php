@@ -391,10 +391,10 @@ AAAAAElFTkSuQmCC" alt="Tweaty" style="float:left"><br /><br /><br /><br />' .
         "code to.<br />Suggestion: Register as a new user and enter an email address at the bottom of " . 
         "the home page,<br />in case you forget your password again.</p>";
     } else {
-// Generate pseudo-random 10-character password reset code and store it in database and email it to user
+// Generate pseudo-random 12-character password reset code and store it in database and email it to user
       $password_reset_code = chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) .
         chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . 
-        chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122));
+        chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122)) . chr(rand(97, 122));
       $email_header = "MIME-Version: 1.0\r\nContent-type:text/html;charset=UTF-8\r\n";
       mail($email, 'Password reset code for ' . $row['name']. '\'s Tweater account',
         '<html><body>' . $row['name'] . ',<br /><br />Here is the requested password reset code for your Tweater account: ' . 
