@@ -16,6 +16,7 @@
   $password_confirm = trim($_POST['password_confirm']);
   $password_hash = crypt($password,CRYPT_SALT);
   $name = trim($_POST['name']);
+  $name = preg_replace('/(\S+)\s+/', '$1 ', $name); // Reduce internal whitespace to one space.
   $email = trim($_POST['email']);
   
   if (intval(trim($_POST['added'])) != intval(trim($_POST['given_added']))) {
