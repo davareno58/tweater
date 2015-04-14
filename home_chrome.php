@@ -34,7 +34,7 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 <fieldset class="fieldset-auto-width" style="float:left">
 <div class="span9 form-group" style="height:170px">
 <textarea class="textarea inbox" style="width:840px" rows="3" cols="104" id="tweat" name="tweat" ng-model="tweat" 
-  onkeyup="showCharsLeftAndLimit(this);" maxlength="{$tweat_max_size}" placeholder=
+  maxlength="{$tweat_max_size}" placeholder=
   "--Type your Tweat here (limit: {$tweat_max_size} characters) and then click the Post Tweat button or press Enter.--">
   </textarea><br />
 <button type="submit" class="btn btn-success" style="position:relative;top:-8px">Post Tweat</button>
@@ -79,4 +79,4 @@ EODF;
   
   echo "&nbsp;<br />&nbsp;<br />&nbsp;</div></body></html>";
   exit();
-  
+  
