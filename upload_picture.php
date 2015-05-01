@@ -51,8 +51,8 @@
     }
 // Allow only certain file types
     $picture_ext = strtolower($imageFileType);
-    if($picture_ext != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-      $message = $message . "Sorry, only JPG, JPEG, PNG and GIF files are allowed. ";
+    if($picture_ext != "jpg" && $picture_ext != "png" && $picture_ext != "jpeg" && $picture_ext != "gif" ) {
+      $message = $message . "Sorry, only .jpg, .jpeg, .png and .gif files are allowed. ";
       $uploadOk = 0;
     }
 // Check whether $uploadOk has been set to 0 by any error
@@ -102,4 +102,4 @@
   }
   echo "<!DOCTYPE HTML><HTML><head><script>alert(\"{$message}\"); window.close();</script></head><body></body></html>";
   exit();
-  
+  
