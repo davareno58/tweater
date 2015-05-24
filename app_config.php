@@ -7,5 +7,5 @@
   define(FONTSIZE, "18");
   define(PASSWORD, "");
   define(TWEATMAXSIZE, "250");
-  define(CRYPT_SALT, "pling515");
-  
+  define(CRYPT_SALT, "changed1");
+  
