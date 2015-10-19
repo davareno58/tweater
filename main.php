@@ -316,7 +316,77 @@ AAAAAElFTkSuQmCC" alt="Tweaty" style="float:left"><br /><br /><br /><br />' .
                 '&nbsp;&nbsp;' . $tweamail . '<hr />If you don\'t want to receive Tweat Notifications, please ' . 
                 'sign in to your Tweat account at http://crandall.altervista.org/tweater<br />' . 
                 'and click on the Tweat Notifications button at the left. A pop-up prompt ' . 
+<<<<<<< HEAD
                 'will appear. Type the word No and click on OK.<br /><br />', $email_header);
+=======
+                'will appear. Type the word No and click on OK.<br /><br />' . 
+                '<a href="http://crandall.altervista.org/tweater">' . 
+                '<b style="font-size:40px;color:red;background-color:#990099;float:left">&nbsp;Tweater&nbsp;</b></a>&nbsp;&nbsp;&nbsp;&nbsp;' . 
+                '<img src="data:image/png;base64,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
+AAAAAElFTkSuQmCC" alt="Tweaty" style="float:left"><br /><br /><br /><br />' . 
+              '<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />' . 
+              '<br /><br /><br /><br />', $email_header); // Tweat email with Tweaty picture encoded
+>>>>>>> 78907f3280d6436513e9090ba83b76eacc27e842
             } else if ($chat == "true") {
               setcookie('chat_timeout', time() + 300, time() + 7200, "/"); // Reset Chat Mode timeout after Tweat
             }
