@@ -8,7 +8,7 @@ echo <<<EOD
     <ul class="nav nav-pills" style="background-color:#C0C0F0">
       <li role="presentation" class="btn btn-success"><a href="{$self_name}" style="color:lightgray">Home</a></li>
       <li role="presentation"><button type="button" class="btn btn-info" style="height:54px;width:100px" onclick="about();" style="width:100px">About</button></li>
-      <li role="presentation" class="btn btn-success"><a href="upload_picture.html" style="color:lightgray" 
+      <li role="presentation" class="btn btn-success"><a href="upload_picture.html?return={$ret}" style="color:lightgray" 
       target="_blank">Upload Picture</a></li>
       <li role="presentation" class="btn btn-primary"><a href="{$self_name}" onclick="staySignedInWithAlert();" style="color:lightgray">
       Remain Signed In</a></li>

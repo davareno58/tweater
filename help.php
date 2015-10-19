@@ -51,6 +51,7 @@ EOD;
   and you would have to click Start Chat to restart it. Tweats sent in Chat Mode will be deleted<br />
   automatically after 24 hours, so they can't have hashtags, and no email notifications<br />
   are sent with these Tweats.</li>
+  <li>Passwords are case-sensitive, but usernames are not. Passwords must have at least<br />six characters.</li>
   <li>To add a hashtag to a Tweat, just include the # sign followed by the hashtag,<br />
   such as #popmusic (with no spaces between multiple words). Only one hashtag<br /> 
   can be used in each Tweat, but you could post the same Tweat twice<br />with different hashtags, theoretically...</li>

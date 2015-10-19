@@ -55,6 +55,7 @@
 font-family:{$font};font-size:{$font_size}px'>{$timeout_message}
 <table>
 EOD;
+    $zebra = "#E0E0FF"; // Alternating Tweat row colors
     while ($myrow = $result->fetch_assoc()) {
       if ($myrow['name']) {
         $myrow_name = $myrow['name'];
@@ -77,7 +78,7 @@ EOD;
           continue;
         }
       }
-      echo "<tr><td style='vertical-align:top;text-align:right'><b>" . 
+      echo "<tr style='color:black;background-color:{$zebra}'><td style='vertical-align:top;text-align:right'><b>" . 
         wordwrap($myrow_name, 40, '<br />', true) . 
         "</b>:&nbsp;&nbsp;</td><td>" . 
         wordwrap($myrow_tweat, $tweat_width, '<br />', true);
@@ -88,6 +89,11 @@ EOD;
             $no_quote_tweat . "...\")) {window.open(\"home{$ret}.php?delete_tweat=\" + {$tid}, \"_parent\");}'>&nbsp;X&nbsp;</span>";
       }
       echo "</td></tr>";
+      if ($zebra == "#C0C0F0") {
+        $zebra = "#E0E0FF";
+      } else {
+        $zebra = "#C0C0F0";
+      }
     }
     $t = time();
     echo "</table>{$timeout_message}</body></html>";

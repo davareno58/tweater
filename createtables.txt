@@ -1,0 +1,58 @@
+use my_crandall;
+CREATE TABLE `users` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`user_name` varchar(50) NOT NULL,
+`name` varchar(100) CHARACTER SET utf8 NOT NULL,
+`interests` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
+`photo_url` varchar(250) DEFAULT NULL,
+`admin_status` tinyint(1) NOT NULL,
+`tweat_notify` tinyint(1) NOT NULL,
+`email` varchar(50) DEFAULT NULL,
+`followers_count` int(11) NOT NULL,
+`followed_ones_pointer` int(11) DEFAULT NULL,
+`stay_logged_in` tinyint(1) NOT NULL,
+`password_hash` varchar(255) NOT NULL,
+`tweat_pointer` int(11) DEFAULT NULL,
+PRIMARY KEY (`id`),
+KEY `user_name_index` (`user_name`),
+KEY `name_index` (`name`),
+KEY `interests_index` (`interests`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1
+
+use my_crandall;
+create table tweats (
+id int(11) primary key auto_increment not null,
+user_name varchar(50) not null,
+tweat varchar(250) CHARACTER SET utf8 not null,
+next_tweat_pointer int(11) null,
+CONSTRAINT FOREIGN KEY (user_name) REFERENCES users (user_name) ON DELETE cascade
+) engine = InnoDB;
+create index tweats_user_name_index on tweats (user_name);
+
+use my_crandall;
+create table `interests` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`user_name` varchar(50) NOT NULL,
+`interest` varchar(30) CHARACTER SET utf8 NOT NULL,
+PRIMARY KEY (`id`),
+KEY `interests_user_name_index` (`user_name`),
+KEY `interests_interest_index` (`interest`),
+CONSTRAINT FOREIGN KEY (user_name) REFERENCES users (user_name) ON DELETE cascade
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+
+use my_crandall;
+create table followed_ones (
+id int(11) primary key auto_increment not null,
+user_name varchar(50) not null,
+followed_one varchar(50) not null,
+next_followed_one_pointer int(11) DEFAULT NULL,
+CONSTRAINT FOREIGN KEY (user_name) REFERENCES users (user_name) ON DELETE cascade,
+CONSTRAINT FOREIGN KEY (followed_one) REFERENCES users (user_name) ON DELETE cascade
+) engine = InnoDB;
+create index follower_index on followed_ones (user_name);
+
+use my_crandall;
+insert into users (admin_status, email, followed_ones_count, followers_count, interests, name, password_hash, photo_url, tweat_notify, user_name, stay_logged_in) values(true, "crandadk@aol.com", 0, 0, "Computer programming, Internet, languages, linguistics, television, movies", "David Crandall", "1234", "crandadk%40aol%2Ecom.jpg", true, "crandadk@aol.com", false);
+insert into users (admin_status, email, followed_ones_count, followers_count, interests, name, password_hash, photo_url, tweat_notify, user_name, stay_logged_in) values(false, "pgriffin@fox.com", 0, 0, "Beer, television, food", "Peter Griffin", "peter", "pgriffin%40fox%2Ecom.jpg", false, "petergriffin", false);
+insert into users (admin_status, email, followed_ones_count, followers_count, interests, name, password_hash, photo_url, tweat_notify, user_name, stay_logged_in) values(false, "lgriffin@fox.com", 0, 0, "Housewifery, family, singing, romantic comedies", "Lois Griffin", "lois", "lgriffin%40fox%2Ecom.jpg", false, "loisgriffin", false);
+insert into users (admin_status, email, followed_ones_count, followers_count, interests, name, password_hash, photo_url, tweat_notify, user_name, stay_logged_in) values(false, "gquagmire@fox.com", 0, 0, "You-know-what, giggity", "Glen Quagmire", "glen", "gquagmire%40fox%2Ecom.jpg", false, "glenquagmire", false);

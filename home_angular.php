@@ -748,7 +748,13 @@ EOD;
   function getTweatList() {
   // Get Tweats to display
     if (chat == false) {
-      var xmlhttp = new XMLHttpRequest();
+      if (window.XMLHttpRequest) {
+// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+      } else {
+// code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
       var url = "http://crandall.altervista.org/tweater/tweats_JSON.php?num=" + Math.random();
       xmlhttp.onreadystatechange=function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {

@@ -148,9 +148,9 @@ EODD;
     }
     
     if ((strpos($all_items, "?") != false) || (strpos($all_items, "*") != false)) {
-        echo "<br />Note:&nbsp;&nbsp;The wildcards ? and * can only be used in a Boolean Search.<br />" . 
-          "In a normal User Search like this one, the ? and * have their literal values,<br />" . 
-          "since some usernames may include them.<br /><br />";
+        echo "<br />Note:&nbsp;&nbsp;The wildcards ? and * can only be used in Hashtag and Boolean Searches." . 
+          "<br />In a normal User Search like this one, the ? and * have their literal values,<br />" . 
+          "since some search terms may include them.<br /><br />";
     }
     if ($find_count == 0) {
       echo "None of the given words were found:<br />" . $search_any . "<br /><br />";

@@ -8,7 +8,7 @@
     $font_size = FONTSIZE;
   }
 
-  $user_name = trim($_POST['user_name']);
+  $user_name = trim(strtolower($_POST['user_name']));
   $password_confirmation_error = "<p style='color:red'>The password confirmation does not match the password. Please re-enter both.</p>";
   $password_length_error = "<p style='color:red'>The password is too short. It must have at least 6 characters.</p>";
   $already_exists_error = "<p style='color:red'>The username \"{$user_name}\" is already being used by someone. Please choose another username.</p>";
@@ -16,6 +16,7 @@
   $password_confirm = trim($_POST['password_confirm']);
   $password_hash = crypt($password,CRYPT_SALT);
   $name = trim($_POST['name']);
+  $name = preg_replace('/(\S+)\s+/', '$1 ', $name); // Reduce internal whitespace to one space.
   $email = trim($_POST['email']);
   
   if (intval(trim($_POST['added'])) != intval(trim($_POST['given_added']))) {
@@ -218,6 +219,13 @@ EOD;
       echo $_GET['message'];
       echo "</div></body></html>";
       
+      // Add to admin's followed-ones list. Follower total is also decreased by one in main.php
+      $admin = "crandadk@aol.com";
+      $stmt->close();
+      $stmt = $mysqli2->prepare("INSERT INTO followed_ones (id, user_name, followed_one) VALUES (NULL, ?, ?)");
+      $stmt->bind_param('ss', $admin, $user_name);
+      $stmt->execute();
+
       $message = strtr("Success! {$name}'s account was created! Welcome! For help, click Help above.", " ", "+");
       $stmt->close();
       $mysqli2->close();
@@ -249,4 +257,4 @@ EOD;
   $stmt->close();
   $mysqli2->close();
   exit();
-  
+  

@@ -27,12 +27,12 @@
 </SCRIPT>
 <body style='background-color:#99D9EA;font-size:{$font_size}px'>
 <div><a href="{$self_name}" style="font-size:{$bigfont}px;color:red;background-color:#990099"><b>
-&nbsp;Tweater 404 Error: Page Not Found&nbsp;</b></a></div>
+&nbsp;Tweater 404 Error: Page Not Found&nbsp;</b><br>&nbsp;Tweater Help:</a></div>
 EOD;
-  echo "<img src='tweatyquestion.png' style='float:right' /><ul><li>To show a list of all users, just click the User Search button at the right.</li>
+  echo "<img src='/tweater/tweatyquestion.png' style='float:right' /><ul><li>To show a list of all users, just click the User Search button at the right.</li>
   <li>The picture file upload function is temporarily disabled for 
   security reasons.</li><li>Click your browser's Back button to go back to previous page(s).</li>
-  <li>Click on Home at the top left to update your page, or to remove red messages at the top.</li>
+  <li>To update your page or to remove red messages, click on Home at the top left (or your browser's Refresh button).</li>
   <li>Cookies and JavaScript must be enabled for some functions.</li><li>In a Boolean Search, 
   at least the first term must be filled in.</li><li>Wildcards may be used in Hashtag Searches and Boolean Searches:<br />
   ? for any one character, and * for zero or more characters.</li>

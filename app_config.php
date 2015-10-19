@@ -8,4 +8,3 @@
   define(PASSWORD, "");
   define(TWEATMAXSIZE, "250");
   define(CRYPT_SALT, "changed1");
-  

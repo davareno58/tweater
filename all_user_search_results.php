@@ -38,7 +38,7 @@
     $stmt->execute();
     $stmt = $con->stmt_init();
     $stmt->prepare("select * from " . DATABASE_TABLE . " where (user_name = ?) and (binary password_hash = ?)");
-    $stmt->bind_param('ss', $user_name, crypt($password,"pling515"));
+    $stmt->bind_param('ss', $user_name, crypt($password,CRYPT_SALT));
     $stmt->execute();
     $result = $stmt->get_result();
     $row = mysqli_fetch_array($result);

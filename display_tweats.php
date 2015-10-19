@@ -23,7 +23,8 @@
       $result = $stmt->get_result();
     } else {
       echo "Error: " . $mysqli2->error . " & " . $mysqli3->error;
-    }    
+    }
+    $zebra = "#E0E0FF"; // Alternating Tweat row colors
     while ($myrow = $result->fetch_assoc()) {
       if ($myrow['name']) {
         $myrow_name = $myrow['name'];
@@ -46,10 +47,10 @@
           continue;
         }
       }
-      echo "<div class='row' style='color:black'><div class='col-md-3 text-right' " . 
+      echo "<div class='row' style='color:black;background-color:{$zebra}'><div class='col-sm-4 col-md-3 text-right' " . 
       "style='word-wrap: break-word; margin-right: 1em; position:relative; left:46px'><b>" . 
         wordwrap($myrow_name, 40, '<br />', true) . 
-        "</b>:</div><div class='col-md-9' style='margin-left: -2em; position:relative; left:46px'><p>" . 
+        "</b>:</div><div class='col-sm-8 col-md-9' style='margin-left: -2em; position:relative; left:46px'><p>" . 
         wordwrap($myrow_tweat, $tweat_width, '<br />', true);
       if ($myrow_name == $name) {
         $no_quote_tweat = strtr(substr($myrow_tweat,0,80), "\"'\t\r\n\f", "      ");
@@ -58,15 +59,21 @@
             $no_quote_tweat . "...\")) {location.replace(\"{$self_name}?delete_tweat=\" + {$tid});}' />";
       }
       echo "</p></div></div>";
+      if ($zebra == "#C0C0F0") {
+        $zebra = "#E0E0FF";
+      } else {
+        $zebra = "#C0C0F0";
+      }
     }
+
     $stmt->close();
     $mysqli2->close();
     echo "</div>";
 // Disclaimer    
     echo "<div style='text-align:center'><br /><i>Note:&nbsp;&nbsp;The creator of this website " . 
       "doesn't assume responsibility for its usage by others.</i><br /><br />" . 
-      "<div class='row' style='color:black'><div class='col-md-3 text-right'>" . 
+      "<div class='row' style='color:black'><div class='col-sm-4 col-md-3 text-right'>" . 
       "<div id='pic_bottom' style='position:absolute;left:7px'>";
     echo "<img id='bottom' src='transparent.gif' />";
-    echo "</div></div><div class='col-md-9'></div></div>";
+    echo "</div></div><div class='col-sm-8 col-md-9'></div></div>";
   }

@@ -1,5 +1,5 @@
 <?php
-  require_once 'app_config.php';
+  require_once '../app_config.php';
 
   $self_name = $_SERVER['PHP_SELF'];
   $message = "";
@@ -17,7 +17,7 @@
   }
 
   if (isset($_POST['submit'])) {
-    $target_dir = "pictures/";
+    $target_dir = "";
     $target_file = $target_dir . basename($_FILES["uploadFile"]["name"]);
     $uploadOk = 1;
     if (!isset($_COOKIE['user_name']) || !isset($_COOKIE['password'])) {
@@ -70,7 +70,7 @@
         if ($row = mysqli_fetch_array($result)) {
           if ($row['picture_ext'] != NULL) {
             $old_filename = $target_dir . $row['id'] . "." . $row['picture_ext'];
-// Non-functional:
+// Only functional if this PHP file is in the same folder (pictures):
             @unlink($old_filename);
           }  
           $new_filename = $target_dir . $row['id'] . "." . $picture_ext;
@@ -84,8 +84,6 @@
         }
         $stmt->close();
         $mysqli2->close();
-      
-  //rename($old_filename, $target_dir . "@DELETE_" . $row['id'] . "." . $row['picture_ext']);
       
         if (!move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $new_filename)) {
           $message = $message . $error_sorry;
@@ -102,4 +100,4 @@
   }
   echo "<!DOCTYPE HTML><HTML><head><script>alert(\"{$message}\"); window.close();</script></head><body></body></html>";
   exit();
-  
+  

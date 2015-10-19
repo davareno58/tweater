@@ -28,22 +28,24 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 </span>
 </form>
 </div>
-<div class='col-md-9' style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
+<div class='col-sm-8 col-md-9' style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
   darkblue;padding:10px;height:259px;width:869px'>
 <form action="{$self_name}" method="POST" role="form" id="tweatform"><span><div ng-app="">
 <fieldset class="fieldset-auto-width" style="float:left">
 <div class="span9 form-group" style="height:170px">
 <textarea class="textarea inbox" style="width:840px;height:89px" rows="3" cols="104" id="tweat" name="tweat" ng-model="tweat" 
-  onkeyup="showCharsLeftAndLimit(this);" maxlength="{$tweat_max_size}" placeholder=
-  "--Type your Tweat here (limit: {$tweat_max_size} characters) and then click the Post Tweat button or press Enter.--">
+  maxlength="{$tweat_max_size}" placeholder=
+  "--Type your Tweat here (limit: {$tweat_max_size} characters) and then click the Post button or press Enter.--">
   </textarea><br />
-<button type="submit" class="btn btn-success" style="position:relative;top:-2px">Post Tweat</button>
+<button type="submit" class="btn btn-success" style="position:relative;top:-2px">Post&nbsp;<span class="glyphicon glyphicon-send"></span>
+</button>
 <span style="font-family:Courier New, monospace;position:relative;top:-3px">
 <span ng-bind="('0000' + ({$tweat_max_size} - tweat.length)).slice(-3)"></span> characters left
 </span>
-<span style="position:relative;top:6px"><button type="button" class="btn btn-warning" onclick="textErase();" style="position:relative;top:-8px">Erase</button>
-<button type="button" class="btn btn-success" onclick="textLarger();" style="position:relative;top:-8px;width:100px">Text Size+</button>
-<button type="button" class="btn btn-primary" onclick="textSmaller();" style="position:relative;top:-8px;padding-left:2px;padding-right:2px;width:80px">Text Size-</button>
+<span style="position:relative;top:6px"><button type="button" class="btn btn-warning" onclick="textErase();" style="position:relative;top:-8px">Erase <span style='color:black;background-color:red'>&nbsp;X&nbsp;</span>
+</button>
+<button type="button" class="btn btn-success" onclick="textLarger();" style="position:relative;top:-8px;width:90px">Text Size<span class="glyphicon glyphicon-zoom-in"></span></button>
+<button type="button" class="btn btn-primary" onclick="textSmaller();" style="position:relative;top:-8px;padding-left:2px;padding-right:2px;width:84px">Text Size<span class="glyphicon glyphicon-zoom-out"></span></button>
 <button type="button" class="btn btn-info" onclick="fontEntry();" style="position:relative;top:-8px">Font</button>
 <button type="button" class="btn btn-primary" onclick="toggleBW();" style="position:relative;top:-8px;padding-left:2px;padding-right:2px;width:47px">B/W</button>
 <button type="button" class="btn btn-info" style="position:relative;top:-8px;width:49px;padding-left:3px;padding-right:3px" onclick="tweatWidth();">Width</button>&nbsp;
@@ -51,13 +53,14 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 <input type="hidden" class="form-control" name="name" value={$esc_name}><br /></form></span><span>
 <form><span style="position:relative">Hashtag Search: #</span><input type="text" id="hashtag_search" style="font-size:{$fontsize};width:450px;height:26px;position:relative;top:1px"
   name="hashtag_search" maxlength="30" placeholder="To search Tweats, type the hashtag here and press--&gt;"></input>
-  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px;position:relative;top:-2px">Hashtag Search</button>&nbsp;
+  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px;position:relative;top:-2px">Hashtag <span class="glyphicon glyphicon-search"></span></button>&nbsp;
 <button type="button" class="btn btn-warning" onclick="shownLimit();" style="position:relative;top:-2px">Limit: {$shown_limit}</button>
 </span></span><br /></div></fieldset></div></form>
 <form action="user_search_results.php?admin={$status}&return=_firefox" method="POST" role="form" id="user_search_form" target="_blank"><br />
 <nobr><span style="position:relative;top:-22px">User Search: </span><textarea class="textarea inbox" rows="1" cols="84" id="search_any" name="search_any" maxlength="250" 
   style="font-size:{$fontsize};position:relative;top:-19px;width:620px;height:26px" placeholder="To search by interests, info or names, type them here and press--&gt;"></textarea>
-&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-24px;left:-4px">User Search</button></nobr><br />
+&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-22px;left:-4px">User <span class="glyphicon glyphicon-user"></span>
+<span class="glyphicon glyphicon-search"></span></button></nobr><br />
 </form>
 <form action="boolean_user_search_results.php?admin={$status}&return=_firefox" method="POST" role="form" target="_blank"><br />
 <nobr><span style="position:relative;top:-45px;left:-33">Boolean Search: <input type="text" 
@@ -69,7 +72,7 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
           <option value="NOT">NOT</option>
 </select><input type="text" style="position:relative;top:0px;left:-6px;width:250px;height:26px" placeholder="Second Search Term" id="search_two" 
   name="search_two" maxlength="30" size="26">
-<button type="submit" class="btn btn-warning" style="position:relative;top:-2px;left:-6px">Boolean Search</button>
+<button type="submit" class="btn btn-warning" style="position:relative;top:-2px;left:-6px">Boolean User <span class="glyphicon glyphicon-search"></span></button>
 </span></nobr></form></div></div></div><div class='row'>
 EODF;
 

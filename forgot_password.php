@@ -73,7 +73,7 @@ EOD;
     }
     mysqli_select_db($con,DATABASE_TABLE);
     $stmt = $con->stmt_init();
-    $stmt->prepare("update " . DATABASE_TABLE . " set password_hash = ? where user_name = ?");
+    $stmt->prepare("update " . DATABASE_TABLE . " set password_hash = ?, password_reset_hash = NULL where user_name = ?");
     $stmt->bind_param('ss', crypt($password,CRYPT_SALT), $user_name);
     $stmt->execute();
     mysqli_close($con);
