@@ -47,7 +47,12 @@
           continue;
         }
       }
-      echo "<div class='row' style='color:black;background-color:{$zebra}'><div class='col-sm-4 col-md-3 text-right' " . 
+	  if ($pic_position == "Background") {
+		echo "<div class='row' style='color:black;'>";
+	  } else {
+		echo "<div class='row' style='color:black;background-color:{$zebra}'>";
+	  }
+      echo "<div class='col-sm-4 col-md-3 text-right' " . 
       "style='word-wrap: break-word; margin-right: 1em; position:relative; left:46px'><b>" . 
         wordwrap($myrow_name, 40, '<br />', true) . 
         "</b>:</div><div class='col-sm-8 col-md-9' style='margin-left: -2em; position:relative; left:46px'><p>" . 
