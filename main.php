@@ -948,13 +948,15 @@ EOD;
       $("#pic_bottom").html("");
       $("body").attr("background", "pictures/{$picture_url}");
       $("body").css("background-size", "cover");
-    }
+	  $(".row").css("background-color", "");
+	}
     if (pic_position == "Tile") {
       $("#pic_top").html("");
       $("#pic_bottom").html("");
       $("body").attr("background", "pictures/{$picture_url}");
       $("body").css("background-size", "auto");
       $("body").css("background-repeat", "repeat");
+	  $(".row").css("background-color", "");
     }
     if (pic_scale != 1) {
       $("#picture").width($("#picture").width() * pic_scale);
