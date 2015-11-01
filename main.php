@@ -316,9 +316,6 @@ AAAAAElFTkSuQmCC" alt="Tweaty" style="float:left"><br /><br /><br /><br />' .
                 '&nbsp;&nbsp;' . $tweamail . '<hr />If you don\'t want to receive Tweat Notifications, please ' . 
                 'sign in to your Tweat account at http://crandall.altervista.org/tweater<br />' . 
                 'and click on the Tweat Notifications button at the left. A pop-up prompt ' . 
-<<<<<<< HEAD
-                'will appear. Type the word No and click on OK.<br /><br />', $email_header);
-=======
                 'will appear. Type the word No and click on OK.<br /><br />' . 
                 '<a href="http://crandall.altervista.org/tweater">' . 
                 '<b style="font-size:40px;color:red;background-color:#990099;float:left">&nbsp;Tweater&nbsp;</b></a>&nbsp;&nbsp;&nbsp;&nbsp;' . 
@@ -386,7 +383,6 @@ ALwQAgCEAAAhAPBCCAAQAgCEAMALIQBACAAQAgAvhAAAIQBACAC8EAIAhADAjx//B5dJmJEF5LkZ
 AAAAAElFTkSuQmCC" alt="Tweaty" style="float:left"><br /><br /><br /><br />' . 
               '<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />' . 
               '<br /><br /><br /><br />', $email_header); // Tweat email with Tweaty picture encoded
->>>>>>> 78907f3280d6436513e9090ba83b76eacc27e842
             } else if ($chat == "true") {
               setcookie('chat_timeout', time() + 300, time() + 7200, "/"); // Reset Chat Mode timeout after Tweat
             }
@@ -980,12 +976,16 @@ EOD;
         $("#pic_top").html(picHtml);
         $("#picture").width($("#picture").width() * pic_scale);
         document.cookie = "pic_position=Top; expires=" + date.toGMTString() + "; path=/";
+        pic_visible = "Show";
+        document.cookie = "pic_visible=" + pic_visible + "; expires=" + date.toGMTString() + "; path=/";
       }
       if ($("#selsize").val() == "Bottom") {
         $("#pic_top").html("");
         $("#pic_bottom").html(picHtmlBottom);
         $("#picture").width($("#picture").width() * pic_scale);
         document.cookie = "pic_position=Bottom; expires=" + date.toGMTString() + "; path=/";
+        pic_visible = "Show";
+        document.cookie = "pic_visible=" + pic_visible + "; expires=" + date.toGMTString() + "; path=/";
       }
       if ($("#selsize").val() == "Background") {
         $("#pic_top").html("");
