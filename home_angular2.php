@@ -736,7 +736,8 @@ EODT;
 EOD;
 
   require_once '_shim.php';
-  echo "<script language='JavaScript'>\n<!--\n";
+  echo "<script language='JavaScript'>\n<!--\nvar jq = $.noConflict();
+";
   
   if ($stay_logged_in == "on") {
     echo "  staySignedIn();\n\n";
@@ -747,7 +748,7 @@ EOD;
   $unsubscribe_password = crypt($password,CRYPT_SALT);
     
   echo <<<EODJ
-  var saveWidth = $("#picture").width();
+  var saveWidth = jq("#picture").width();
   var picHtml = "<img id='picture' src='pictures/{$picture_url}' />";
   var picHtmlBottom = "<img id='picture' src='pictures/{$picture_url}' style='position:relative;top:-20px;padding-bottom:20px' />";
   var color = "{$text_color}";
@@ -774,94 +775,94 @@ EOD;
       toggleBW();
     }
     if (pic_position == "Bottom") {
-      $("body").attr("background", "pictures/backviolet.png");
-      $("#pic_top").html("");
-      $("#pic_bottom").html(picHtmlBottom);
+      jq("body").attr("background", "pictures/backviolet.png");
+      jq("#pic_top").html("");
+      jq("#pic_bottom").html(picHtmlBottom);
     }
     if (pic_position == "Top") {
-      $("body").attr("background", "pictures/backviolet.png");
-      $("#pic_bottom").html("");
-      $("#pic_top").html(picHtml);
+      jq("body").attr("background", "pictures/backviolet.png");
+      jq("#pic_bottom").html("");
+      jq("#pic_top").html(picHtml);
     }
     if (pic_position == "Background") {
-      $("#pic_top").html("");
-      $("#pic_bottom").html("");
-      $("body").attr("background", "pictures/{$picture_url}");
-      $("body").css("background-size", "cover");
+      jq("#pic_top").html("");
+      jq("#pic_bottom").html("");
+      jq("body").attr("background", "pictures/{$picture_url}");
+      jq("body").css("background-size", "cover");
     }
     if (pic_position == "Tile") {
-      $("#pic_top").html("");
-      $("#pic_bottom").html("");
-      $("body").attr("background", "pictures/{$picture_url}");
-      $("body").css("background-size", "auto");
-      $("body").css("background-repeat", "repeat");
+      jq("#pic_top").html("");
+      jq("#pic_bottom").html("");
+      jq("body").attr("background", "pictures/{$picture_url}");
+      jq("body").css("background-size", "auto");
+      jq("body").css("background-repeat", "repeat");
     }
     if (pic_scale != 1) {
-      $("#picture").width($("#picture").width() * pic_scale);
+      jq("#picture").width(jq("#picture").width() * pic_scale);
     }
   }
   
-  $(document).ready(function(){
-    $("#selsize").change(function(){
-      if ($("#picture").width() == 0) {
-        $("#picture").width(saveWidth);
+  jq(document).ready(function(){
+    jq("#selsize").change(function(){
+      if (jq("#picture").width() == 0) {
+        jq("#picture").width(saveWidth);
       }
       var date = new Date();
       date.setTime(date.getTime() + (86400 * 365 * 67));
 
-      $("body").attr("background", "pictures/backviolet.png");
-      $("body").css("background-size", "auto");
-      $("body").css("background-repeat", "repeat");
+      jq("body").attr("background", "pictures/backviolet.png");
+      jq("body").css("background-size", "auto");
+      jq("body").css("background-repeat", "repeat");
       
-      if ($("#selsize").val() == "Top") {
-        $("#pic_bottom").html("");
-        $("#pic_top").html(picHtml);
-        $("#picture").width($("#picture").width() * pic_scale);
+      if (jq("#selsize").val() == "Top") {
+        jq("#pic_bottom").html("");
+        jq("#pic_top").html(picHtml);
+        jq("#picture").width(jq("#picture").width() * pic_scale);
         document.cookie = "pic_position=Top; expires=" + date.toGMTString() + "; path=/";
       }
-      if ($("#selsize").val() == "Bottom") {
-        $("#pic_top").html("");
-        $("#pic_bottom").html(picHtmlBottom);
-        $("#picture").width($("#picture").width() * pic_scale);
+      if (jq("#selsize").val() == "Bottom") {
+        jq("#pic_top").html("");
+        jq("#pic_bottom").html(picHtmlBottom);
+        jq("#picture").width(jq("#picture").width() * pic_scale);
         document.cookie = "pic_position=Bottom; expires=" + date.toGMTString() + "; path=/";
       }
-      if ($("#selsize").val() == "Background") {
-        $("#pic_top").html("");
-        $("#pic_bottom").html("");
-        $("body").attr("background", "pictures/{$picture_url}");
-        $("body").css("background-size", "cover");
+      if (jq("#selsize").val() == "Background") {
+        jq("#pic_top").html("");
+        jq("#pic_bottom").html("");
+        jq("body").attr("background", "pictures/{$picture_url}");
+        jq("body").css("background-size", "cover");
         document.cookie = "pic_position=Background; expires=" + date.toGMTString() + "; path=/";
       }
-      if ($("#selsize").val() == "Tile") {
-        $("#pic_top").html("");
-        $("#pic_bottom").html("");
-        $("body").attr("background", "pictures/{$picture_url}");
-        $("body").css("background-size", "auto");
-        $("body").css("background-repeat", "repeat");
+      if (jq("#selsize").val() == "Tile") {
+        jq("#pic_top").html("");
+        jq("#pic_bottom").html("");
+        jq("body").attr("background", "pictures/{$picture_url}");
+        jq("body").css("background-size", "auto");
+        jq("body").css("background-repeat", "repeat");
         document.cookie = "pic_position=Tile; expires=" + date.toGMTString() + "; path=/";
       }
-      if ($("#selsize").val() == "Double") {
-        $("#picture").width($("#picture").width() * 2);
+      if (jq("#selsize").val() == "Double") {
+        jq("#picture").width(jq("#picture").width() * 2);
         pic_scale = pic_scale * 2;
         document.cookie = "pic_scale=" + pic_scale + "; expires=" + date.toGMTString() + "; path=/";
       }
-      if ($("#selsize").val() == "Half") {
-        $("#picture").width($("#picture").width() / 2);
+      if (jq("#selsize").val() == "Half") {
+        jq("#picture").width(jq("#picture").width() / 2);
         pic_scale = pic_scale / 2;
         document.cookie = "pic_scale=" + pic_scale + "; expires=" + date.toGMTString() + "; path=/";
       } 
-      if ($("#selsize").val() == "Hide") {
-        saveWidth = $("#picture").width();
-        $("#picture").width(0);
+      if (jq("#selsize").val() == "Hide") {
+        saveWidth = jq("#picture").width();
+        jq("#picture").width(0);
         pic_visible = "Hide";
         document.cookie = "pic_visible=" + pic_visible + "; expires=" + date.toGMTString() + "; path=/";
       }
-      if ($("#selsize").val() == "Show") {
-        $("#picture").width(saveWidth);
+      if (jq("#selsize").val() == "Show") {
+        jq("#picture").width(saveWidth);
         pic_visible = "Show";
         document.cookie = "pic_visible=" + pic_visible + "; expires=" + date.toGMTString() + "; path=/";
       }      
-      $("#selsize").val("Caption");
+      jq("#selsize").val("Caption");
     });
   });
 
@@ -905,11 +906,11 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
   }
  
   function textErase() {
-    $("#tweat").val("");
-    $("#hashtag_search").val("");
-    $("#search_any").val("");
-    $("#search_one").val("");
-    $("#search_two").val("");
+    jq("#tweat").val("");
+    jq("#hashtag_search").val("");
+    jq("#search_any").val("");
+    jq("#search_one").val("");
+    jq("#search_two").val("");
   }
   
   function textLarger() {
@@ -948,17 +949,17 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     var date = new Date();
     date.setTime(date.getTime() + (86400 * 365 * 67));
     if (color == "black") {
-      $("body").css("color", "white");
-      $("body").css("background-color", "black");
-      $(".row").css("color", "white");
-      $(".inbox").css("background-color", "black");      
+      jq("body").css("color", "white");
+      jq("body").css("background-color", "black");
+      jq(".row").css("color", "white");
+      jq(".inbox").css("background-color", "black");      
       color = "white";
       document.cookie = "text_color=white; expires=" + date.toGMTString() + "; path=/";
     } else {
-      $("body").css("color", "black");
-      $("body").css("background-color", "white");      
-      $(".row").css("color", "black");
-      $(".inbox").css("background-color", "white");      
+      jq("body").css("color", "black");
+      jq("body").css("background-color", "white");      
+      jq(".row").css("color", "black");
+      jq(".inbox").css("background-color", "white");      
       color = "black";
       document.cookie = "text_color=black; expires=" + date.toGMTString() + "; path=/";
     }
@@ -1018,7 +1019,7 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
   }
   
   function hashtagSearch() {
-    var hashtag = $("#hashtag_search").val();
+    var hashtag = jq("#hashtag_search").val();
     hashtag = hashtag.trim().toLowerCase();
     if (hashtag.substr(0,1) == "#") {
       hashtag = hashtag.substr(1);
@@ -1035,12 +1036,12 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     var chatTimeout = Math.floor(date.getTime()/1000) + 300;
     date.setTime(date.getTime() + (86400 * 365 * 67));
     if (mode == true) {
-      if ($("#picture").width() == 0) {
-        $("#picture").width(saveWidth);
+      if (jq("#picture").width() == 0) {
+        jq("#picture").width(saveWidth);
       }
-      $("#pic_top").html("");
-      $("#pic_bottom").html(picHtml);
-      $("#picture").width($("#picture").width() * pic_scale);
+      jq("#pic_top").html("");
+      jq("#pic_bottom").html(picHtml);
+      jq("#picture").width(jq("#picture").width() * pic_scale);
       document.cookie = "pic_position=Bottom; expires=" + date.toGMTString() + "; path=/";
       document.cookie = "chat_timeout=" + chatTimeout + "; expires=" + date.toGMTString() + "; path=/";
     }
@@ -1048,10 +1049,10 @@ Note:  The creator of this website doesn't assume responsibility for its usage b
     location.replace("{$self_name}?chat=" + mode);
   }
   
-  $(document).ready(function() {
-    $('#tweat').keypress(function(e) {
+  jq(document).ready(function() {
+    jq('#tweat').keypress(function(e) {
       if (e.which == 13) {
-        $('#tweatform').submit();
+        jq('#tweatform').submit();
         e.preventDefault();
       }
     });
