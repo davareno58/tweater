@@ -677,6 +677,8 @@ EOD;
       staySignedIn();
       var date = new Date();
       date.setTime(date.getTime() + (86400 * 365 * 67));
+      document.cookie = "user_name=; expires=-7200; path=/";
+      document.cookie = "password=; expires=-7200; path=/";
       document.cookie = "unsub=unsub; expires=" + date.toGMTString() + "; path=/";
     }
   }
