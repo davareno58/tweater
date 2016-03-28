@@ -3,7 +3,7 @@
   $header = '_header' . $ret . '.php';
   $title_position = "right: -153px;";
   $sign_in_width = "";
-  $margin_left = "margin-left: -53px;";
+  $margin_left = "margin-left: -260px;";
   $interests_position = "left:2px;";
   $interests_width = "";
 
@@ -56,25 +56,25 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 <input type="hidden" class="form-control" name="name" value={$esc_name}><br /></form>
 <form><span style="position:relative;top:3px">Hashtag Search: #</span><input type="text" id="hashtag_search" style="font-size:{$fontsize};width:450px;position:relative;top:5px"
   name="hashtag_search" maxlength="30" placeholder="To search Tweats, type the hashtag here and press--&gt;"></input>
-  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px">Hashtag <span class="glyphicon glyphicon-search"></span></button>&nbsp;
-<button type="button" class="btn btn-warning" onclick="shownLimit();" style="padding-left:3px;padding-right:3px">Limit: {$shown_limit}</button>
+  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px;position:relative;top:1px">Hashtag <span class="glyphicon glyphicon-search"></span></button>&nbsp;
+<button type="button" class="btn btn-warning" onclick="shownLimit();" style="padding-left:3px;padding-right:3px;position:relative;top:1px">Limit: {$shown_limit}</button>
 </span></span><br /></div></fieldset></div></form>
 <form action="user_search_results.php?admin={$status}&return={$ret}" method="POST" role="form" target="_blank" id="user_search_form"><br />
 <nobr><span style="position:relative;top:-22px">User Search: </span><input type="text" id="search_any" name="search_any" size="72" maxlength="250" 
   style="position:relative;top:-19px;height:26px" placeholder="To search by interests, info or names, type them here and press--&gt;" 
-  style="font-size:{$fontsize}"></input>&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-22px">User <span class="glyphicon glyphicon-user"></span>
+  style="font-size:{$fontsize}"></input>&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-24px">User <span class="glyphicon glyphicon-user"></span>
 <span class="glyphicon glyphicon-search"></span></button></nobr><br />
 </form>
 <form action="boolean_user_search_results.php?admin={$status}&return={$ret}" method="POST" role="form" target="_blank"><br />
-<nobr><span style="position:relative;top:-46px">Boolean Search: <input type="text" 
-  style="position:relative;top:3px" placeholder="First Search Term" id="search_one" 
+<nobr><span style="position:relative;top:-47px">Boolean Search: <input type="text" 
+  style="position:relative;top:2px" placeholder="First Search Term" id="search_one" 
   name="search_one" maxlength="30" size="26">
 <select class="inbox" id="search_type" name="search_type" style="position:relative;left:-5px;top:1px">
           <option value="AND" default>AND</option>
           <option value="OR">OR</option>
           <option value="NOT">NOT</option>
 </select><input type="text" style="position:relative;top:3px;left:-6px" placeholder="Second Search Term" id="search_two" name="search_two" value="" maxlength="30" size="26">
-<button type="submit" class="btn btn-warning" style="position:relative;top:-2px;left:-6px">Boolean User <span class="glyphicon glyphicon-search"></span></button></span></nobr></form>
+<button type="submit" class="btn btn-warning" style="position:relative;top:-1px;left:-6px">Boolean User <span class="glyphicon glyphicon-search"></span></button></span></nobr></form>
 </div></div></div><div class='row'>
 EODF;
 

@@ -7,7 +7,9 @@
     <SCRIPT LANGUAGE="JavaScript">
     <!--
 function openit() {
-  if (navigator.appVersion.indexOf("Chrome") >= 0) {
+  if (navigator.appVersion.indexOf("Edge") >= 0) {
+    window.location.replace('home_edge.php');
+  } else if (navigator.appVersion.indexOf("Chrome") >= 0) {
     window.location.replace('home_chrome.php');
   } else if (navigator.appVersion.indexOf("(Windows ") >= 0) {
     window.location.replace('home_msie.php');

@@ -1,9 +1,9 @@
 <?php
-  $ret = '_chrome'; // Chrome browser version
+  $ret = '_edge'; // MS Edge browser version
   $header = '_header' . $ret . '.php';
   $title_position = "right: -77px;";
   $sign_in_width = "width:506px;";
-  $margin_left = "margin-left: -82px;";
+  $margin_left = "margin-left: -90px;";
   $interests_position = "left:3px;";
   $interests_width = "width:310px;position:relative;top:2px";
 
@@ -37,29 +37,29 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
   maxlength="{$tweat_max_size}" placeholder=
   "--Type your Tweat here (limit: {$tweat_max_size} characters) and then click the Post button or press Enter.--">
   </textarea><br />
-<button type="submit" class="btn btn-success" style="position:relative;top:-8px">Post&nbsp;<span class="glyphicon glyphicon-send"></span></button>
-<span style="font-family:Courier New, monospace;position:relative;top:-8px">
+<button type="submit" class="btn btn-success" style="position:relative;top:0px">Post&nbsp;<span class="glyphicon glyphicon-send"></span></button>
+<span style="font-family:Courier New, monospace;position:relative;top:0px">
 <span ng-bind="('0000' + ({$tweat_max_size} - tweat.length)).slice(-3)"></span> characters left
 </span>
-<span><button type="button" class="btn btn-warning" onclick="textErase();" style="position:relative;top:-8px">Erase <span style='color:black;background-color:red'>&nbsp;X&nbsp;</span>
+<span><button type="button" class="btn btn-warning" onclick="textErase();" style="position:relative;top:0px">Erase <span style='color:black;background-color:red'>&nbsp;X&nbsp;</span>
 </button>
-<button type="button" class="btn btn-success" onclick="textLarger();" style="position:relative;top:-8px;width:90px">Text Size<span class="glyphicon glyphicon-zoom-in"></span></button>
+<button type="button" class="btn btn-success" onclick="textLarger();" style="position:relative;top:0px;width:90px">Text Size<span class="glyphicon glyphicon-zoom-in"></span></button>
 <button type="button" class="btn btn-primary" onclick="textSmaller();" 
-style="position:relative;top:-8px;padding-left:2px;padding-right:2px;width:84px">Text Size<span class="glyphicon glyphicon-zoom-out"></span></button>
-<button type="button" class="btn btn-info" onclick="fontEntry();" style="position:relative;top:-8px">Font</button>
-<button type="button" class="btn btn-primary" onclick="toggleBW();" style="position:relative;top:-8px;padding-left:2px;padding-right:2px;width:47px">B/W</button>
-<button type="button" class="btn btn-info" style="position:relative;top:-8px;width:49px;padding-left:3px;padding-right:3px" onclick="tweatWidth();">Width</button>&nbsp;
-<button type="submit" class="btn btn-{$chat_button}" onclick="chatToggle({$chat_toggle})" style="position:relative;left:-6px;top:-7px">{$chat_button_action} Chat</button>
+style="position:relative;top:0px;padding-left:2px;padding-right:2px;width:84px">Text Size<span class="glyphicon glyphicon-zoom-out"></span></button>
+<button type="button" class="btn btn-info" onclick="fontEntry();" style="position:relative;top:0px">Font</button>
+<button type="button" class="btn btn-primary" onclick="toggleBW();" style="position:relative;top:0px;padding-left:2px;padding-right:2px;width:47px">B/W</button>
+<button type="button" class="btn btn-info" style="position:relative;top:0px;width:49px;padding-left:3px;padding-right:3px" onclick="tweatWidth();">Width</button>&nbsp;
+<button type="submit" class="btn btn-{$chat_button}" onclick="chatToggle({$chat_toggle})" style="position:relative;left:-6px;top:0px">{$chat_button_action} Chat</button>
 <input type="hidden" class="form-control" name="name" value={$esc_name}><br /></form>
-<form><span style="position:relative;top:-4px">Hashtag Search: #</span><input type="text" id="hashtag_search" style="font-size:{$fontsize};width:450px;position:relative;top:-4px"
+<form><span style="position:relative;top:1px">Hashtag Search: #</span><input type="text" id="hashtag_search" style="font-size:{$fontsize};width:450px;position:relative;top:2px"
   name="hashtag_search" maxlength="30" placeholder="To search Tweats, type the hashtag here and press--&gt;"></input>
-  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px;position:relative;top:-2px">Hashtag <span class="glyphicon glyphicon-search"></span></button>&nbsp;
-<button type="button" class="btn btn-warning" onclick="shownLimit();" style="position:relative;top:-2px;padding-left:3px;padding-right:3px">Limit: {$shown_limit}</button>
+  <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px;position:relative;top:1px">Hashtag <span class="glyphicon glyphicon-search"></span></button>&nbsp;
+<button type="button" class="btn btn-warning" onclick="shownLimit();" style="position:relative;top:1px;padding-left:3px;padding-right:4px">Limit: {$shown_limit}</button>
 </span></span><br /></div></fieldset></div></form>
 <form action="user_search_results.php?admin={$status}&return={$ret}" method="POST" role="form" id="user_search_form" target="_blank"><br />
-<nobr><span style="position:relative;top:-32px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
-  style="font-size:{$fontsize};position:relative;top:-22px;width:613px" placeholder="To search by interests, info or names, type them here and press--&gt;"></textarea>
-&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-32px">User <span class="glyphicon glyphicon-user"></span>
+<nobr><span style="position:relative;top:-27px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
+  style="font-size:{$fontsize};position:relative;top:-27px;width:613px" placeholder="To search by interests, info or names, type them here and press--&gt;"></textarea>
+&nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-28px">User <span class="glyphicon glyphicon-user"></span>
 <span class="glyphicon glyphicon-search"></span></button></nobr><br />
 </form>
 <form action="boolean_user_search_results.php?admin={$status}&return={$ret}" method="POST" role="form" target="_blank"><br />
@@ -81,4 +81,4 @@ EODF;
   
   echo "&nbsp;<br />&nbsp;<br />&nbsp;</div></body></html>";
   exit();
-  
+  

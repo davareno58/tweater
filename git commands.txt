@@ -1,0 +1,14 @@
+cd c:/xampp/ZendFramework-2.3.3/tweater/views
+
+***** Change PWs before pushing!
+
+cd to folder with files.
+if new, first create new repository online on GitHub, then change to directory of app in command prompt, then type git init, and git remote add origin https://github.com/davareno58/appnamehere.git 
+or if not new, type git checkout master (may be already checked out)
+To add all files, type git add -A
+git commit -m "message goes here"
+Optional if local lacks files that origin has: git pull -u origin
+git push -u origin master
+
+user is davareno58
+pw is renorenokvinok

@@ -13,7 +13,7 @@ echo <<<EOD
         style="width:100px">About</button>
     </li>
     <li role="presentation" class="btn btn-success">
-      <a href="upload_picture.html" style="color:lightgray" target="_blank">Upload Picture</a>
+      <a href="upload_picture.html?return={$ret}" style="color:lightgray" target="_blank">Upload Picture</a>
     </li>
     <li role="presentation" class="btn btn-primary">
       <a href="{$self_name}" onclick="staySignedInWithAlert();" style="color:lightgray">Remain Signed In</a>
@@ -33,7 +33,7 @@ echo <<<EOD
     <li role="presentation" class="btn btn-danger">
       <a href="signout.html" onclick="signOut();" style="color:lightgray">Sign Out</a>
     </li>     
-    <li role="presentation" class="btn btn-info">
+    <li role="presentation" class="btn btn-info" style="width:153px">
       <a href="{$self_name}?view_user_name={$user_name}" target="_blank">Public Page</a>
     </li>
   </ul>

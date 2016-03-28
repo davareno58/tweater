@@ -33,7 +33,7 @@ echo <<<EOD
     <li role="presentation" class="btn btn-danger">
       <a href="signout.html" onclick="signOut();" style="color:lightgray">Sign Out</a>
     </li>     
-    <li role="presentation" class="btn btn-info">
+    <li role="presentation" class="btn btn-info" style="width:137px">
       <a href="{$self_name}?view_user_name={$user_name}" target="_blank">Public Page</a>
     </li>
   </ul>

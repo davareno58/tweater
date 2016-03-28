@@ -4,10 +4,10 @@ $self_name = $_SERVER['PHP_SELF'];
 $view_user_name = $row['user_name'];
 
 echo <<<EOD
-<nav class="navbar navbar-default" style="width:1215px">
+<nav class="navbar navbar-default" style="width:1217px">
     <ul class="nav nav-pills" style="background-color:#C0C0F0">
       <li role="presentation" class="btn btn-success"><a href="{$self_name}" style="color:lightgray">Home</a></li>
-      <li role="presentation"><button type="button" class="btn btn-info" style="height:54px;width:100px" onclick="about();" style="width:100px">About</button></li>
+      <li role="presentation"><button type="button" class="btn btn-info" style="height:54px;width:100px" onclick="about();">About</button></li>
       <li role="presentation" class="btn btn-success"><a href="upload_picture.html?return={$ret}" style="color:lightgray" 
       target="_blank">Upload Picture</a></li>
       <li role="presentation" class="btn btn-primary"><a href="{$self_name}" onclick="staySignedInWithAlert();" style="color:lightgray">
@@ -19,8 +19,8 @@ echo <<<EOD
       <li role="presentation" class="btn btn-primary"><a onclick="settings();" style="color:lightgray">
       Settings</a></li>
       <li role="presentation" class="btn btn-danger"><a href="signout.html" onclick="signOut();" style="color:lightgray">Sign Out</a></li>     
-      <li role="presentation" class="btn btn-info">
-      <a href="{$self_name}?view_user_name={$user_name}" style="width:105px" target="_blank">Public Page</a></li>
+      <li role="presentation" class="btn btn-info" style="width:133px">
+      <a href="{$self_name}?view_user_name={$user_name}" target="_blank">Public Page</a></li>
     </ul>
 </nav>
 EOD;
