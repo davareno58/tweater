@@ -3,7 +3,7 @@
   $header = '_header' . $ret . '.php';
   $title_position = "right: -153px;";
   $sign_in_width = "";
-  $margin_left = "margin-left: -260px;";
+  $margin_left = "margin-left: -52px;";
   $interests_position = "left:2px;";
   $interests_width = "";
 
