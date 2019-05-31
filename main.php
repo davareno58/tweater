@@ -265,6 +265,8 @@ AAAAAElFTkSuQmCC" alt="Tweaty" style="float:left"><br /><br /><br /><br />' .
 //Post New Tweat
   if (isset($_REQUEST['tweat']) && (strlen($_REQUEST['tweat']) > 0)) {
     $tweat = trim($_REQUEST['tweat']);
+    $tweat = str_replace("<s", "&lt;s", $tweat); // Avoid script injection
+    $tweat = str_replace("</s", "&lt;/s", $tweat);
     $name = str_replace("+", " ", $_REQUEST['name']);
     if (mb_check_encoding($tweat, 'UTF-8' ) === true ) {
       $mysqli3 = new mysqli(DATABASE_HOST,USERNAME,'',DATABASE_NAME);
@@ -318,9 +320,10 @@ AAAAAElFTkSuQmCC" alt="Tweaty" style="float:left"><br /><br /><br /><br />' .
                 'and click on the Tweat Notifications button at the left. A pop-up prompt ' . 
                 'will appear. Type the word No and click on OK.<br /><br />' . 
                 '<a href="http://crandall.altervista.org/tweater">' . 
-                '<b style="font-size:40px;color:red;background-color:#990099;float:left">&nbsp;Tweater&nbsp;</b></a>&nbsp;&nbsp;&nbsp;&nbsp;' . 
-              '<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />' . 
-              '<br /><br /><br /><br />', $email_header); // Tweat email with Tweaty picture encoded
+                '<b style="font-size:40px;color:red;background-color:#990099;float:left">&nbsp;Tweater&nbsp;</b></a>&nbsp;&nbsp;' . 
+                '&nbsp;&nbsp;<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />', $email_header .
+                'From: "Tweater" <tweater@crandall.altervista.org>'
+              ); // Tweat email with Tweaty picture encoded
             } else if ($chat == "true") {
               setcookie('chat_timeout', time() + 300, time() + 7200, "/"); // Reset Chat Mode timeout after Tweat
             }
@@ -775,7 +778,7 @@ EODJ;
 'unfollow.php?followed_one={$view_user_name}&followed_name={$view_name}&return={$ret}');">Unfollow</button>
 </div></h1><br />
 <b>Interests and Information:&nbsp;&nbsp;</b>{$view_interests}<br /><br />
-<img id='picture' src='pictures/{$picture_url}' /><br /><br />
+<img id='picture' src='pictures/{$picture_url}' alt='{$picture_url}' /><br /><br />
 <b>Tweats:</b><br /><br />
 EODT;
 
@@ -865,8 +868,8 @@ EOD;
     
   echo <<<EODJ
   var saveWidth = $("#picture").width(); // Save image size
-  var picHtml = "<img id='picture' src='pictures/{$picture_url}' />"; // Image tag for above Tweats
-  var picHtmlBottom = "<img id='picture' src='pictures/{$picture_url}' " +
+  var picHtml = "<img id='picture' src='pictures/{$picture_url}' alt='{$picture_url}' title='{$picture_url}' />"; // Image tag for above Tweats
+  var picHtmlBottom = "<img id='picture' src='pictures/{$picture_url}' alt='{$picture_url}' title='{$picture_url}' " +
     "style='position:relative;top:-20px;padding-bottom:20px' />"; // Image tag for below Tweats
   var color = "{$text_color}";
   var pic_scale = {$pic_scale};

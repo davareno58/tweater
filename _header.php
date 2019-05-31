@@ -10,13 +10,13 @@ echo <<<EOD
     </li>
     <li role="presentation">
       <button type="button" class="btn btn-info" style="height:54px;width:100px" 
-        onclick="about();" style="width:100px">About</button>
+        onclick="about();">About</button>
     </li>
     <li role="presentation" class="btn btn-success">
       <a href="upload_picture.html" style="color:lightgray" target="_blank">Upload Picture</a>
     </li>
     <li role="presentation" class="btn btn-primary">
-      <a href="{$self_name}" onclick="staySignedInWithAlert();" style="color:lightgray">Remain Signed In</a>
+      <a href="{$self_name}" onclick="staySignedInWithAlert();" style="color:lightgray">Stay Signed In</a>
     </li>
     <li role="presentation" class="btn btn-success">
       <a href="{$self_name}" onclick="contact();" style="color:lightgray">Contact</a>

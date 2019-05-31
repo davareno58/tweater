@@ -3,8 +3,8 @@
   $header = '_header' . $ret . '.php';
   $title_position = "right: -153px;";
   $sign_in_width = "";
-  $margin_left = "margin-left: -52px;";
-  $interests_position = "left:2px;";
+  $margin_left = "margin-left: -28px;";
+  $interests_position = "left:0px;";
   $interests_width = "";
 
   require_once 'app_config.php'; // Get configuration data
@@ -28,8 +28,8 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 </span>
 </form>
 </div>
-<div class='col-sm-8 col-md-9' style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
-  darkblue;padding:10px;height:259px'>
+<div class='col-sm-8 col-md-9' style='background-color:#9999FF;margin-left: 0px;margin-right: 2px;border: 2px outset 
+  darkblue;padding:4px;height:259px;width:854px'>
 <form action="{$self_name}" method="POST" role="form" id="tweatform">
 <span>
 <div ng-app="">
@@ -83,4 +83,4 @@ EODF;
   
   echo "&nbsp;<br />&nbsp;<br />&nbsp;</div></body></html>";
   exit();
-  
+  

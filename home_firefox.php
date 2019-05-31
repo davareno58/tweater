@@ -3,8 +3,8 @@
   $header = '_header' . $ret . '.php';
   $title_position = "right: -77px;";
   $sign_in_width = "width:506px;";
-  $margin_left = "margin-left: -201px;";
-  $interests_position = "left:3px;";
+  $margin_left = "margin-left: -20px;";
+  $interests_position = "left:0px;";
   $interests_width = "width:310px;position:relative;top:2px";
 
   require_once 'app_config.php';
@@ -28,8 +28,8 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 </span>
 </form>
 </div>
-<div class='col-sm-8 col-md-9' style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
-  darkblue;padding:10px;height:259px;width:869px'>
+<div class='col-sm-8 col-md-9' style='background-color:#9999FF;margin-left: 2px;margin-right: 2px;border: 2px outset 
+  darkblue;padding:2px;height:259px;width:848px'>
 <form action="{$self_name}" method="POST" role="form" id="tweatform"><span><div ng-app="">
 <fieldset class="fieldset-auto-width" style="float:left">
 <div class="span9 form-group" style="height:170px">

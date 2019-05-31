@@ -3,8 +3,8 @@
   $header = '_header' . $ret . '.php';
   $title_position = "right: -77px;";
   $sign_in_width = "width:506px;";
-  $margin_left = "margin-left: -51px;";
-  $interests_position = "left:3px;";
+  $margin_left = "margin-left: -24px;";
+  $interests_position = "left:0px;";
   $interests_width = "width:310px;position:relative;top:2px";
 
   require_once 'app_config.php';
@@ -28,8 +28,8 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 </span>
 </form>
 </div>
-<div class="col-sm-8 col-md-9" style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
-  darkblue;padding:10px;height:259px;width:869px'>
+<div class="col-sm-8 col-md-9" style='background-color:#9999FF;margin-left: 0px;margin-right: 2px;border: 2px outset 
+  darkblue;padding:4px;height:259px;width:854px'>
 <form action="{$self_name}" method="POST" role="form" id="tweatform"><span><div ng-app="">
 <fieldset class="fieldset-auto-width" style="float:left">
 <div class="span9 form-group" style="height:170px">
@@ -58,7 +58,7 @@ style="position:relative;top:0px;padding-left:2px;padding-right:2px;width:84px">
 </span></span><br /></div></fieldset></div></form>
 <form action="user_search_results.php?admin={$status}&return={$ret}" method="POST" role="form" id="user_search_form" target="_blank"><br />
 <nobr><span style="position:relative;top:-27px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
-  style="font-size:{$fontsize};position:relative;top:-27px;width:613px" placeholder="To search by interests, info or names, type them here and press--&gt;"></textarea>
+  style="font-size:{$fontsize};position:relative;top:-19px;width:613px" placeholder="To search by interests, info or names, type them here and press--&gt;"></textarea>
 &nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-28px">User <span class="glyphicon glyphicon-user"></span>
 <span class="glyphicon glyphicon-search"></span></button></nobr><br />
 </form>

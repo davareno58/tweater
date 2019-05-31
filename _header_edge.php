@@ -3,7 +3,7 @@ $self_name = $_SERVER['PHP_SELF'];
 $view_user_name = $row['user_name'];
 
 echo <<<EOD
-<nav class="navbar navbar-default" style="width:1207px">
+<nav class="navbar navbar-default" style="width:1188px;left:-8px">
   <ul class="nav nav-pills" style="background-color:#C0C0F0">
     <li role="presentation" class="btn btn-success">
       <a href="{$self_name}" style="color:lightgray">Home</a>
@@ -16,7 +16,7 @@ echo <<<EOD
       <a href="upload_picture.html?return={$ret}" style="color:lightgray" target="_blank">Upload Picture</a>
     </li>
     <li role="presentation" class="btn btn-primary">
-      <a href="{$self_name}" onclick="staySignedInWithAlert();" style="color:lightgray">Remain Signed In</a>
+      <a href="{$self_name}" onclick="staySignedInWithAlert();" style="color:lightgray">Stay Signed In</a>
     </li>
     <li role="presentation" class="btn btn-success">
       <a href="{$self_name}" onclick="contact();" style="color:lightgray">Contact</a>

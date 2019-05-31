@@ -3,8 +3,8 @@
   $header = '_header' . $ret . '.php';
   $title_position = "right: -77px;";
   $sign_in_width = "width:506px;";
-  $margin_left = "margin-left: -43px;";
-  $interests_position = "left:3px;";
+  $margin_left = "margin-left: -18px;";
+  $interests_position = "left:0px;";
   $interests_width = "width:310px;position:relative;top:2px";
 
   require_once 'app_config.php';
@@ -19,7 +19,7 @@
 <button type="submit" id="intsubmit" name="intsubmit" class="btn btn-info" style="margin-left:-9px;position:relative;{$interests_position}">
 Update</button><input type="hidden" name="message" value="Updated Interests and Information! (Limit: {$tweat_max_size} bytes.)"></input>
 <div class="span3 form-group">
-<textarea class="textarea inbox" rows="4" cols="36" id="interests" name="interests" maxlength="{$tweat_max_size}" 
+<textarea class="textarea inbox" rows="4" cols="34" id="interests" name="interests" maxlength="{$tweat_max_size}" 
   placeholder="You may type your interests and information here and press Update."
   style="font-size:{$fontsize};height:80px;{$interests_width}">{$interests}</textarea>
 </div>
@@ -28,8 +28,8 @@ Update</button><input type="hidden" name="message" value="Updated Interests and 
 </span>
 </form>
 </div>
-<div class="col-sm-8 col-md-9" style='background-color:#9999FF;margin-left: 0px;margin-right: 6px;border: 4px outset 
-  darkblue;padding:10px;height:259px;width:869px'>
+<div class="col-sm-8 col-md-9" style='background-color:#9999FF;margin-left: 0px;margin-right: 2px;border: 2px outset 
+  darkblue;padding:2px;height:259px;width:848px'>
 <form action="{$self_name}" method="POST" role="form" id="tweatform"><span><div ng-app="">
 <fieldset class="fieldset-auto-width" style="float:left">
 <div class="span9 form-group" style="height:170px">
@@ -51,19 +51,19 @@ style="position:relative;top:-8px;padding-left:2px;padding-right:2px;width:84px"
 <button type="button" class="btn btn-info" style="position:relative;top:-8px;width:49px;padding-left:3px;padding-right:3px" onclick="tweatWidth();">Width</button>&nbsp;
 <button type="submit" class="btn btn-{$chat_button}" onclick="chatToggle({$chat_toggle})" style="position:relative;left:-6px;top:-7px">{$chat_button_action} Chat</button>
 <input type="hidden" class="form-control" name="name" value={$esc_name}><br /></form>
-<form><span style="position:relative;top:-4px">Hashtag Search: #</span><input type="text" id="hashtag_search" style="font-size:{$fontsize};width:450px;position:relative;top:-4px"
+<form><span style="position:relative;top:-4px;left:2px">Hashtag Search: #</span><input type="text" id="hashtag_search" style="font-size:{$fontsize};width:450px;position:relative;top:-4px"
   name="hashtag_search" maxlength="30" placeholder="To search Tweats, type the hashtag here and press--&gt;"></input>
   <button type="button" class="btn btn-primary" onclick="hashtagSearch();" style="margin:2px;position:relative;top:-2px">Hashtag <span class="glyphicon glyphicon-search"></span></button>&nbsp;
 <button type="button" class="btn btn-warning" onclick="shownLimit();" style="position:relative;top:-2px;padding-left:3px;padding-right:3px">Limit: {$shown_limit}</button>
 </span></span><br /></div></fieldset></div></form>
 <form action="user_search_results.php?admin={$status}&return={$ret}" method="POST" role="form" id="user_search_form" target="_blank"><br />
-<nobr><span style="position:relative;top:-32px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
+<nobr><span style="position:relative;top:-32px;left:2px">User Search: </span><textarea class="textarea inbox" rows="1" cols="75" id="search_any" name="search_any" maxlength="250" 
   style="font-size:{$fontsize};position:relative;top:-22px;width:613px" placeholder="To search by interests, info or names, type them here and press--&gt;"></textarea>
 &nbsp;<button type="submit" class="btn btn-info" style="position:relative;top:-32px">User <span class="glyphicon glyphicon-user"></span>
 <span class="glyphicon glyphicon-search"></span></button></nobr><br />
 </form>
 <form action="boolean_user_search_results.php?admin={$status}&return={$ret}" method="POST" role="form" target="_blank"><br />
-<nobr><span style="position:relative;top:-49px;left:-40">Boolean Search: <input type="text" 
+<nobr><span style="position:relative;top:-49px;left:2px">Boolean Search: <input type="text" 
   style="position:relative;width:250px" placeholder="First Search Term" id="search_one" 
   name="search_one" maxlength="30" size="26">
 <select class="inbox" id="search_type" name="search_type" style="position:relative;left:-5px">
