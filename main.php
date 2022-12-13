@@ -570,7 +570,7 @@ EOD;
   unchecked>I forgot my password.</label></div>
 <div class="checkbox"><label><input type="checkbox" name="stay_logged_in" 
   unchecked>Remain signed in.</label></div>
-<button type="submit" class="btn btn-success">Sign In</button>
+<button type="submit" class="btn btn-success">Sign In</button>&nbsp;By using this website, the user agrees not to post material which is obscene, fraudulent, slanderous or libelous. Cookies are used in this website.
 </fieldset>
 </div>
 </span>
@@ -1260,11 +1260,11 @@ EODTmsg;
 // Build list of old interests for deleting and list of new interests for adding
     $old_interests = str_replace("-", " ", substr(strtolower($row_interests), 0, 250));
     $old_interests = trim(strtr($old_interests, '!"#%&()*+,-./:;<=>?[\]^_`{|}~' . 
-    '¡¦©«¬­®¯´¶¸»¿', '                                                  ' . 
+    'Â¡Â¦Â©Â«Â¬Â­Â®Â¯Â´Â¶Â¸Â»Â¿', '                                                  ' . 
     '                                       '));
     $new_interests = str_replace("-", " ", substr(strtolower($interests), 0, 250));
     $new_interests = trim(strtr($new_interests, '!"#%&()*+,-./:;<=>?[\]^_`{|}~' . 
-    '¡¦©«¬­®¯´¶¸»¿', '                                                  ' . 
+    'Â¡Â¦Â©Â«Â¬Â­Â®Â¯Â´Â¶Â¸Â»Â¿', '                                                  ' . 
     '                                       '));
     $old_interests = str_replace("   ", " ", $old_interests);
     $old_interests = str_replace("  ", " ", $old_interests);
