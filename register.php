@@ -136,7 +136,7 @@ placeholder="Optional: Your Email for Tweat Notifications" name="email" value="{
           <div class="input-group"><img src="qt.png" /><span id="firstnumber" name="firstnumber"> </span><img src="sa.png" /> 
             <span id="secondnumber" name="secondnumber"> </span>? <input type="text" name="given_added" autocomplete="off" size="3"><br />
           <input type="hidden" class="form-control" id="added" name="added" value="101"></div>
-          <button type="submit" class="btn btn-primary">Register</button>
+          <button type="submit" class="btn btn-primary">Register</button>&nbsp;By using this website, the user agrees not to post material which is obscene, fraudulent, slanderous or libelous. Cookies are used in this website.
       </fieldset><br />
     </div>
     </span>
